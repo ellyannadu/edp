@@ -1,0 +1,218 @@
+<!-- 1. fix the active status so that it covers employees instead of dashboard -->
+<!-- 2. connect pages to one another; make it interactive -->
+<!-- 3. make the employee list page, which should lead to this add_employee page -->
+<!-- 4. make the edit/delete employees page -->
+<!-- 5. FIX SIDEBAR RESPONSIVENESS -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employees</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <!-- ------------------------------------------------------------------------- -->
+    <div class="sidebar sticky-sidebar">
+        <div class="logo flex-container">
+        </div>
+        <!-- ------------------------------------------------------------------------- -->
+        <ul class="menu">
+            <!-- ------------------------------------------------------------------------- -->
+            <li class="active">
+                <a href="#">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#employees.html">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span>Employees</span>
+                </a>
+            </li>
+            <!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-user-tag"></i>
+                    <span>Departments</span>
+                </a>
+            </li>
+            <!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-money-bill"></i>
+                    <span>Payroll</span>
+                </a>
+            </li>
+            <!-- ------------------------------------------------------------------------- -->
+            <div class="logout-wrapper">
+                <li class="logout">
+                    <a href="#">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </div>
+            <!-- ------------------------------------------------------------------------- -->
+        </ul>
+    </div>
+    <!-- ------------------------------------------------------------------------- -->
+    <section class="container">
+        <header>Add Employee</header>
+        <form action="#" class="form">
+
+            <div class="row">
+                <div class="column">
+                    <div class="input--box">
+                        <label>First Name</label>
+                        <input type="text" name="firstname" required>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="input--box">
+                        <label>Last Name</label>
+                        <input type="text" name="lastname" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="column">
+                    <div class="input--box">
+                        <label>Email Add.</label>
+                        <input type="text" name="emailadd" required>
+                    </div>
+                </div>
+
+                <div class="column">
+                    <div class="input--box">
+                        <label>Contact No.</label>
+                        <input type="text" name="contact" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input--box">
+                <label>Address</label>
+                <input type="text" name="address" required>
+
+                <div class="row">
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Baranggay</label>
+                            <input type="text" name="brgy" required>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Province</label>
+                            <input type="text" name="province" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Country</label>
+                            <input type="text" name="country" required>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Zip Code</label>
+                            <input type="text" name="zipcode" required>
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------- -->
+                <div class="row">
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Department</label>
+                            <select name="dropdown1">
+                                <option value="">Select...</option>
+                                <option value="Sales">Sales</option>
+                                <option value="Marketing">Marketing</option>
+                                <option value="Finance">Finance</option>
+                                <option value="Human Resources">Human Resources</option>
+                                <option value="Information Technology">Information Technology</option>
+                                <option value="Operations">Operations</option>
+                                <option value="Customer Service">Customer Service</option>
+                                <option value="Research and Development">Research and Development</option>
+                                <option value="Production">Production</option>
+                                <option value="Quality Assurance">Quality Assurance</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Designation</label>
+                            <select name="dropdown2">
+                                <option value="">Select...</option>
+                                <option value="Sales Manager">Sales Manager</option>
+                                <option value="Sales Representative">Sales Representative</option>
+                                <option value="Marketing Manager">Marketing Manager</option>
+                                <option value="Marketing Specialist">Marketing Specialist</option>
+                                <option value="Financial Analyst">Financial Analyst</option>
+                                <option value="Accountant">Accountant</option>
+                                <option value="HR Manager">HR Manager</option>
+                                <option value="HR Coordinator">HR Coordinator</option>
+                                <option value="IT Manager">IT Manager</option>
+                                <option value="IT Specialist">IT Specialist</option>
+                                <option value="Operations Manager">Operations Manager</option>
+                                <option value="Operations Supervisor">Operations Supervisor</option>
+                                <option value="Customer Service Manager">Customer Service Manager</option>
+                                <option value="Customer Service Representative">Customer Service Representative</option>
+                                <option value="R&D Manager">R&D Manager</option>
+                                <option value="Research Scientist">Research Scientist</option>
+                                <option value="Production Manager">Production Manager</option>
+                                <option value="Production Worker">Production Worker</option>
+                                <option value="Quality Assurance Manager">Quality Assurance Manager</option>
+                                <option value="Quality Assurance Specialist">Quality Assurance Specialist</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Status</label>
+                            <select name="dropdown3">
+                                <option value="">Select...</option>
+                                <option value="Active">Active</option>
+                                <option value="On Leave">On Leave</option>
+                                <option value="Resigned">Resigned</option>
+                                <option value="Terminated">Terminated</option>
+                                <option value="Retired">Retired</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <!-- ------------------------------------------------------------------------- -->
+
+                <button>Submit</button>
+
+        </form>
+    </section>
+    <!-- ------------------------------------------------------------------------- -->
+</body>
+
+</html>
