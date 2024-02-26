@@ -120,7 +120,7 @@ flex: 1 !important;
     color: #7FC7D9;
 }
 
-:-ms-input-placeholder { 
+::-ms-input-placeholder { 
     color: #7FC7D9;
 }
 
