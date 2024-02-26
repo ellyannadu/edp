@@ -28,7 +28,7 @@ body {
 
 .container {
     position: relative;
-    max-width: 900px;
+    max-width: 65%;
     width: 100%;
     background: #BBE2EC;
     padding: 50px;
@@ -81,8 +81,13 @@ body {
     justify-content: space-between;
 }
 
+.row--options {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
 .column {
-    flex: 1;
+flex: 1 !important;
     margin: 0 0.5rem;
 }
 
@@ -97,7 +102,7 @@ body {
     color: #FBF9F1;
     font-size: 1rem;
     border: none;
-    margin-top: 30px;
+    margin-top: 50px;
     align-self: center;
     cursor: pointer;
     border-radius: 6px;
@@ -111,10 +116,14 @@ body {
     transition: ease-out 0.5s;
 }
 
-/* responsive */
+::placeholder { 
+    color: #7FC7D9;
+}
 
-@media screen and (max-width: 700px) {
-    .form .column {
-        flex-direction: column;
-    }
+:-ms-input-placeholder { 
+    color: #7FC7D9;
+}
+
+::-ms-input-placeholder { 
+    color: #7FC7D9;
 }
