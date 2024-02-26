@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <link rel="stylesheet" href="view.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo flex-container">
+        </div>
+<!-- ------------------------------------------------------------------------- -->
+        <ul class="menu">
+<!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-gauge"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+<!-- ------------------------------------------------------------------------- -->
+            <li class="active">
+                <a href="#employees.html">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span>Employees</span>
+                </a>
+            </li>
+<!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-user-tag"></i>
+                    <span>Departments</span>
+                </a>
+            </li>
+<!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-flag"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+<!-- ------------------------------------------------------------------------- -->
+            <li>
+                <a href="#">
+                    <i class="fa-solid fa-money-bill"></i>
+                    <span>Payroll</span>
+                </a>
+            </li>
+<!-- ------------------------------------------------------------------------- -->
+            <div class="logout-wrapper">
+                <li class="logout">
+                    <a href="#">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </div>
+<!-- ------------------------------------------------------------------------- -->
+        </ul>
+    </div>
+<!-- ------------------------------------------------------------------------- -->
+
+    <div class="container">
+        <h1>Employee List</h1>
+        <div class="employee-list">
+            <div class="employee">
+                <div class="employee-info">
+                    <div class="employee-name">John Doe</div>
+                    <div class="employee-designation">Manager</div>
+                </div>
+                <div class="employee-actions">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+            <div class="employee">
+                <div class="employee-info">
+                    <div class="employee-name">Jane Smith</div>
+                    <div class="employee-designation">Sales Representative</div>
+                </div>
+                <div class="employee-actions">
+                    <button>Edit</button>
+                    <button>Delete</button>
+                </div>
+            </div>
+            <!-- Add more employees as needed -->
+        </div>
+    </div>
+
+</body>
+
+</html>
