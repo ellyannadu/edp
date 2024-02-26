@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee List</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="view.css">
     <link rel="stylesheet" href="sidebar.css">
     <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
@@ -64,33 +65,86 @@
         </ul>
     </div>
 <!-- ------------------------------------------------------------------------- -->
-
-    <div class="container">
-        <h1>Employee List</h1>
-        <div class="employee-list">
-            <div class="employee">
-                <div class="employee-info">
-                    <div class="employee-name">John Doe</div>
-                    <div class="employee-designation">Manager</div>
-                </div>
-                <div class="employee-actions">
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-            </div>
-            <div class="employee">
-                <div class="employee-info">
-                    <div class="employee-name">Jane Smith</div>
-                    <div class="employee-designation">Sales Representative</div>
-                </div>
-                <div class="employee-actions">
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-            </div>
-            <!-- Add more employees as needed -->
-        </div>
-    </div>
+<div class="container">
+    <h1>Employee List</h1>
+    <table class="employee-list">
+        <tr>
+            <th>ID</th>
+            <th>Emp. No.</th>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Birthdate</th>
+            <th>Phone No.</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Barangay</th>
+            <th>City</th>
+            <th>Province</th>
+            <th>Zip Code</th>
+            <th>Actions</th>
+        </tr>
+        <tr class="employee">
+            <td>1</td>
+            <td>1001</td>
+            <td>Brad</td>
+            <td>William</td>
+            <td>Pitt</td>
+            <td>1963-12-18</td>
+            <td>09223344556</td>
+            <td>bradpitt@gmail.com</td>
+            <td>123 Mangga St</td>
+            <td>Matina Aplaya</td>
+            <td>Los Angeles</td>
+            <td>Davao del Norte</td>
+            <td>8100</td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+        </tr>
+        <tr class="employee">
+            <td>2</td>
+            <td>1002</td>
+            <td>Angelina</td>
+            <td>Jolie</td>
+            <td>Voight</td>
+            <td>1975-06-04</td>
+            <td>09112239293</td>
+            <td>angelinajolie@gmail.com</td>
+            <td>456 Apple St</td>
+            <td>Bucana</td>
+            <td>Davao</td>
+            <td>Davao del Sur</td>
+            <td>8000</td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+        </tr>
+        <tr class="employee">
+            <td>3</td>
+            <td>1003</td>
+            <td>Leonardo</td>
+            <td>Wilhelm</td>
+            <td>DiCaprio</td>
+            <td>1974-11-11</td>
+            <td>09898912321</td>
+            <td>leonardodicaprio@gmail.com</td>
+            <td>789 Durian St</td>
+            <td>Pangi</td>
+            <td>Tagum</td>
+            <td>Davao Oriental</td>
+            <td>8200</td>
+            <td>
+                <button>Edit</button>
+                <button>Delete</button>
+            </td>
+        </tr>
+        <!-- add more-->
+    </table>
+</div>
+<!-- ------------------------------------------------------------------------- -->
 
 </body>
 

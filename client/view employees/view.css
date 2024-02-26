@@ -1,27 +1,44 @@
+/* colors */
+/*
+light blue BBE2EC
+dark blue 7FC7D9
+off white FBF9F1
+ */
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: Poppins;
     margin: 0;
     padding: 0;
 }
 
 .container {
-    max-width: 800px;
-    margin: 20px auto;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    max-width: min-content;
+    margin: auto;
     padding: 0 20px;
+    overflow-x: auto;
+    box-sizing: border-box;
 }
 
 h1 {
     text-align: center;
+    margin-top: 50px; 
 }
+
+/* ALIGN THE H1 WITH THE ADD EMPLOYEES EME EME */
 
 .employee-list {
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
+    width: 100%;
+    border-collapse: collapse;
+    margin: auto;
 }
 
 .employee {
-    display: flex;
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ccc;
@@ -39,16 +56,19 @@ h1 {
     font-weight: bold;
 }
 
-.employee-actions button {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+.employee-list th, .employee-list td {
+    border: 1px solid #ddd;
+    padding: 8px;
 }
 
-.employee-actions button:hover {
-    background-color: #0056b3;
+.employee-list tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.employee-list th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #BBE2EC;
+    color: #FBF9F1;
 }
