@@ -1,3 +1,13 @@
+/* 
+
+dark purple 7469B6
+lighter AD88C6
+magenta E1AFD1
+lightest FFE6E6
+bg F1EAFF
+
+ */
+
 /* main body section */
 
 .main--content {
@@ -19,7 +29,7 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    background: #BBE2EC;
+    background: #7469B6;
     border-radius: 10px;
     padding: 10px 2rem;
     margin-bottom: 1rem;
