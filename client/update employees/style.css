@@ -17,13 +17,6 @@ bg F1EAFF
     padding: 1rem;
 }
 
-/* .header--wrapper img {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    border-radius: 50%;
-} */
-
 .header--wrapper {
     display: flex;
     align-items: center;
@@ -43,4 +36,98 @@ bg F1EAFF
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+.container {
+    position: relative;
+    max-width: 100%;
+    width: 100%;
+    background: #F2F2F2;
+    padding: 50px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.container .form {
+    margin-top: 20px;
+}
+
+.form .input--box {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input--box label {
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.form .input--box input,
+.form .input--box select {
+    height: 40px;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.form .column {
+    display: flex;
+    column-gap: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.row--options {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.column {
+    flex: 1 !important;
+    margin: 0 0.5rem;
+}
+
+.input--box {
+    display: flex;
+    flex-direction: column;
+}
+
+.form button {
+    display: block;
+    height: 40px;
+    width: 300px;
+    color: #FFF;
+    font-size: 1rem;
+    border: none;
+    margin: 50px auto 0;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: #7469B6;
+}
+
+.form button:hover {
+    background-color: #AD88C6;
+    transition: ease-out 0.5s;
+}
+
+::placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
 }
