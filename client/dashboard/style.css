@@ -1,25 +1,28 @@
+/* 
+
+dark purple 7469B6
+lighter AD88C6
+magenta E1AFD1
+lightest FFE6E6
+bg F1EAFF
+
+ */
+
 /* main body section */
 
 .main--content {
     position: relative;
-    background: #ebe9e9;
+    background: #F1EAFF;
     width: 100%;
     padding: 1rem;
 }
-
-/* .header--wrapper img {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    border-radius: 50%;
-} */
 
 .header--wrapper {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    background: #BBE2EC;
+    background: #7469B6;
     border-radius: 10px;
     padding: 10px 2rem;
     margin-bottom: 1rem;
@@ -38,7 +41,7 @@
 .search--box {
     background: #fff;
     border-radius: 15px;
-    color: #BBE2EC;
+    color: #7469B6;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -49,11 +52,11 @@
     border: none;
     outline: none;
     background: none;
-    color: #BBE2EC;
+    color: #7469B6;
 }
 
 .search--box input::placeholder {
-    color: #BBE2EC;
+    color: #7469B6;
 }
 
 .search--box i:hover {
@@ -64,13 +67,14 @@
 
 .cards--wrapper {
     display: flex;
+    flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
 }
 
 .card--container {
-    background-color: #BBE2EC;
+    background-color: #7469B6;
     padding: 2rem;
     border-radius: 10px;
 }
@@ -94,7 +98,7 @@
 
 .front--card {
     color: #FFF;
-    background-color: #7FC7D9;
+    background-color: #AD88C6;
     border-radius: 10px;
     padding: 1.25rem;
     height: 150px;
