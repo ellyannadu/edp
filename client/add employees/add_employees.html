@@ -5,55 +5,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Employees</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="sidebar.css">
     <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<!-- ------------------------------------------------------------------------- -->
-    <div class="sidebar sticky-sidebar">
+
+    <div class="sidebar">
         <div class="logo flex-container">
         </div>
-<!-- ------------------------------------------------------------------------- -->
+        <!-- ------------------------------------------------------------------------- -->
         <ul class="menu">
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-gauge"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <li class="active">
                 <a href="#employees.html">
                     <i class="fa-solid fa-people-group"></i>
                     <span>Employees</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-user-tag"></i>
                     <span>Departments</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-flag"></i>
                     <span>Reports</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-money-bill"></i>
                     <span>Payroll</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
             <div class="logout-wrapper">
                 <li class="logout">
                     <a href="#">
@@ -62,76 +61,40 @@
                     </a>
                 </li>
             </div>
-<!-- ------------------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------------------- -->
         </ul>
     </div>
-<!-- ------------------------------------------------------------------------- -->
-    <section class="container">
-        <header>Add Employee</header>
-        <form id="employeeForm" class="form">
-
-            <div class="row">
-                <div class="column">
-                    <div class="input--box">
-                        <label>First Name</label>
-                        <input type="text" name="firstname" required>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="input--box">
-                        <label>Middle Name</label>
-                        <input type="text" name="middlename" required>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="input--box">
-                        <label>Last Name</label>
-                        <input type="text" name="lastname" required>
-                    </div>
-                </div>
+    <!-- ------------------------------------------------------------------------- -->
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <span>Employees List</span>
+                <h1>Add Employee Details</h1>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="column">
-                    <div class="input--box">
-                        <label>Birthdate</label>
-                        <input type="text" name="birthdate" placeholder="YYYY-MM-DD" required>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="input--box">
-                        <label>Contact Number</label>
-                        <input type="text" name="contact" required>
-                    </div>
-                </div>
-
-                <div class="column">
-                    <div class="input--box">
-                        <label>Email Address</label>
-                        <input type="text" name="emailadd" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="input--box">
-                <label>Address</label>
-                <input type="text" name="address" required>
+        <section class="container">
+            <form id="employeeForm" class="form">
 
                 <div class="row">
                     <div class="column">
                         <div class="input--box">
-                            <label>Barangay</label>
-                            <input type="text" name="brgy" required>
+                            <label>First Name</label>
+                            <input type="text" name="firstname" required>
                         </div>
                     </div>
 
                     <div class="column">
                         <div class="input--box">
-                            <label>City</label>
-                            <input type="text" name="city" required>
+                            <label>Middle Name</label>
+                            <input type="text" name="middlename" required>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Last Name</label>
+                            <input type="text" name="lastname" required>
                         </div>
                     </div>
                 </div>
@@ -139,19 +102,63 @@
                 <div class="row">
                     <div class="column">
                         <div class="input--box">
-                            <label>Province</label>
-                            <input type="text" name="province" required>
+                            <label>Birthdate</label>
+                            <input type="text" name="birthdate" placeholder="YYYY-MM-DD" required>
                         </div>
                     </div>
 
                     <div class="column">
                         <div class="input--box">
-                            <label>Zip Code</label>
-                            <input type="text" name="zipcode" required>
+                            <label>Contact Number</label>
+                            <input type="text" name="contact" required>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                            <label>Email Address</label>
+                            <input type="text" name="emailadd" required>
                         </div>
                     </div>
                 </div>
-<!-- ------------------------------------------------------------------------- -->
+
+                <div class="input--box">
+                    <label>Address</label>
+                    <input type="text" name="address" required>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Barangay</label>
+                                <input type="text" name="brgy" required>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>City</label>
+                                <input type="text" name="city" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Province</label>
+                                <input type="text" name="province" required>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Zip Code</label>
+                                <input type="text" name="zipcode" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="column">
                         <div class="input--box">
@@ -232,14 +239,12 @@
                         </div>
                     </div>
                 </div>
-<!-- ------------------------------------------------------------------------- -->
 
-                <button>Submit</button>
+                <button type="submit">Submit</button>
 
-        </form>
-    </section>
-<!-- ------------------------------------------------------------------------- -->
+            </form>
+        </section>
+
+    </div>
+    <!-- ------------------------------------------------------------------------- -->
 </body>
-<script src="script.js"></script>
-
-</html>
