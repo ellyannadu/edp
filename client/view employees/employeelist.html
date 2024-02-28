@@ -12,61 +12,74 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="logo flex-container">
+<!-- ------------------------------------------------------------------------- -->
+<div class="main--screen"> 
+<div class="main--content">
+    <div class="header--wrapper">
+        <div class="header--title">
+            <h1>Employees List</h1>
         </div>
-<!-- ------------------------------------------------------------------------- -->
-        <ul class="menu">
-<!-- ------------------------------------------------------------------------- -->
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-gauge"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-<!-- ------------------------------------------------------------------------- -->
-            <li class="active">
-                <a href="#employees.html">
-                    <i class="fa-solid fa-people-group"></i>
-                    <span>Employees</span>
-                </a>
-            </li>
-<!-- ------------------------------------------------------------------------- -->
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-user-tag"></i>
-                    <span>Departments</span>
-                </a>
-            </li>
-<!-- ------------------------------------------------------------------------- -->
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-flag"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
-<!-- ------------------------------------------------------------------------- -->
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-money-bill"></i>
-                    <span>Payroll</span>
-                </a>
-            </li>
-<!-- ------------------------------------------------------------------------- -->
-            <div class="logout-wrapper">
-                <li class="logout">
-                    <a href="#">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Log Out</span>
-                    </a>
-                </li>
-            </div>
-<!-- ------------------------------------------------------------------------- -->
-        </ul>
+        <button class="add-button">
+            <i class="fa-solid fa-user-plus"></i>
+        </button>
     </div>
 <!-- ------------------------------------------------------------------------- -->
+        <div class="sidebar">
+            <div class="logo flex-container">
+            </div>
+<!-- ------------------------------------------------------------------------- -->
+            <ul class="menu">
+<!-- ------------------------------------------------------------------------- -->
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-gauge"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+<!-- ------------------------------------------------------------------------- -->
+                <li class="active">
+                    <a href="#employees.html">
+                        <i class="fa-solid fa-people-group"></i>
+                        <span>Employees</span>
+                    </a>
+                </li>
+<!-- ------------------------------------------------------------------------- -->
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-user-tag"></i>
+                        <span>Departments</span>
+                    </a>
+                </li>
+<!-- ------------------------------------------------------------------------- -->
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+<!-- ------------------------------------------------------------------------- -->
+                <li>
+                    <a href="#">
+                        <i class="fa-solid fa-money-bill"></i>
+                        <span>Payroll</span>
+                    </a>
+                </li>
+<!-- ------------------------------------------------------------------------- -->
+                <div class="logout-wrapper">
+                    <li class="logout">
+                        <a href="#">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+                </div>
+<!-- ------------------------------------------------------------------------- -->
+            </ul>
+        </div>
+        </div>
+<!-- ------------------------------------------------------------------------- -->
 <div class="container">
-    <h1>Employee List</h1>
+    <!-- <h1>Employee List</h1> -->
     <table class="employee-list">
         <tr>
             <th>ID</th>
@@ -99,8 +112,15 @@
             <td>Davao del Norte</td>
             <td>8100</td>
             <td>
-                <button>Edit</button>
-                <button>Delete</button>
+                <div class="button-container">
+                    <button class="edit-button">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                
+                    <button class="delete-button">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </td>
         </tr>
         <tr class="employee">
@@ -118,8 +138,15 @@
             <td>Davao del Sur</td>
             <td>8000</td>
             <td>
-                <button>Edit</button>
-                <button>Delete</button>
+                <div class="button-container">
+                <button class="edit-button">
+                    <i class="fas fa-edit"></i>
+                </button>
+                
+                <button class="delete-button">
+                    <i class="fas fa-trash"></i>
+                </button>
+                </div>
             </td>
         </tr>
         <tr class="employee">
@@ -137,12 +164,20 @@
             <td>Davao Oriental</td>
             <td>8200</td>
             <td>
-                <button>Edit</button>
-                <button>Delete</button>
+                <div class="button-container">
+                    <button class="edit-button">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                
+                    <button class="delete-button">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </td>
         </tr>
         <!-- add more-->
     </table>
+</div>
 </div>
 <!-- ------------------------------------------------------------------------- -->
 

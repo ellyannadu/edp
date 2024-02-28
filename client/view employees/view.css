@@ -5,37 +5,70 @@ dark blue 7FC7D9
 off white FBF9F1
  */
 
+/* main body section */
+
+.main--content {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+}
+
+.header--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    background: #BBE2EC;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
+}
+
+.header--title {
+    color: #FFF;
+    margin-bottom: 0;
+    padding-top: 10px;
+}
+
+.user--info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------- */
+
 body {
-    font-family: Poppins;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
     margin: 0;
     padding: 0;
+    background-color: #FBF9F1;
 }
 
 .container {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
+    position: relative;
     max-width: min-content;
     margin: auto;
     padding: 0 20px;
-    overflow-x: auto;
     box-sizing: border-box;
 }
 
 h1 {
     text-align: center;
-    margin-top: 50px; 
 }
-
-/* ALIGN THE H1 WITH THE ADD EMPLOYEES EME EME */
 
 .employee-list {
     border: 1px solid #ccc;
     border-radius: 5px;
     overflow: hidden;
-    width: 100%;
+    width: 1500px;
     border-collapse: collapse;
     margin: auto;
+    z-index: 1;
 }
 
 .employee {
@@ -62,7 +95,7 @@ h1 {
 }
 
 .employee-list tr:nth-child(even) {
-    background-color: #f2f2f2;
+    background-color: #FBF9F1;
 }
 
 .employee-list th {
@@ -71,4 +104,45 @@ h1 {
     text-align: left;
     background-color: #BBE2EC;
     color: #FBF9F1;
+}
+.add-button {
+    background-color: #BBE2EC;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.fa-solid.fa-user-plus {
+    font-size: 20px;
+}
+
+.employee button {
+    background-color: #7FC7D9;
+    color: #fff;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+.employee button:hover{
+    background-color: #BBE2EC;
+    color: #FBF9F1;
+}
+
+.add-button:hover {
+    background-color: #7FC7D9;
+}
+
+.fas.fa-edit, .fas.fa-trash {
+    font-size: 15px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
 }
