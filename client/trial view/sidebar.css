@@ -23,10 +23,10 @@ bottom: 0;
 width: 110px;
 height: 100vh;
 padding: 0 1.75rem;
-background-color: #DCF2F1;
+background-color: #AD88C6;
 overflow: hidden;
 transition: all 0.5s linear;
-background: #BBE2EC;
+background: #7469B6;
 }
 
 .sidebar:hover {
@@ -72,8 +72,8 @@ transition: all 0.5s ease-in-out;
 
 .menu li:hover,
 .active {
-background-color: #7FC7D9;
-color: #7FC7D9;
+background-color: #AD88C6;
+color: #AD88C6;
 }
 
 .menu a {
