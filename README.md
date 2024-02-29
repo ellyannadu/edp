@@ -1,5 +1,5 @@
 IF YOU EDITED SOMETHING:
-pls pls pls pull first then push para di mawala yung previous edits
+pls pls pls pull first then push para di mawala yung previous edits or in synch lahat heheh thank you
 
 To run code:
 
