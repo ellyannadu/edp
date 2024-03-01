@@ -70,7 +70,14 @@ th, td {
 
 }
 
-.delete-button {
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-button, .edit-button {
+    display: inline-block;
     color: #fff;
     background-color: #AD88C6;
     padding: 5px 10px;
@@ -78,7 +85,7 @@ th, td {
     cursor: pointer;
 }
 
-.delete-button:hover {
+.delete-button:hover, .edit-button:hover {
     background-color: #E1AFD1;
     transition: ease-in-out 0.5s;
 }
@@ -101,7 +108,7 @@ th, td {
     margin: 10% auto;
     padding: 20px 40px;
     border-radius: 10px;
-    max-width: 80%;
+    max-width: 98%;
 }
 
 #employee-details-table {

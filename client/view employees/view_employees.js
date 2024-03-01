@@ -24,18 +24,18 @@ document.addEventListener("DOMContentLoaded", function() {
         var employeeData = {
             id: "1",
             empNo: "111",
-            firstName: "Arj",
+            firstName: "Juan Roberto Antonio",
             middleName: "Panget",
             lastName: "Tabudlong",
             birthdate: "1999-11-11",
             phoneNo: "09123456789",
             email: "arjtabudlong@gmail.com",
-            address: "tell the truth, it's horrendous",
-            barangay: "it's modern / don't lie! / i'm not!",
+            address: "Purok Bading",
+            barangay: "Brgy. Bading",
             city: "Davao",
             province: "Davao del Sur",
             zipCode: "8000",
-            actions: '<button class="delete-button"><i class="fa-solid fa-trash"></i></button>'
+            actions: '<div class="button-container">' + '<button class="edit-button"><i class="fa-regular fa-pen-to-square"></i></button>' + '<button class="delete-button"><i class="fa-solid fa-trash"></i></button>' + '</div>',
         };
 
         var modalBody = document.getElementById("employee-modal-body");
