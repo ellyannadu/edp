@@ -64,5 +64,11 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('An error occurred, please try again later');
         });
+    }); 
+    
+    // Exit add employee page
+    const cancelButton = document.getElementById('cancel-button');
+    cancelButton.addEventListener('click', function() {
+        window.location.href = "/client/view employees/view_employees.html";
     });
 });
