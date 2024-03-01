@@ -45,6 +45,10 @@
     padding: 10px 10px 10px 10px;
 }
 
+th, td {
+    text-align: center;
+}
+
 .add-button {
     color: #fff;
     background-color: #AD88C6;
@@ -62,7 +66,20 @@
     font-size: 15px;
 }
 
-.edit-button, .delete-button {
+.info-button {
+    background-color: transparent;
+    color: #FFF;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.fa-solid.fa-circle-info {
+    font-size: 17px;
+
+}
+
+.delete-button {
     color: #fff;
     background-color: #AD88C6;
     padding: 5px 10px;
@@ -70,7 +87,7 @@
     cursor: pointer;
 }
 
-.edit-button:hover, .delete-button:hover {
+.delete-button:hover {
     background-color: #E1AFD1;
     transition: ease-in-out 0.5s;
 }
