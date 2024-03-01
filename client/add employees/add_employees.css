@@ -1,13 +1,3 @@
-/* 
-
-dark purple 7469B6
-lighter AD88C6
-magenta E1AFD1
-lightest FFE6E6
-bg F1EAFF
-
- */
-
 /* main body section */
 
 .main--content {
@@ -99,6 +89,13 @@ bg F1EAFF
 .input--box {
     display: flex;
     flex-direction: column;
+}
+
+.button--wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
 }
 
 .form button {
