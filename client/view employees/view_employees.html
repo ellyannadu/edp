@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,11 +9,11 @@
     <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
     <title>View Employees</title>
 </head>
+
 <body>
     <div class="sidebar">
         <div class="logo flex-container">
         </div>
-<!-- ------------------------------------------------------------------------- -->
         <ul class="menu">
             <li>
                 <a href="#">
@@ -20,35 +21,30 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
             <li class="active">
                 <a href="#">
                     <i class="fa-solid fa-people-group"></i>
                     <span>Employees</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-user-tag"></i>
                     <span>Departments</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-flag"></i>
                     <span>Reports</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
             <li>
                 <a href="#">
                     <i class="fa-solid fa-money-bill"></i>
                     <span>Payroll</span>
                 </a>
             </li>
-<!-- ------------------------------------------------------------------------- -->
             <div class="logout-wrapper">
                 <li class="logout">
                     <a href="#">
@@ -59,59 +55,79 @@
             </div>
         </ul>
     </div>
-<!-- ------------------------------------------------------------------------- -->
     <div class="main--content">
-        
+
         <div class="header--wrapper">
             <div class="header--title">
                 <span>Employees</span>
                 <h1>View Employees</h1>
             </div>
 
-        <button id="add-button" class="add-button">
-            <i class="fa-solid fa-user-plus"></i>
-        </button>
-
+            <button id="add-button" class="add-button">
+                <i class="fa-solid fa-user-plus"></i>
+            </button>
         </div>
         <div id="employee-list" class="container">
-            <!-- <h1>Employee List</h1> -->
             <table class="employee-list">
                 <tr>
                     <th>ID</th>
-                    <!-- <th>Emp. No.</th> -->
                     <th>First Name</th>
-                    <!-- <th>Middle Name</th> -->
                     <th>Last Name</th>
-                    <!-- <th>Birthdate</th> -->
                     <th>Phone No.</th>
                     <th>Email</th>
-                    <!-- <th>Address</th> -->
-                    <!-- <th>Barangay</th> -->
                     <th>City</th>
-                    <!-- <th>Province</th> -->
-                    <!-- <th>Zip Code</th> -->
-                    <!-- <th>Actions</th> -->
                     <th>More</th>
                 </tr>
                 <tbody id="employee-table-body">
-                  <tr>
-                    <td>1</td>
-                    <td>Arj</td>
-                    <td>Tabudlong</td>
-                    <td>09123456789</td>
-                    <td>arjtabudlong@gmail.com</td>
-                    <td>Mati</td>
-                    <td>
-                        <a href="/client/view employees/employee_info.html">
+                    <tr>
+                        <td>1</td>
+                        <td>Arj</td>
+                        <td>Tabudlong</td>
+                        <td>09123456789</td>
+                        <td>arjtabudlong@gmail.com</td>
+                        <td>Mati</td>
+                        <td>
                             <button class="info-button">
                                 <i class="fa-solid fa-circle-info"></i>
                             </button>
-                        </a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
+
+<!-- Modal -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <table id="employee-details-table">
+            <tr>
+                <th>ID</th>
+                <th>Emp. No.</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Birthdate</th>
+                <th>Phone No.</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Barangay</th>
+                <th>City</th>
+                <th>Province</th>
+                <th>Zip Code</th>
+                <th>Actions</th>
+            </tr>
+            <tbody id="employee-modal-body">
+                <!-- employee details are dynamically populated -->
+            </tbody>
+        </table>
     </div>
-<!-- ------------------------------------------------------------------------- -->
+</div>
+
+    </div>
+
+
+    <script src="view_employees.js"></script>
 </body>
-<script src="/client/view employees/view.js"></script>
+
 </html>

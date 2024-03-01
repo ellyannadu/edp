@@ -1,12 +1,3 @@
- /*
- light purple E1AFD1
- dark purple 7469B6
- magenta E1AFD1
- lightest FFE6E6
-  */
-  
-/* main body section */
-
 .main--content {
     position: relative;
     background: #F1EAFF;
@@ -31,7 +22,7 @@
 
 .container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -90,4 +81,68 @@ th, td {
 .delete-button:hover {
     background-color: #E1AFD1;
     transition: ease-in-out 0.5s;
+}
+
+/* modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #7469B6;
+    margin: 10% auto;
+    padding: 20px 40px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+#employee-details-table {
+    width: 100%;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    border-collapse: collapse;
+}
+
+#employee-details-table th,
+#employee-details-table td {
+    padding: 12px;
+    border-bottom: 1px solid #AD88C6;
+}
+
+#employee-details-table th {
+    background-color: transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#employee-details-table td {
+    text-align: center;
+}
+
+#employee-details-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.close {
+    color: #fff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: #AD88C6;
+    text-decoration: none;
+    cursor: pointer;
 }
