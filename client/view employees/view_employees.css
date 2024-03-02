@@ -57,13 +57,19 @@ th, td {
     font-size: 15px;
 }
 
-.info-button {
+.modalBtn {
     background-color: transparent;
     color: #FFF;
     border: none;
     padding: 5px 10px;
     cursor: pointer;
 }
+
+.modalBtn:hover {
+    color: #E1AFD1;
+    transition: ease-in-out 0.3s;
+}
+
 
 .fa-solid.fa-circle-info {
     font-size: 17px;
@@ -105,8 +111,9 @@ th, td {
 
 .modal-content {
     background-color: #7469B6;
-    margin: 10% auto;
+    margin: 1% auto;
     padding: 20px 40px;
+    padding-bottom: 60px;
     border-radius: 10px;
     max-width: 98%;
 }
@@ -152,4 +159,119 @@ th, td {
     color: #AD88C6;
     text-decoration: none;
     cursor: pointer;
+}
+
+/* ADD EMPLOYEE MODAL CSS */
+.container {
+    position: center;
+    max-width: 100%;
+    width: 100%;
+    background: #F2F2F2;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form .input--box {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input--box label {
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.form .input--box input,
+.form .input--box select {
+    height: 40px;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.form .column {
+    display: flex;
+    column-gap: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.row--options {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.column {
+    flex: 1 !important;
+    margin: 0 0.5rem;
+}
+
+.input--box {
+    display: flex;
+    flex-direction: column;
+}
+
+.button--wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.form button {
+    display: block;
+    height: 40px;
+    width: 300px;
+    color: #FFF;
+    font-size: 1rem;
+    border: none;
+    margin: 50px auto 0;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: #7469B6;
+}
+
+.form button:hover {
+    background-color: #AD88C6;
+    transition: ease-out 0.5s;
+}
+
+::placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
+}
+
+/* UPDATE EMPLOYEE MODAL CSS */
+.update-container {
+    display: none;
+    position: center;
+    max-width: 100%;
+    width: 100%;
+    background: #F2F2F2;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
