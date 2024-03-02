@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         alert('Employee added and designation assigned successfully');
+                        closeModal(); // Close the form modal
+                        fetchEmployees(); // Fetch and display all employees
                         form.reset(); // Clear the form
                     } else {
                         alert('Failed to assign designation');
@@ -65,10 +67,4 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred, please try again later');
         });
     }); 
-    
-    // Exit add employee page
-    const cancelButton = document.getElementById('cancel-button');
-    cancelButton.addEventListener('click', function() {
-        window.location.href = "/client/view employees/view_employees.html";
-    });
 });
