@@ -72,15 +72,10 @@ document.addEventListener("DOMContentLoaded", function() {
     document.addEventListener('click', function(event) {
         // If the clicked element is the updateBtn, display the updateModal
         if (event.target.id === 'updateBtn') {
+
             updateModal.style.display = 'block';
         }
     });
     }
-
-    
-
-           
-
-            
         
 });
