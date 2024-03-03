@@ -1,3 +1,5 @@
+console.log("Starting the server...");
+
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -82,18 +84,38 @@ app.get("/employee/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// Get assigned designation of an employee
+/// Get assigned designation of an employee
 app.get("/assign-designation/:id", async (req, res) => {
   try {
-    const{id} = req.params;
-    const assignDesignation = await pool.query("SELECT * FROM assign_designation WHERE employee_id = $1", [id]);
+    const { id } = req.params;
+    console.log('Employee ID:', id); // Log the employee ID
+    const assignDesignation = await pool.query(`
+    SELECT
+      ad.assign_designation_id,
+      e.first_name,
+      e.last_name,
+      d.department_name,
+      des.designation_name,
+      et.employee_type_name,
+      es.employee_status_name,
+      ad.designation_date
+    FROM
+      assign_designation ad
+      JOIN employee e ON ad.employee_id = e.employee_id
+      JOIN designation des ON ad.designation_id = des.designation_id
+      JOIN department d ON des.department_id = d.department_id
+      JOIN employee_type et ON ad.employee_type = et.employee_type_id
+      JOIN employee_status es ON ad.employee_status = es.employee_status_id
+    WHERE ad.employee_id = $1`, [id]); // Moved WHERE clause outside the string template
+    console.log('Assign Designation:', assignDesignation.rows[0]); // Log the fetched assign designation
     res.json(assignDesignation.rows[0]);
   } catch (err) {
-    console.error("Cannot get x employee designation:", err.message);
+    console.error("Cannot get employee designation:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
 
 // Get employee JOINED with designation, status, type
 app.get("/employees", async(req, res) => {
@@ -108,6 +130,50 @@ app.get("/employees", async(req, res) => {
     res.json(allEmployees.rows);
   } catch (err) {
     console.error("Cannot get employees:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get department
+app.get("/department", async(req, res) => {
+  try {
+    const allDepartments = await pool.query("SELECT * FROM department ORDER BY department_id ASC");
+    res.json(allDepartments.rows);
+  } catch (err) {
+    console.error("Cannot get departments:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get designation
+app.get("/designation", async(req, res) => {
+  try {
+    const allDesignations = await pool.query("SELECT * FROM designation ORDER BY designation_id ASC");
+    res.json(allDesignations.rows);
+  } catch (err) {
+    console.error("Cannot get designations:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get employee status
+app.get("/employee-status", async(req, res) => {
+  try {
+    const allEmployeeStatus = await pool.query("SELECT * FROM employee_status ORDER BY employee_status_id ASC");
+    res.json(allEmployeeStatus.rows);
+  } catch (err) {
+    console.error("Cannot get employee status:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get employee type
+app.get("/employee-type", async(req, res) => {
+  try {
+    const allEmployeeType = await pool.query("SELECT * FROM employee_type ORDER BY employee_type_id ASC");
+    res.json(allEmployeeType.rows);
+  } catch (err) {
+    console.error("Cannot get employee type:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
