@@ -1,3 +1,5 @@
+import { closeModal, fetchEmployees } from './view_employees.js';
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('employeeForm');
 
@@ -47,9 +49,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => {
                     if (response.ok) {
                         alert('Employee added and designation assigned successfully');
-                        closeModal(); // Close the form modal
-                        fetchEmployees(); // Fetch and display all employees
-                        form.reset(); // Clear the form
+                        closeModal();
+                        fetchEmployees(); 
+                        form.reset();
                     } else {
                         alert('Failed to assign designation');
                     }
@@ -68,3 +70,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }); 
 });
+
