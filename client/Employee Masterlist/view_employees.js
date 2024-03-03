@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
     closeModal();
   });
 
-  cancelButton.addEventListener('click', function() {
+  cancelButton.addEventListener('click', function(event) {
+    event.preventDefault();
     closeModal();
   });
 
@@ -107,12 +108,23 @@ document.addEventListener('DOMContentLoaded', function() {
   // Function to fetch employee details from the server
   async function fetchEmployeeDetails(employee_id) {
     try {
-      const response = await fetch(`http://localhost:3000/employee/${employee_id}`);
-      if (!response.ok) {
+      const employeeResponse = await fetch(`http://localhost:3000/employee/${employee_id}`);
+      if (!employeeResponse.ok) {
         throw new Error('Failed to fetch employee details');
       }
-      const employeeDetails = await response.json();
-      return formatEmployeeDetails(employeeDetails);
+      const employeeDetails = await employeeResponse.json();
+      
+      // Fetch employee designation separately
+      const designationResponse = await fetch(`http://localhost:3000/assign-designation/${employee_id}`);
+      if (!designationResponse.ok) {
+        throw new Error('Failed to fetch employee designation');
+      }
+      const employeeDesignation = await designationResponse.json();
+      
+      // Call formatEmployeeDetails with employee details and designation
+      const formattedDetails = formatEmployeeDetails({ employeeDetails, employeeDesignation });
+      console.log(employeeDesignation);
+      return formattedDetails;
     } catch (error) {
       console.error('Error fetching employee details:', error);
       throw error;
@@ -120,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Function to format employee details
-  function formatEmployeeDetails(employeeDetails) {
+  function formatEmployeeDetails({ employeeDetails, employeeDesignation }) {
     var formattedDetails = `
       <section class="container">
         <form id="employeeForm" class="form" readonly>
@@ -129,28 +141,28 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="column">
               <div class="input--box">
                 <label>Employee ID</label>
-                <input type="text" name="employee_id" value="${employeeDetails.employee_id}" readonly />
+                <input type="text" name="employee_id" class="info-modal-input" value="${employeeDetails.employee_id}" readonly />
               </div>
             </div>
 
             <div class="column">
               <div class="input--box">
                 <label>First Name</label>
-                <input type="text" name="first_name" value="${employeeDetails.first_name}" readonly />
+                <input type="text" name="first_name" class="info-modal-input" value="${employeeDetails.first_name}" readonly />
               </div>
             </div>
 
             <div class="column">
                 <div class="input--box">
                   <label>Middle Name</label>
-                  <input type="text" name="middle_name" value="${employeeDetails.middle_name}" readonly />
+                  <input type="text" name="middle_name" class="info-modal-input" value="${employeeDetails.middle_name}" readonly />
                 </div>
             </div>
 
             <div class="column">
               <div class="input--box">
                 <label>Last Name</label>
-                <input type="text" name="last_name" value="${employeeDetails.last_name}" readonly />
+                <input type="text" name="last_name" class="info-modal-input" value="${employeeDetails.last_name}" readonly />
               </div>
             </div>
           </div>
@@ -159,41 +171,41 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="column">
             <div class="input--box">
               <label>Birthdate</label>
-              <input type="text" name="birthdate" value="${employeeDetails.birthdate.split('T')[0]}" readonly />
+              <input type="text" name="birthdate" class="info-modal-input" value="${employeeDetails.birthdate.split('T')[0]}" readonly />
             </div>
           </div>
 
           <div class="column">
             <div class="input--box">
               <label>Contact Number</label>
-              <input type="text" name="contact_num" value="${employeeDetails.contact_num}" readonly />
+              <input type="text" name="contact_num" class="info-modal-input" value="${employeeDetails.contact_num}" readonly />
             </div>
           </div>
 
           <div class="column">
             <div class="input--box">
               <label>Email Address</label>
-              <input type="text" name="email" value="${employeeDetails.email}" readonly />
+              <input type="text" name="email" class="info-modal-input" value="${employeeDetails.email}" readonly />
             </div>
           </div>
           </div>
 
           <div class="input--box">
             <label>Address</label>
-            <input type="text" name="address_line" value="${employeeDetails.address_line}" readonly />
+            <input type="text" name="address_line" class="info-modal-input" value="${employeeDetails.address_line}" readonly />
 
           <div class="row">
             <div class="column">
               <div class="input--box">
                 <label>Barangay</label>
-                <input type="text" name="barangay" value="${employeeDetails.barangay}" readonly />
+                <input type="text" name="barangay" class="info-modal-input" value="${employeeDetails.barangay}" readonly />
               </div>
             </div>
 
             <div class="column">
               <div class="input--box">
                 <label>City</label>
-                <input type="text" name="city" value="${employeeDetails.city}" readonly />
+                <input type="text" name="city" class="info-modal-input" value="${employeeDetails.city}" readonly />
               </div>
             </div>
           </div>
@@ -202,14 +214,14 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="column">
               <div class="input--box">
                 <label>Province</label>
-                <input type="text" name="province" value="${employeeDetails.province}" readonly />
+                <input type="text" name="province" class="info-modal-input" value="${employeeDetails.province}" readonly />
               </div>
             </div>
 
             <div class="column">
               <div class="input--box">
                 <label>Zip Code</label>
-                <input type="text" name="zip_code" value="${employeeDetails.zip_code}" readonly />
+                <input type="text" name="zip_code" class="info-modal-input" value="${employeeDetails.zip_code}" readonly />
               </div>
             </div>
           </div>
@@ -219,21 +231,21 @@ document.addEventListener('DOMContentLoaded', function() {
            <div class="column">
             <div class="input--box">
               <label>Department</label>
-              <input type="text" name="department" value="${employeeDetails.department}" readonly />
+              <input type="text" name="department" class="info-modal-input" value="${employeeDesignation.department_name}" readonly />
             </div>
           </div>
 
           <div class="column">
             <div class="input--box">
               <label>Designation</label>
-              <input type="text" name="designation" value="${employeeDetails.assign_designation}" readonly />
+              <input type="text" name="designation" class="info-modal-input" value="${employeeDesignation.designation_name}" readonly />
             </div>
           </div>
 
           <div class="column">
           <div class="input--box">
             <label>Designation Date</label>
-            <input type="text" name="designation_date" value="${employeeDetails.designation_date}" readonly />
+            <input type="text" name="designation_date" class="info-modal-input" value="${employeeDesignation.designation_date.split('T')[0]}" readonly />
           </div>
           </div>
           </div>
@@ -242,14 +254,14 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="column">
                 <div class="input--box">
                   <label>Employee Type</label>
-                  <input type="text" name="type" value="${employeeDetails.type}" readonly />
+                  <input type="text" name="type" class="info-modal-input" value="${employeeDesignation.employee_type_name}" readonly />
                 </div>
             </div>
 
             <div class="column">
               <div class="input--box">
                 <label>Employment Status</label>
-                <input type="text" name="status" value="${employeeDetails.employee_status}" readonly />
+                <input type="text" name="status" class="info-modal-input" value="${employeeDesignation.employee_status_name}" readonly />
               </div>
             </div>
           </div>
@@ -265,6 +277,7 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     return formattedDetails;
   }
+  
 
   // Fetch and display all employees when the page is loaded
   fetchEmployees();

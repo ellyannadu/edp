@@ -81,8 +81,8 @@ infoModal.addEventListener('click', async function(event) {
           saveButton.style.display = 'none';
           cancelButton2.style.display = 'none';
   
-          const inputs = document.querySelectorAll('input[type="text"]');
-          inputs.forEach(input => {
+          const infoInputs = document.querySelectorAll('.info-modal-input');
+          infoInputs.forEach(input => {
               input.setAttribute('readonly', '');
           });
 

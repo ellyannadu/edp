@@ -40,9 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({
                         employee_id: data.employee_id, 
-                        designation_id: formData.get('dropdown-des'),
-                        employee_type: formData.get('dropdown-type'),
-                        employee_status: formData.get('dropdown-stat'),
+                        designation_id: formData.get('designation'),
+                        employee_type: formData.get('employee-type'),
+                        employee_status: formData.get('employee-status'),
                         designation_date: formData.get('designation-date')
                     })
                 })
@@ -70,4 +70,3 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }); 
 });
-
