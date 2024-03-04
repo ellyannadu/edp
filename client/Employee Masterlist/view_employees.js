@@ -18,10 +18,12 @@ export function displayEmployees(employees) {
         <td>${employee.last_name}</td>
         <td>${employee.first_name}</td>
         <td>${employee.middle_name}</td>
+        <td>${employee.department_name}</td>
+        <td>${employee.designation_name}</td>
         <td>
-            <button class="modalBtn" data-employee_id="${employee.employee_id}">
-                <i class="fa-solid fa-circle-info"></i>
-            </button>
+        <button class="modalBtn" data-employee_id="${employee.employee_id}">
+            <i class="fa-solid fa-circle-info"></i>
+        </button>
         </td>
     `;
     employeeTableBody.appendChild(row);
@@ -30,7 +32,7 @@ export function displayEmployees(employees) {
 // Function to fetch all employees
 export async function fetchEmployees() {
   try {
-    const response = await fetch('http://localhost:3000/employee');
+    const response = await fetch('http://localhost:3000/employees');
     if (!response.ok) {
       throw new Error('Failed to fetch employees');
     }
