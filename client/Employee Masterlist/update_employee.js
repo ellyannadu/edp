@@ -192,6 +192,11 @@ infoModal.addEventListener('click', async function(event) {
             });
             
             // Replace dropdowns with input fields
+            departmentInput = document.querySelector('input[name="department"]');
+            designationInput = document.querySelector('input[name="designation"]');
+            typeInput = document.querySelector('input[name="type"]');
+            statusInput = document.querySelector('input[name="status"]');
+
             replaceElement(departmentDropdown, departmentInput);
             replaceElement(designationDropdown, designationInput);
             replaceElement(typeDropdown, typeInput);
