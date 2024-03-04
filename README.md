@@ -1,25 +1,12 @@
-IF YOU EDITED SOMETHING:
-pls pls pls pull first then push para di mawala yung previous edits or in synch lahat heheh thank you
+To update local edp:
+  git pull
 
-To run code:
+To upload changes to github:
+  git add .
+  git commit -m "message here"
+  git push origin main
 
-In terminal:
-(if wala pa na clone)
-  git clone https://github.com/ellyannadu/edp.git
-  cd edp
+To run code in terminal:
+  /edp/server: npm start
+  
 
--Install dependencies
-  npm install
-
-Update code:
-git pull origin main
-
-Run the code:
-Front-end:
-  run html sa browser
-Back-end
-  cd server
-  npm start
-
-
-For database: just copy paste the entire insert tables from database.sql sa terminal
