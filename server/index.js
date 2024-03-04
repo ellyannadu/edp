@@ -88,7 +88,7 @@ app.get("/employee/:id", async (req, res) => {
 app.get("/assign-designation/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log('Employee ID:', id); // Log the employee ID
+    // console.log('Employee ID:', id);
     const assignDesignation = await pool.query(`
     SELECT
       ad.assign_designation_id,
@@ -107,7 +107,7 @@ app.get("/assign-designation/:id", async (req, res) => {
       JOIN employee_type et ON ad.employee_type = et.employee_type_id
       JOIN employee_status es ON ad.employee_status = es.employee_status_id
     WHERE ad.employee_id = $1`, [id]); // Moved WHERE clause outside the string template
-    console.log('Assign Designation:', assignDesignation.rows[0]); // Log the fetched assign designation
+    // console.log('Assign Designation:', assignDesignation.rows[0]); // Log the fetched assign designation
     res.json(assignDesignation.rows[0]);
   } catch (err) {
     console.error("Cannot get employee designation:", err.message);
