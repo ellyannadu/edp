@@ -161,6 +161,11 @@ th, td {
 }
 
 /* ADD EMPLOYEE MODAL CSS */
+
+.add-employee-title {
+    color: #FFF;
+}
+
 .container {
     position: center;
     max-width: 100%;
