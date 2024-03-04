@@ -24,7 +24,7 @@ infoModal.addEventListener('click', async function(event) {
     } else if (target.classList.contains('delete-button')) {
         // Get the employee ID from the modal body
         const employeeId = document.querySelector('[name="employee_id"]').value;
-
+        // ARJ DITO KA MAG ADD NG CONFIMRATION IF ARE YOU SURE YOU WANT TO DELETE?
     try {
         // Delete the employee from the database
         const response = await fetch(`http://localhost:3000/employee/${employeeId}`, {
