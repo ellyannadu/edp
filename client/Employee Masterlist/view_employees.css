@@ -236,6 +236,7 @@ th, td {
     justify-content: space-between;
     align-items: center;
     margin-top: 15px;
+    width: 100%;
 }
 
 .form button {
@@ -283,9 +284,4 @@ th, td {
 
 .info-modal-title {
     color: white;
-}
-
-.dropdowns {
-    display: flex;
-    justify-content: space-between;
 }

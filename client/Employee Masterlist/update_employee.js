@@ -266,7 +266,6 @@ function createDropdown(options, dependentDropdown, dependentOptions) {
         // Clear out the existing options in the dependent dropdown
         dependentDropdown.innerHTML = '';
 
-
         // Get the options for the selected value
         const selectedOptions = dependentOptions[this.value];
 
