@@ -46,33 +46,59 @@ infoModal.addEventListener('click', async function(event) {
             { text: 'Production', value: 9 },
             { text: 'Quality Assurance', value: 10 }
         ]; 
-        departmentDropdown = createDropdown(departmentOptions);
-        replaceElement(departmentInput, departmentDropdown);
 
         // Replace designation input
-        const designationOptions = [
-            { text: 'Sales Manager', value: 1 },
-            { text: 'Sales Representative', value: 2 },
-            { text: 'Marketing Manager', value: 3 },
-            { text: 'Marketing Specialist', value: 4 },
-            { text: 'Financial Analyst', value: 5 },
-            { text: 'Accountant', value: 6 },
-            { text: 'HR Manager', value: 7 },
-            { text: 'HR Coordinator', value: 8 },
-            { text: 'IT Manager', value: 9 },
-            { text: 'IT Specialist', value: 10 },
-            { text: 'Operations Manager', value: 11 },
-            { text: 'Operations Supervisor', value: 12 },
-            { text: 'Customer Service Manager', value: 13 },
-            { text: 'Customer Service Representative', value: 14 },
-            { text: 'R&D Manager', value: 15 },
-            { text: 'Research Scientist', value: 16 },
-            { text: 'Production Manager', value: 17 },
-            { text: 'Production Worker', value: 18 },
-            { text: 'Quality Assurance Manager', value: 19 },
-            { text: 'Quality Assurance Specialist', value: 20 }
-        ]; 
-        designationDropdown = createDropdown(designationOptions);
+        const designationOptions = {
+            '1': [
+                { text: 'Sales Manager', value: '1' },
+                { text: 'Sales Representative', value: '2' },
+            ],
+            '2': [
+                { text: 'Marketing Manager', value: '3' },
+                { text: 'Marketing Specialist', value: '4' },
+            ],
+            '3': [
+                { text: 'Financial Analyst', value: '5' },
+                { text: 'Accountant', value: '6' },
+            ],
+            '4': [
+                { text: 'HR Manager', value: '7' },
+                { text: 'HR Coordinator', value: '8' },
+            ],
+            '5': [
+                { text: 'IT Manager', value: '9' },
+                { text: 'IT Specialist', value: '10' },
+            ],
+            '6': [
+                { text: 'Operations Manager', value: '11' },
+                { text: 'Operations Supervisor', value: '12' },
+            ],
+            '7': [
+                { text: 'Customer Service Manager', value: '13' },
+                { text: 'Customer Service Representative', value: '14' },
+            ],
+            '8': [
+                { text: 'R&D Manager', value: '15' },
+                { text: 'Research Scientist', value: '16' },
+            ],
+            '9': [
+                { text: 'Production Manager', value: '17' },
+                { text: 'Production Worker', value: '18' },
+            ],
+            '10': [
+                { text: 'Quality Assurance Manager', value: '19' },
+                { text: 'Quality Assurance Specialist', value: '20' },
+            ],
+            
+        };
+        
+        // Create an empty select element for the designation dropdown
+        designationDropdown = document.createElement('select');
+
+        departmentDropdown = createDropdown(departmentOptions, designationDropdown, designationOptions);
+        replaceElement(departmentInput, departmentDropdown);
+
+        // Replace the designation input with the designation dropdown
         replaceElement(designationInput, designationDropdown);
 
         // Replace employee type input
@@ -96,13 +122,15 @@ infoModal.addEventListener('click', async function(event) {
         ]; 
         statusDropdown = createDropdown(statusOptions);
         replaceElement(statusInput, statusDropdown);
-
+        
         deleteButton.style.display = 'none';
         editButton.style.display = 'none';
+        saveButton.style.backgroundColor = '#05a95c';
         saveButton.style.display = 'block';
         cancelButton2.style.display = 'block';
     } else if (target.classList.contains('delete-button')) {
         // Get the employee ID from the modal body
+        
         const employeeId = document.querySelector('[name="employee_id"]').value;
 
         try {
@@ -121,6 +149,7 @@ infoModal.addEventListener('click', async function(event) {
             console.error('Error deleting employee:', error);
         }
     } else if (target.classList.contains('cancel-button-2')) {
+        deleteButton.style.backgroundColor = '#c70000';
         deleteButton.style.display = 'block';
         editButton.style.display = 'block';
         saveButton.style.display = 'none';
@@ -223,7 +252,7 @@ infoModal.addEventListener('submit', function(event) {
 });
     
 // Function to create dropdown element
-function createDropdown(options) {
+function createDropdown(options, dependentDropdown, dependentOptions) {
     const select = document.createElement('select');
     options.forEach(option => {
         const optionElement = document.createElement('option');
@@ -231,6 +260,25 @@ function createDropdown(options) {
         optionElement.value = option.value;
         select.appendChild(optionElement);
     });
+
+    // Add event listener for change event
+    select.addEventListener('change', function() {
+        // Clear out the existing options in the dependent dropdown
+        dependentDropdown.innerHTML = '';
+
+
+        // Get the options for the selected value
+        const selectedOptions = dependentOptions[this.value];
+
+        // Add the new options to the dependent dropdown
+        selectedOptions.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.textContent = option.text;
+            optionElement.value = option.value;
+            dependentDropdown.appendChild(optionElement);
+        });
+    });
+
     return select;
 }
 

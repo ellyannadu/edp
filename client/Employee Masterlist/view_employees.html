@@ -77,7 +77,7 @@
       <div id="addModal" class="modal">
         <div class="modal-content">
           <span class="close">&times;</span>
-          <h1 class="add-employee-title">Add Employee</h1>
+          <h1 class="modal-title">Add Employee</h1>
           
           <section class="container">
             <form id="employeeForm" class="form">
@@ -174,6 +174,7 @@
                   <div class="input--box">
                     <label>Department</label>
                     <select name="department" id="departmentSelect" required>
+                      <option value="0"></option>
                       <option value="1">Sales</option>
                       <option value="2">Marketing</option>
                       <option value="3">Finance</option>
@@ -192,6 +193,7 @@
                   <div class="input--box">
                     <label>Designation</label>
                     <select name="designation" id="designationSelect" required>
+                      <option value="0"></option>
                       <option value="1">Sales Manager</option>
                       <option value="2">Sales Representative</option>
                       <option value="3">Marketing Manager</option>
@@ -297,7 +299,7 @@
     <div id="infoModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
-        <h1>Employee Details</h1>
+        <h1 class="modal-title">Employee Details</h1>
         <div id="employee-modal-body" class="modal-body">
           <!-- Employee details will be inserted here -->
         </div>
