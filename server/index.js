@@ -84,19 +84,23 @@ app.get("/employee/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-/// Get assigned designation of an employee
+
+// Get assigned designation of an employee
 app.get("/assign-designation/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    // console.log('Employee ID:', id);
     const assignDesignation = await pool.query(`
     SELECT
       ad.assign_designation_id,
       e.first_name,
       e.last_name,
+      d.department_id,
       d.department_name,
+      des.designation_id,
       des.designation_name,
+      ad.employee_type,
       et.employee_type_name,
+      ad.employee_status,
       es.employee_status_name,
       ad.designation_date
     FROM
@@ -106,8 +110,7 @@ app.get("/assign-designation/:id", async (req, res) => {
       JOIN department d ON des.department_id = d.department_id
       JOIN employee_type et ON ad.employee_type = et.employee_type_id
       JOIN employee_status es ON ad.employee_status = es.employee_status_id
-    WHERE ad.employee_id = $1`, [id]); // Moved WHERE clause outside the string template
-    // console.log('Assign Designation:', assignDesignation.rows[0]); // Log the fetched assign designation
+    WHERE ad.employee_id = $1`, [id]);
     res.json(assignDesignation.rows[0]);
   } catch (err) {
     console.error("Cannot get employee designation:", err.message);
@@ -115,7 +118,29 @@ app.get("/assign-designation/:id", async (req, res) => {
   }
 });
 
-
+// // Get all employee designations
+// app.get("/assign-designation", async(req, res) => {
+//   try {
+//     const allDesignations = await pool.query(`
+//     SELECT
+//       ad.assign_designation_id,
+//       ad.employee_id,
+//       ad.designation_id,
+//       ad.employee_type,
+//       ad.employee_status,
+//       ad.designation_date,
+//       d.department_id
+//     FROM
+//       assign_designation ad
+//     LEFT JOIN
+//       designation d ON ad.designation_id = d.designation_id;
+//     `);
+//     res.json(allDesignations.rows);
+//   } catch (err) {
+//     console.error("Cannot get designations:", err.message);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 // Get employee JOINED with designation, status, type
 app.get("/employees", async(req, res) => {

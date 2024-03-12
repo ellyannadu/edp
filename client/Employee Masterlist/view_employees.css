@@ -30,10 +30,11 @@
     width: 100%;
     margin-top: 1rem;
     color: #fff;
-    background-color: #7469B6;
+    background-color: #6559a8;
     border-top: #fff;
     border-radius: 6px;
     padding: 10px 10px 10px 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
 }
 
 th, td {
@@ -162,7 +163,7 @@ th, td {
 
 /* ADD EMPLOYEE MODAL CSS */
 
-.add-employee-title {
+.modal-title {
     color: #FFF;
 }
 
@@ -235,6 +236,7 @@ th, td {
     justify-content: space-between;
     align-items: center;
     margin-top: 15px;
+    width: 100%;
 }
 
 .form button {
@@ -280,7 +282,6 @@ th, td {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.dropdowns {
-    display: flex;
-    justify-content: space-between;
+.info-modal-title {
+    color: white;
 }

@@ -1,11 +1,3 @@
-// View all employees in table form
-// Fetch employee details from the server
-// Open info modal on info-button click
-// Display employee details in the info modal
-// Open add modal on add-button click
-// Close modals on close-button click
-// Close modals when clicking outside
-
 // Function to display all employees
 var employeeTableBody = document.getElementById('employee-table-body');
 export function displayEmployees(employees) {
@@ -66,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     infoModal.style.display = 'block';
     saveButton.style.display = 'none';
     cancelButton2.style.display = 'none';
+    deleteButton.style.backgroundColor = '#c70000';
   }
 
   // Event listener for the close buttons
@@ -121,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!designationResponse.ok) {
         throw new Error('Failed to fetch employee designation');
       }
+      
       const employeeDesignation = await designationResponse.json();
       
       // Call formatEmployeeDetails with employee details and designation
@@ -267,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
               </div>
             </div>
           </div>
-        
+
           <div class="row">
             <button id="editButton" class="edit-button">Edit</button>
             <button id="deleteButton" class="delete-button">Delete Employee</button>

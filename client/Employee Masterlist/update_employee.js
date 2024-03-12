@@ -9,96 +9,230 @@ let departmentInput;
 let designationInput;
 let typeInput;
 let statusInput;
+let dependentOptions;
 
 // Event listener for the info modal
 infoModal.addEventListener('click', async function(event) {
     const target = event.target;
+    const editButton = document.getElementById('editButton');
+    const saveButton = document.getElementById('saveButton');
+    const deleteButton = document.getElementById('deleteButton');
+    const cancelButton2 = document.getElementById('cancelButton2');
 
     if (target.classList.contains('edit-button')) {
-        const editButton = document.getElementById('editButton');
-        const saveButton = document.getElementById('saveButton');
-        const deleteButton = document.getElementById('deleteButton');
-        const cancelButton2 = document.getElementById('cancelButton2');
-
-        const inputs = document.querySelectorAll('input[type="text"]');
-        inputs.forEach(input => {
-            if (input.name !== 'employee_id'){
-                input.removeAttribute('readonly');
-            }
-        });
-
         // Query the relevant input elements from the DOM
         departmentInput = document.querySelector('input[name="department"]');
         designationInput = document.querySelector('input[name="designation"]');
         typeInput = document.querySelector('input[name="type"]');
         statusInput = document.querySelector('input[name="status"]');
+
+        // Store current values of input elements
+        let current_departmentValue, current_designationValue, current_typeValue, current_statusValue;
+
+        // Fetch assignment details for a specific employee
+        const fetchAssignmentDetails = async (employeeId) => {
+            try {
+                const response = await fetch(`http://localhost:3000/assign-designation/${employeeId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch assignment details");
+                }
+                const data = await response.json();
+    
+                // Update input values with fetched assignment details
+                if (data) {
+                    current_departmentValue = data.department_id || '';
+                    current_designationValue = data.designation_id || '';
+                    current_typeValue = data.employee_type || '';
+                    current_statusValue = data.employee_status || '';
+
+                    // Check if inputs exist before iterating over them
+                    const inputs = document.querySelectorAll('input[type="text"]');
+                    if (inputs) {
+                        inputs.forEach(input => {
+                            if (input.name !== 'employee_id') {
+                                input.removeAttribute('readonly');
+                            }
+                        });
+                    } else {
+                        console.error("Inputs are undefined or not found");
+                        console.error('Additional context:', {
+                            target: event.target,
+                            errorDetails: error
+                        });
+                    }
+                    
+                    // Department Options
+                    const departmentOptions = [
+                        { text: 'Sales', value: 1 },
+                        { text: 'Marketing', value: 2 },
+                        { text: 'Finance', value: 3 },
+                        { text: 'Human Resources', value: 4 },
+                        { text: 'Information Technology', value: 5 },
+                        { text: 'Operations', value: 6 },
+                        { text: 'Customer Service', value: 7 },
+                        { text: 'Research and Development', value: 8 },
+                        { text: 'Production', value: 9 },
+                        { text: 'Quality Assurance', value: 10 }
+                    ]; 
+                
+                    // Populate designation dropdown based on selected department or add a default option
+                    const selectedDepartment = current_departmentValue;
+                    const designationOptions = {
+                        '1': [
+                            { text: 'Sales Manager', value: '1' },
+                            { text: 'Sales Representative', value: '2' },
+                        ],
+                        '2': [
+                            { text: 'Marketing Manager', value: '3' },
+                            { text: 'Marketing Specialist', value: '4' },
+                        ],
+                        '3': [
+                            { text: 'Financial Analyst', value: '5' },
+                            { text: 'Accountant', value: '6' },
+                        ],
+                        '4': [
+                            { text: 'HR Manager', value: '7' },
+                            { text: 'HR Coordinator', value: '8' },
+                        ],
+                        '5': [
+                            { text: 'IT Manager', value: '9' },
+                            { text: 'IT Specialist', value: '10' },
+                        ],
+                        '6': [
+                            { text: 'Operations Manager', value: '11' },
+                            { text: 'Operations Supervisor', value: '12' },
+                        ],
+                        '7': [
+                            { text: 'Customer Service Manager', value: '13' },
+                            { text: 'Customer Service Representative', value: '14' },
+                        ],
+                        '8': [
+                            { text: 'R&D Manager', value: '15' },
+                            { text: 'Research Scientist', value: '16' },
+                        ],
+                        '9': [
+                            { text: 'Production Manager', value: '17' },
+                            { text: 'Production Worker', value: '18' },
+                        ],
+                        '10': [
+                            { text: 'Quality Assurance Manager', value: '19' },
+                            { text: 'Quality Assurance Specialist', value: '20' },
+                        ],
+                    };
+                    
+                    // Type Options
+                    const typeOptions = [
+                        { text: 'Regular', value: 1 },
+                        { text: 'Part Time', value: 2 },
+                        { text: 'Contractual', value: 3 },
+                        { text: 'OJT', value: 4 },
+                        { text: 'Intern', value: 5 }
+                    ]; 
+
+                    // Status Options
+                    const statusOptions = [
+                        { text: 'Active', value: 1 },
+                        { text: 'On Leave', value: 2 },
+                        { text: 'Resigned', value: 3 },
+                        { text: 'Terminated', value: 4 },
+                        { text: 'Retired', value: 5 }
+                    ]; 
+
+                    // Create dropdown elements
+                    departmentDropdown = createDropdown(departmentOptions, designationDropdown);
+                    designationDropdown = createDropdown(designationOptions[selectedDepartment] || [], null);
+                    typeDropdown = createDropdown(typeOptions, null);
+                    statusDropdown = createDropdown(statusOptions, null);
+                                
+                    // Function to create dropdown element with dependency
+                    function createDropdown(options, dependentDropdown) {
+                        const select = document.createElement('select');
+                        options.forEach(option => {
+                            const optionElement = document.createElement('option');
+                            optionElement.textContent = option.text;
+                            optionElement.value = option.value;
+                            select.appendChild(optionElement);
+                        });
+
+                        // Add event listener for change event
+                        select.addEventListener('change', function() {
+                            if (dependentDropdown) {
+                                // Clear existing options
+                                dependentDropdown.innerHTML = '';
+
+                                // Check if dependentOptions is defined and has the expected structure
+                                if (dependentOptions && typeof dependentOptions === 'object' && this.value in dependentOptions) {
+                                    // Get dependent options based on the selected value
+                                    const selectedOptions = dependentOptions[this.value] || [];
+                                    // Add new options to the dependent dropdown
+                                    selectedOptions.forEach(option => {
+                                        const optionElement = document.createElement('option');
+                                        optionElement.textContent = option.text;
+                                        optionElement.value = option.value;
+                                        dependentDropdown.appendChild(optionElement);
+                                    });
+                                } else {
+                                    console.error('Dependent options not properly initialized or invalid');
+                                    // Handle the case where dependentOptions is not valid
+                                }
+                            }
+                        });
+                        return select;
+                    }
+
+                    // Event listener for department dropdown
+                    departmentDropdown.addEventListener('change', () => {
+                        const selectedDepartment = departmentDropdown.value;
+                        const designationOptionsForDepartment = designationOptions[selectedDepartment] || [];
+                        
+                        // Clear existing options
+                        designationDropdown.innerHTML = '';
+                        
+                        // Populate designation dropdown based on the selected department
+                        designationOptionsForDepartment.forEach(option => {
+                            const optionElement = document.createElement('option');
+                            optionElement.textContent = option.text;
+                            optionElement.value = option.value;
+                            designationDropdown.appendChild(optionElement);
+                        });
+                    });
+
+                    // Replace input elements with dropdown elements
+                    replaceElement(departmentInput, departmentDropdown);
+                    replaceElement(designationInput, designationDropdown);
+                    replaceElement(typeInput, typeDropdown);
+                    replaceElement(statusInput, statusDropdown);
+
+                    // Set the dropdown values to the current values
+                    departmentDropdown.value = current_departmentValue;
+                    designationDropdown.value = current_designationValue;
+                    typeDropdown.value = current_typeValue;
+                    statusDropdown.value = current_statusValue;
+                  
+                } else {
+                    console.error("No data received from server");
+                    console.error('Additional context:', {
+                        target: event.target,
+                        errorDetails: error
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching assignment details:", error);
+                console.error('Additional context:', {
+                    target: event.target,
+                    errorDetails: error
+                });
+            }
+        };
         
-        // Replace department input
-        const departmentOptions = [
-            { text: 'Sales', value: 1 },
-            { text: 'Marketing', value: 2 },
-            { text: 'Finance', value: 3 },
-            { text: 'Human Resources', value: 4 },
-            { text: 'Information Technology', value: 5 },
-            { text: 'Operations', value: 6 },
-            { text: 'Customer Service', value: 7 },
-            { text: 'Research and Development', value: 8 },
-            { text: 'Production', value: 9 },
-            { text: 'Quality Assurance', value: 10 }
-        ]; 
-        departmentDropdown = createDropdown(departmentOptions);
-        replaceElement(departmentInput, departmentDropdown);
-
-        // Replace designation input
-        const designationOptions = [
-            { text: 'Sales Manager', value: 1 },
-            { text: 'Sales Representative', value: 2 },
-            { text: 'Marketing Manager', value: 3 },
-            { text: 'Marketing Specialist', value: 4 },
-            { text: 'Financial Analyst', value: 5 },
-            { text: 'Accountant', value: 6 },
-            { text: 'HR Manager', value: 7 },
-            { text: 'HR Coordinator', value: 8 },
-            { text: 'IT Manager', value: 9 },
-            { text: 'IT Specialist', value: 10 },
-            { text: 'Operations Manager', value: 11 },
-            { text: 'Operations Supervisor', value: 12 },
-            { text: 'Customer Service Manager', value: 13 },
-            { text: 'Customer Service Representative', value: 14 },
-            { text: 'R&D Manager', value: 15 },
-            { text: 'Research Scientist', value: 16 },
-            { text: 'Production Manager', value: 17 },
-            { text: 'Production Worker', value: 18 },
-            { text: 'Quality Assurance Manager', value: 19 },
-            { text: 'Quality Assurance Specialist', value: 20 }
-        ]; 
-        designationDropdown = createDropdown(designationOptions);
-        replaceElement(designationInput, designationDropdown);
-
-        // Replace employee type input
-        const typeOptions = [
-            { text: 'Regular', value: 1 },
-            { text: 'Part Time', value: 2 },
-            { text: 'Contractual', value: 3 },
-            { text: 'OJT', value: 4 },
-            { text: 'Intern', value: 5 }
-        ]; 
-        typeDropdown = createDropdown(typeOptions);
-        replaceElement(typeInput, typeDropdown);
-
-        // Replace employment status input
-        const statusOptions = [
-            { text: 'Active', value: 1 },
-            { text: 'On Leave', value: 2 },
-            { text: 'Resigned', value: 3 },
-            { text: 'Terminated', value: 4 },
-            { text: 'Retired', value: 5 }
-        ]; 
-        statusDropdown = createDropdown(statusOptions);
-        replaceElement(statusInput, statusDropdown);
-
+        // Call fetchAssignmentDetails with the desired employee_id
+        const employeeId = document.querySelector('[name="employee_id"]').value;
+        fetchAssignmentDetails(employeeId);
+        
+        // Hide the edit and delete buttons
         deleteButton.style.display = 'none';
         editButton.style.display = 'none';
+        saveButton.style.backgroundColor = '#05a95c';
         saveButton.style.display = 'block';
         cancelButton2.style.display = 'block';
     } else if (target.classList.contains('delete-button')) {
@@ -119,8 +253,13 @@ infoModal.addEventListener('click', async function(event) {
             fetchEmployees();
         } catch (error) {
             console.error('Error deleting employee:', error);
+            console.error('Additional context:', {
+                target: event.target,
+                errorDetails: error
+            });
         }
     } else if (target.classList.contains('cancel-button-2')) {
+        deleteButton.style.backgroundColor = '#c70000';
         deleteButton.style.display = 'block';
         editButton.style.display = 'block';
         saveButton.style.display = 'none';
@@ -183,24 +322,32 @@ infoModal.addEventListener('click', async function(event) {
                 })
                 .catch(error => {
                     console.error('Error updating designation:', error);
+                    console.error('Additional context:', {
+                        target: event.target,
+                        errorDetails: error
+                    });
                     alert('An error occurred while updating designation');
                 });
             })
             .catch(error => {
                 console.error('Error updating employee:', error);
+                console.error('Additional context:', {
+                    target: event.target,
+                    errorDetails: error
+                });
                 alert('An error occurred while updating employee');
             });
             
-            // Replace dropdowns with input fields
-            departmentInput = document.querySelector('input[name="department"]');
-            designationInput = document.querySelector('input[name="designation"]');
-            typeInput = document.querySelector('input[name="type"]');
-            statusInput = document.querySelector('input[name="status"]');
+            // // Replace dropdowns with input fields
+            // departmentInput = document.querySelector('input[name="department"]');
+            // designationInput = document.querySelector('input[name="designation"]');
+            // typeInput = document.querySelector('input[name="type"]');
+            // statusInput = document.querySelector('input[name="status"]');
 
-            replaceElement(departmentDropdown, departmentInput);
-            replaceElement(designationDropdown, designationInput);
-            replaceElement(typeDropdown, typeInput);
-            replaceElement(statusDropdown, statusInput);
+            // replaceElement(departmentDropdown, departmentInput);
+            // replaceElement(designationDropdown, designationInput);
+            // replaceElement(typeDropdown, typeInput);
+            // replaceElement(statusDropdown, statusInput);
     
             // Show edit and delete buttons, hide save button and cancel button
             deleteButton.style.display = 'block';
@@ -212,7 +359,10 @@ infoModal.addEventListener('click', async function(event) {
             fetchEmployees();
         } catch (error) {
           console.error('Error updating employee:', error);
-          console.log(updatedEmployee);
+          console.error('Additional context:', {
+            target: event.target,
+            errorDetails: error
+        });
         }
     }
 });
@@ -221,20 +371,14 @@ infoModal.addEventListener('click', async function(event) {
 infoModal.addEventListener('submit', function(event) {
     event.preventDefault();
 });
-    
-// Function to create dropdown element
-function createDropdown(options) {
-    const select = document.createElement('select');
-    options.forEach(option => {
-        const optionElement = document.createElement('option');
-        optionElement.textContent = option.text;
-        optionElement.value = option.value;
-        select.appendChild(optionElement);
-    });
-    return select;
-}
 
 // Function to replace input element with dropdown element
 function replaceElement(inputElement, newElement) {
-    inputElement.parentNode.replaceChild(newElement, inputElement);
+// Check if inputElement exists and has a parent node
+if (!inputElement || !inputElement.parentNode) {
+    return; // Exit the function if inputElement or its parent node is invalid
+}
+
+// Replace inputElement with newElement
+inputElement.parentNode.replaceChild(newElement, inputElement);
 }
