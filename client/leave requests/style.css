@@ -26,7 +26,7 @@
     align-items: center;
 }
 
-.employee-list {
+.leave-list {
     width: 100%;
     margin-top: 1rem;
     color: #fff;
@@ -42,7 +42,7 @@ td {
     text-align: center;
 }
 
-.add-button {
+.leave-button {
     color: #fff;
     background-color: #AD88C6;
     padding: 10px 20px;
@@ -50,7 +50,7 @@ td {
     cursor: pointer;
 }
 
-.add-button:hover {
+.leave-button:hover {
     background-color: #E1AFD1;
     transition: ease-in-out 0.5s;
 }
@@ -121,7 +121,7 @@ td {
     max-width: 98%;
 }
 
-#employee-details-table {
+#leave-details-table {
     width: 100%;
     color: #fff;
     border-radius: 6px;
@@ -129,23 +129,23 @@ td {
     border-collapse: collapse;
 }
 
-#employee-details-table th,
-#employee-details-table td {
+#leave-details-table th,
+#leave-details-table td {
     padding: 12px;
     border-bottom: 1px solid #AD88C6;
 }
 
-#employee-details-table th {
+#leave-details-table th {
     background-color: transparent;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
 
-#employee-details-table td {
+#leave-details-table td {
     text-align: center;
 }
 
-#employee-details-table tbody tr:last-child td {
+#leave-details-table tbody tr:last-child td {
     border-bottom: none;
 }
 
