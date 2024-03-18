@@ -57,6 +57,28 @@ CREATE TABLE assign_designation (
     FOREIGN KEY (employee_status) REFERENCES employee_status(employee_status_id)
 );
 
+CREATE TABLE leave (
+    leave_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    leave_start DATE NOT NULL,
+    leave_end DATE,
+    leave_type INT NOT NULL,
+    leave_status INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (leave_type) REFERENCES leave_type(leave_type_id),
+    FOREIGN KEY (leave_status) REFERENCES employee_status(employee_status_id)
+);
+
+CREATE TABLE leave_type (
+    leave_type_id SERIAL PRIMARY KEY,
+    leave_type_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE leave_status (
+    leave_status_id SERIAL PRIMARY KEY,
+    leave_status_name VARCHAR(255) NOT NULL
+);
+
 -- QUERIES START (IN ORDER):
 
 -- ADD EMPLOYEE status
@@ -130,6 +152,21 @@ INSERT INTO assign_designation (employee_id, designation_id, employee_type_id, e
     (1, 1, 1, 1, '2024-02-01'),
     (2, 3, 2, 2, '2024-12-10'),
     (3, 5, 3, 3, '2024-08-01');
+
+-- ADD LEAVE TYPES
+INSERT INTO leave_type (leave_type_name) VALUES
+    ('Vacation Leave'),
+    ('Personal Leave'),
+    ('Sick Leave'),
+    ('Maternity Leave'),
+    ('Paternity Leave'),
+    ('Emergency Leave');
+
+-- ADD LEAVE STATUS
+INSERT INTO leave_status (leave_status_name) VALUES
+    ('Pending'),
+    ('Approved'),
+    ('Denied');
 
 -- JOIN STATEMENTS
 SELECT e.employee_id, e.first_name, e.middle_name, e.last_name, d.designation_name, dep.department_name, es.employee_status_name, ad.designation_date

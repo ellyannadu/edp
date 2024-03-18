@@ -62,6 +62,31 @@ app.post("/assign-designation", async (req, res) => {
   }
 });
 
+// Create a leave request
+app.post("/leave", async (req, res) => {
+  try {
+    const {
+      employee_id, leave_type, leave_start, leave_end, leave_status
+    } = req.body;
+    
+    const newLeaveQuery = `
+    INSERT INTO leave 
+      (employee_id, leave_type, leave_start, leave_end, leave_status) 
+    VALUES 
+      ($1, $2, $3, $4, $5)
+    RETURNING * `;
+
+    const newLeave = await pool.query(newLeaveQuery, [
+      employee_id, leave_type, leave_start, leave_end, leave_status
+    ]);
+
+    res.json(newLeave.rows[0]);
+  } catch (err) {
+    console.error("Error adding leave request:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Get all employees
 app.get("/employee", async(req, res) => {
   try {
@@ -117,30 +142,6 @@ app.get("/assign-designation/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// // Get all employee designations
-// app.get("/assign-designation", async(req, res) => {
-//   try {
-//     const allDesignations = await pool.query(`
-//     SELECT
-//       ad.assign_designation_id,
-//       ad.employee_id,
-//       ad.designation_id,
-//       ad.employee_type,
-//       ad.employee_status,
-//       ad.designation_date,
-//       d.department_id
-//     FROM
-//       assign_designation ad
-//     LEFT JOIN
-//       designation d ON ad.designation_id = d.designation_id;
-//     `);
-//     res.json(allDesignations.rows);
-//   } catch (err) {
-//     console.error("Cannot get designations:", err.message);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
 
 // Get employee JOINED with designation, status, type
 app.get("/employees", async(req, res) => {
@@ -199,6 +200,22 @@ app.get("/employee-type", async(req, res) => {
     res.json(allEmployeeType.rows);
   } catch (err) {
     console.error("Cannot get employee type:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get all leave requests joined with employee first name and last name, leave type, leave status
+app.get("/leave", async(req, res) => {
+  try {
+    const allLeaves = await pool.query(`
+    SELECT l.leave_id, e.first_name, e.last_name, lt.leave_type_name, ls.leave_status_name, l.leave_start, l.leave_end
+    FROM leave l
+    LEFT JOIN employee e ON l.employee_id = e.employee_id
+    LEFT JOIN leave_type lt ON l.leave_type = lt.leave_type_id
+    LEFT JOIN leave_status ls ON l.leave_status = ls.leave_status_id;`);
+    res.json(allLeaves.rows);
+  } catch (err) {
+    console.error("Cannot get leaves:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
