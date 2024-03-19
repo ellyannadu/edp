@@ -75,8 +75,9 @@
                 <span>Leaves</span>
                 <h1>Leave Requests</h1>
             </div>
+                
 
-            <button id="fileLeaveButton" class="modalBtn">
+            <button id="show-modal-button" class="modalBtn">
                 <i class="fa-solid fa-user-plus"></i>
                 <!-- Change to other symbol or "apply/file for leave??" -->
             </button>
@@ -116,11 +117,79 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- MODAL FOR ADD LEAVE REQUEST -->
+        <dialog id="leave-modal">
+            <div class="modal-content">
+                <span id="close-modal-button">&times;</span>
+                <h1 class="modal-title">File A Leave</h1>
+                <form method="put" id="file-leave-form">
+                    <div class="row">
+                        <div class="column">
+                        <div class="input--box">
+                            <label>Employee Name</label>
+                            <input type="text" name="employee-name" required />
+                        </div>
+                        </div>
+                    </div>
+        
+                    <div class="row">
+                        <div class="column">
+                        <div class="input--box">
+                            <label>From</label>
+                            <input type="text" name="leave-start" required />
+                        </div>
+                        </div>
+        
+                        <div class="column">
+                        <div class="input--box">
+                            <label>To</label>
+                            <input type="text" name="leave-end" required />
+                        </div>
+                        </div>
+                    </div>
+                    
+                    <div class="column">
+                        <div class="input--box">
+                          <label>Leave Type</label>
+                          <select name="leave-type" id="leave-type-select" required>
+                            <option value="1">Vacation</option>
+                            <option value="2">Personal</option>
+                            <option value="3">Sick</option>
+                            <option value="4">Maternity</option>
+                            <option value="5">Paternity</option>
+                            <option value="5">Paternity</option>
+                            <option value="6">Emergency</option>
+                          </select>
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="input--box">
+                          <label>Leave Status</label>
+                          <select name="leave-status" id="leave-status-select" required>
+                            <option value="1">Pending</option>
+                            <option value="2">Approved</option>
+                            <option value="3">Denied</option>
+                          </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="button--wrapper">
+                          <button type="submit">File Leave</button>
+                          <button type="reset">Clear</button>
+                          <button id="cancel-modal-button">Cancel</button>
+                        </div>
+                      </div>  
+                </form>
+            </div>
+          </dialog>
     </div>
+
     
-    <script type="module" src="view_employees.js"></script>
-    <script type="module" src="add_employee.js"></script>
-    <script type="module" src="update_employee.js"></script>
+    
+    <script type="module" src="leave_request.js"></script>
 </body>
 
 </html>
