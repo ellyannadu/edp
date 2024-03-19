@@ -107,13 +107,13 @@
                      -->
                 </tr>
                 <tbody id="leave-table-body">
-                    <tr>
+                    <!-- <tr>
                         <td>John Doe</td>
                         <td>2021-10-01</td>
                         <td>2021-10-05</td>
                         <td>Vacation Leave</td>
                         <td>Pending</td>
-                    </tr> 
+                    </tr>  -->
                 </tbody>
             </table>
         </div>
@@ -123,29 +123,31 @@
             <div class="modal-content">
                 <span id="close-modal-button">&times;</span>
                 <h1 class="modal-title">File A Leave</h1>
+
                 <form method="put" id="file-leave-form">
                     <div class="row">
                         <div class="column">
-                        <div class="input--box">
-                            <label>Employee Name</label>
-                            <input type="text" name="employee-name" required />
-                        </div>
+                            <div class="input--box">
+                                <label>Employee Name</label>
+                                <input type="text" id="search-input" placeholder="Search employees...">
+                                <select name="employee-name" id="employee-dropdown" required></select>
+                            </div>
                         </div>
                     </div>
-        
+
                     <div class="row">
                         <div class="column">
-                        <div class="input--box">
-                            <label>From</label>
-                            <input type="text" name="leave-start" required />
-                        </div>
+                            <div class="input--box">
+                                <label>From</label>
+                                <input type="date" name="leave-start" required/>
+                            </div>
                         </div>
         
                         <div class="column">
-                        <div class="input--box">
-                            <label>To</label>
-                            <input type="text" name="leave-end" required />
-                        </div>
+                            <div class="input--box">
+                                <label>To</label>
+                                <input type="date" name="leave-end" required/>
+                            </div>
                         </div>
                     </div>
                     
@@ -177,18 +179,16 @@
 
                     <div class="row">
                         <div class="button--wrapper">
-                          <button type="submit">File Leave</button>
+                          <button type="submit" onclick="fileLeave()">File Leave</button>
                           <button type="reset">Clear</button>
                           <button id="cancel-modal-button">Cancel</button>
                         </div>
                       </div>  
                 </form>
             </div>
-          </dialog>
+        </dialog>
+         <!-- END OF MODAL FOR ADD LEAVE REQUEST -->
     </div>
-
-    
-    
     <script type="module" src="leave_request.js"></script>
 </body>
 
