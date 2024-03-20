@@ -288,3 +288,25 @@ td {
 .info-modal-title {
     color: white;
 }
+
+.employee-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.employee-list-item {
+    cursor: pointer;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.employee-list-item:hover {
+    background-color: #f0f0f0;
+}
+
+#leave-modal body.modal-open {
+    overflow: hidden;
+}

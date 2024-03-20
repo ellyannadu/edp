@@ -24,10 +24,11 @@ export async function addLeave() {
       },
       
       body: JSON.stringify({
+        employee_id: 1,
         leave_start: '2022-12-01',
         leave_end: '2022-12-10',
         leave_type_id: 1,
-        employee_id: 1,
+        leave_status_id: 1
       }),
     });
     if (!response.ok) {
@@ -40,35 +41,25 @@ export async function addLeave() {
 }
 
 // Fetch all employees + populate dropdown
-export async function getEmployeesAndPopulateDropdown() {
+export async function getEmployeesAndPopulateList() {
   try {
     const response = await fetch('http://localhost:3000/employee');
     if (!response.ok) {
-      throw new Error('Failed to fetch employees');
+        throw new Error('Failed to fetch employees');
     }
     const allEmployees = await response.json();
 
-    // Get the dropdown element from the HTML
-    const employeeDropdown = document.getElementById('employee-dropdown');
+    const employeeList = document.getElementById('employee-list');
+    employeeList.innerHTML = '';
 
-    // Clear existing options in the dropdown
-    employeeDropdown.innerHTML = '';
-
-    // Add default "Select" option
-    const defaultOption = document.createElement('option');
-    defaultOption.text = 'Select';
-    defaultOption.value = ''; // Set the value to an empty string or 'select' as needed
-    defaultOption.selected = true; // Select the default option
-    employeeDropdown.appendChild(defaultOption);
-    
-    // Populate the dropdown with employees' names
     allEmployees.forEach(employee => {
-      const option = document.createElement('option');
-      option.text = `${employee.last_name}, ${employee.first_name} ${employee.middle_name}`;
-      option.value = employee.employee_id; // Set the value to the employee's ID if needed
-      employeeDropdown.appendChild(option);
+        const listItem = document.createElement('div');
+        listItem.classList.add('employee-list-item');
+        listItem.textContent = `${employee.last_name}, ${employee.first_name} ${employee.middle_name}`;
+        listItem.dataset.value = employee.employee_id; // Set the value attribute
+        employeeList.appendChild(listItem);
     });
   } catch (error) {
-    console.error('Error fetching employees:', error);
+      console.error('Error fetching employees:', error);
   }
 }
