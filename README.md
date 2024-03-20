@@ -1,3 +1,14 @@
+PROGRESS:
+> added leave page, leave modal for new leave request
+
+TO WORK ON:
+> CRUD for leave (cassey)
+> CRUD for signatories (arj)
+> link pages to one another (yunny)
+> edit css for leave-modal (yunny)
+
+
+
 To update local edp:
   git pull
 
