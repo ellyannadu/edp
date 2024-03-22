@@ -4,8 +4,8 @@ PROGRESS:
 TO WORK ON:
 1. Search name sa update leave request (cassey)
 2. CRUD for signatories (arj)
-3. link pages to one another (yunny)
-4. edit css for leave-modal (yunny)
+3. link pages to one another (yunny) 🟢
+4. edit css for leave-modal (yunny) 🟡
 
 
 
