@@ -63,4 +63,3 @@ export async function getEmployeesAndPopulateList() {
       console.error('Error fetching employees:', error);
   }
 }
-

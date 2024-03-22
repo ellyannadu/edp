@@ -61,7 +61,7 @@ CREATE TABLE leave (
     leave_id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
     leave_start DATE NOT NULL,
-    leave_end DATE,
+    leave_end DATE NOT NULL,
     leave_type INT NOT NULL,
     leave_status INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),

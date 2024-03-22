@@ -17,70 +17,63 @@
     <div class="sidebar">
         <div class="logo flex-container"></div>
         <ul class="menu">
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-gauge"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            <li>
-                <a href="/client/employee/view_employees.html">
-                    <i class="fa-solid fa-people-group"></i>
-                    <span>Employees</span>
-                </a>
-            </li>
-            
-            <li>
-                <a href="#">
-                    <i class="fa-solid fa-user-tag"></i>
-                    <span>Departments</span>
-                </a>
-            </li>
+
+        <li>
+          <a href="../dashboard/index.html">
+            <i class="fa-solid fa-gauge"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="../view employees/view_employees.html">
+            <i class="fa-solid fa-people-group"></i>
+            <span>Employees</span>
+          </a>
+        </li>
+
+        <li class="active">
+          <a href="../departments/departments.html">
+            <i class="fa-solid fa-user-tag"></i>
+            <span>Departments</span>
+          </a>
+        </li>
+
         <li>
           <a href="#">
             <i class="fa-solid fa-flag"></i>
             <span>Reports</span>
           </a>
         </li>
+
         <li>
           <a href="#">
             <i class="fa-solid fa-money-bill"></i>
             <span>Payroll</span>
           </a>
         </li>
-        <li>
+
+        <div class="logout-wrapper">
+          <li class="logout">
             <a href="#">
-                <i class="fa-solid fa-signal"></i>
-                <span>Signatories</span>
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Log Out</span>
             </a>
-        </li>
-        <li class="active">
-            <a href="#">
-                <i class="fa-solid fa-person-walking-arrow-right"></i>
-                <span>Leave Requests</span>
-            </a>
-        </li>
-            <div class="logout-wrapper">
-                <li class="logout">
-                    <a href="#">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                        <span>Log Out</span>
-                    </a>
-                </li>
-            </div>
-        </ul>
+          </li>
+        </div>
+
+      </ul>
     </div>
 
     <!-- Main Content -->
     <div class="main--content">
         <div class="header--wrapper">
             <div class="header--title">
-                <span>Leaves</span>
                 <h1>Leave Requests</h1>
             </div>
                 
 
-            <button id="show-modal-button" class="modalBtn">
+            <button id="show-add-modal-button" class="modalBtn">
                 <i class="fa-solid fa-user-plus"></i>
                 <!-- Change to other symbol or "apply/file for leave??" -->
             </button>
@@ -90,6 +83,7 @@
         <div id="leave-list" class="table-container">
             <table class="leave-list">
                 <tr>
+                    <th>ID</th>
                     <th>Requested By</th>
                     <th>From</th>
                     <th>To</th>
@@ -108,6 +102,7 @@
                         Approved
                         Denied
                      -->
+                     <th>Action</th>
                 </tr>
                 <tbody id="leave-table-body">
                     <!-- <tr>
@@ -122,18 +117,25 @@
         </div>
 
         <!-- MODAL FOR ADD LEAVE REQUEST -->
-        <dialog id="leave-modal">
+        <dialog id="add-leave-modal">
             <div class="modal-content">
-                <span id="close-modal-button">&times;</span>
+                <span id="close-add-modal-button">&times;</span>
                 <h1 class="modal-title">File A Leave</h1>
 
-                <form method="put" id="file-leave-form">
+                <form id="file-leave-form">
                     <div class="row">
                         <div class="column">
                             <div class="input--box">
                                 <label>Employee Name</label>
-                                <input type="text" id="search-input" placeholder="Search employee..." autocomplete="off">
+                                <input type="text" id="search-input" placeholder="Search employee..." autocomplete="off" required>
                                 <div name="employee-name" id="employee-list" class="employee-list" required></div>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Employee ID</label>
+                                <input type="text" name="employee-id" id="employee-id" autocomplete="off" readonly>
                             </div>
                         </div>
                     </div>
@@ -142,14 +144,14 @@
                         <div class="column">
                             <div class="input--box">
                                 <label>From</label>
-                                <input type="date" name="leave-start" required/>
+                                <input type="date" id="leave-start" name="leave-start" required/>
                             </div>
                         </div>
         
                         <div class="column">
                             <div class="input--box">
                                 <label>To</label>
-                                <input type="date" name="leave-end" required/>
+                                <input type="date" id="leave-end" name="leave-end" required/>
                             </div>
                         </div>
                     </div>
@@ -162,7 +164,6 @@
                             <option value="2">Personal</option>
                             <option value="3">Sick</option>
                             <option value="4">Maternity</option>
-                            <option value="5">Paternity</option>
                             <option value="5">Paternity</option>
                             <option value="6">Emergency</option>
                           </select>
@@ -184,14 +185,100 @@
                         <div class="button--wrapper">
                           <button type="submit" id="file-leave-button">File Leave</button>
                           <button type="reset">Clear</button>
-                          <button id="cancel-modal-button">Cancel</button>
+                          <button id="cancel-add-modal-button">Cancel</button>
                         </div>
                       </div>  
                 </form>
             </div>
         </dialog>
-         <!-- END OF MODAL FOR ADD LEAVE REQUEST -->
+        <!-- END OF MODAL FOR ADD LEAVE REQUEST -->
+
+        <!-- MODAL FOR UPDATE LEAVE REQUEST -->
+        <dialog id="edit-leave-modal">
+            <div class="modal-content">
+                <span id="close-edit-modal-button">&times;</span>
+                <h1 class="modal-title">Edit Leave Request</h1>
+
+                <form id="edit-leave-form">
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Leave ID</label>
+                                <input type="text" name="leave-id" id="leave-id" autocomplete="off" readonly>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Employee ID</label>
+                                <input type="text" name="employee-id" id="employee-id" autocomplete="off" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Employee Name</label>
+                                <input type="text" id="search-input" autocomplete="off" required>
+                                <div name="employee-name" id="employee-list" class="employee-list" required></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>From</label>
+                                <input type="date" id="leave-start" name="leave-start" required/>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>To</label>
+                                <input type="date" id="leave-end" name="leave-end" required/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Leave Type</label>
+                                <select name="leave-type" id="leave-type-select" required>
+                                    <option value="1">Vacation</option>
+                                    <option value="2">Personal</option>
+                                    <option value="3">Sick</option>
+                                    <option value="4">Maternity</option>
+                                    <option value="5">Paternity</option>
+                                    <option value="6">Emergency</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="column">
+                            <div class="input--box">
+                                <label>Leave Status</label>
+                                <select name="leave-status" id="leave-status-select" required>
+                                    <option value="1">Pending</option>
+                                    <option value="2">Approved</option>
+                                    <option value="3">Denied</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="button--wrapper">
+                            <button type="submit" id="update-leave-button">Update Leave</button>
+                            <button id="cancel-edit-modal-button">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </dialog>
+        <!-- END OF MODAL FOR UPDATE LEAVE REQUEST -->
     </div>
 </body>
-
 </html>
