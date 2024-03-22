@@ -3,8 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="view_employees.css" />
-    <link rel="stylesheet" href="sidebar.css" />
+    <link rel="stylesheet" href="/client/css/view_employees.css">
+    <link rel="stylesheet" href="/client/css/sidebar.css">
+    <link rel="stylesheet" href="/client/css/style.css">
     <script
       src="https://kit.fontawesome.com/e4c61f12b3.js"
       crossorigin="anonymous"
@@ -17,38 +18,42 @@
     <div class="sidebar">
       <div class="logo flex-container"></div>
       <ul class="menu">
+        <!-- ------------------------------------------------------------------------- -->
         <li>
-          <a href="#">
+          <a href="../dashboard/index.html">
             <i class="fa-solid fa-gauge"></i>
             <span>Dashboard</span>
           </a>
         </li>
-        <li class="active">
-          <a href="#">
+        <!-- ------------------------------------------------------------------------- -->
+        <li>
+          <a href="../view employees/view_employees.html">
             <i class="fa-solid fa-people-group"></i>
             <span>Employees</span>
           </a>
         </li>
-        <li>
-          <a href="#">
+        <!-- ------------------------------------------------------------------------- -->
+        <li class="active">
+          <a href="../departments/departments.html">
             <i class="fa-solid fa-user-tag"></i>
             <span>Departments</span>
           </a>
         </li>
-<!--
-        <li>
-          <a href="#">
-            <i class="fa-solid fa-flag"></i>
-            <span>Reports</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <i class="fa-solid fa-money-bill"></i>
-            <span>Payroll</span>
-          </a>
-        </li>
--->
+        <!-- ------------------------------------------------------------------------- -->
+        <!-- <li>
+                <a href="#">
+                  <i class="fa-solid fa-flag"></i>
+                  <span>Reports</span>
+                </a>
+              </li> -->
+        <!-- ------------------------------------------------------------------------- -->
+        <!-- <li>
+                <a href="#">
+                  <i class="fa-solid fa-money-bill"></i>
+                  <span>Payroll</span>
+                </a>
+              </li> -->
+        <!-- ------------------------------------------------------------------------- -->
         <div class="logout-wrapper">
           <li class="logout">
             <a href="#">
@@ -57,6 +62,7 @@
             </a>
           </li>
         </div>
+        <!-- ------------------------------------------------------------------------- -->
       </ul>
     </div>
     
@@ -311,8 +317,8 @@
         </div>
       </div>
     </div>
-    <script type="module" src="view_employees.js"></script>
-    <script type="module" src="add_employee.js"></script>
-    <script type="module" src="update_employee.js"></script>
+    <script type="module" src="/client/js/view_employees.js"></script>
+    <script type="module" src="/client/js/add_employee.js"></script>
+    <script type="module" src="/client/js/update_employee.js"></script>
 </body>
 </html>

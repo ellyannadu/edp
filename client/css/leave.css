@@ -26,7 +26,7 @@
     align-items: center;
 }
 
-.employee-list {
+.leave-list {
     width: 100%;
     margin-top: 1rem;
     color: #fff;
@@ -39,10 +39,30 @@
 
 th,
 td {
+    text-align: left;
+}
+
+.pending-status {
+    background-color: yellow;
+    border-radius: 5px;
+    color: black;
     text-align: center;
 }
 
-.add-button {
+.approved-status {
+    background-color: green;
+    border-radius: 5px;
+    text-align: center;
+
+}
+
+.denied-status {
+    background-color: red;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.leave-button {
     color: #fff;
     background-color: #AD88C6;
     padding: 10px 20px;
@@ -50,7 +70,7 @@ td {
     cursor: pointer;
 }
 
-.add-button:hover {
+.leave-button:hover {
     background-color: #E1AFD1;
     transition: ease-in-out 0.5s;
 }
@@ -121,7 +141,7 @@ td {
     max-width: 98%;
 }
 
-#employee-details-table {
+#leave-details-table {
     width: 100%;
     color: #fff;
     border-radius: 6px;
@@ -129,23 +149,23 @@ td {
     border-collapse: collapse;
 }
 
-#employee-details-table th,
-#employee-details-table td {
+#leave-details-table th,
+#leave-details-table td {
     padding: 12px;
     border-bottom: 1px solid #AD88C6;
 }
 
-#employee-details-table th {
+#leave-details-table th {
     background-color: transparent;
     border-top-left-radius: 6px;
     border-top-right-radius: 6px;
 }
 
-#employee-details-table td {
+#leave-details-table td {
     text-align: center;
 }
 
-#employee-details-table tbody tr:last-child td {
+#leave-details-table tbody tr:last-child td {
     border-bottom: none;
 }
 
@@ -288,3 +308,48 @@ td {
 .info-modal-title {
     color: white;
 }
+
+/* YUNNY, ito na part kasi para mag float yung employee-list na 
+scrollbar and hindi siya mag affect ng other elements */
+
+/* Style the employee list container */
+.input--box {
+    position: relative; /* Set the parent container to relative positioning */
+}
+
+/* Style the employee list container */
+.employee-list {
+    position: absolute; /* Set the employee list to absolute positioning */
+    top: calc(100% + 5px); /* Position it below the input box */
+    left: 0;
+    z-index: 1000; /* Ensure it appears above other elements */
+    max-height: 300px; /* Set a maximum height for the list */
+    overflow-y: auto; /* Enable vertical scrollbar */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
+    display: none; /* Initially hide the list */
+    width: 100%; /* Make the list full width */
+}
+
+/* Show the employee list when its parent is hovered */
+.input--box:hover .employee-list {
+    display: block;
+}
+
+.employee-list-item {
+    cursor: pointer;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+    font-size: 12px;
+}
+
+.employee-list-item:hover {
+    background-color: #f0f0f0;
+}
+
+#leave-modal body.modal-open {
+    overflow: hidden;
+}
+
