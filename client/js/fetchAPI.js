@@ -64,3 +64,49 @@ export async function getEmployeesAndPopulateList() {
   }
 }
 
+// Function to submit/add a new leave request
+export async function submitLeaveRequest(requestData) {
+  try {
+    const response = await fetch('http://localhost:3000/leave', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit leave request');
+    }
+
+    const data = await response.json(); // Parse response as JSON
+    console.log('Leave request submitted successfully:', data);
+    // Optionally, update the UI or perform other actions after successful submission
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred, please try again later');
+  }
+}
+
+// Function to update a leave request of a specific ID
+export async function updateLeaveRequest(requestData, leave_id) {
+  try {
+    const response = await fetch(`http://localhost:3000/leave/${leave_id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update leave request');
+    }
+
+    const data = await response.json(); // Parse response as JSON
+    console.log('Leave request updated successfully:', data);
+  } catch(error) {
+    console.error('Error:', error);
+    alert('An error occurred, please try again later');
+  }
+}
