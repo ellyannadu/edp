@@ -124,8 +124,6 @@ td {
     display: none;
     position: fixed;
     z-index: 1;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -135,10 +133,29 @@ td {
 .modal-content {
     background-color: #7469B6;
     margin: 1% auto;
-    padding: 20px 40px;
-    padding-bottom: 60px;
+    padding: 100px 150px;
     border-radius: 10px;
     max-width: 98%;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-content h1,
+.modal-content label,
+.modal-content span {
+    color: #fff !important;
+}
+
+.modal-content span {
+    color: #fff !important;
+    font-size: 24px;
+    font-weight: bold;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
 }
 
 #leave-details-table {
@@ -188,6 +205,7 @@ td {
 
 .modal-title {
     color: #FFF;
+    font-size: 36px;
 }
 
 .container {
@@ -202,29 +220,31 @@ td {
 
 .form {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 80px;
 }
 
 .form .input--box {
     width: 100%;
-    margin-top: 20px;
+    margin-top: 80px;
 }
 
 .input--box label {
     color: #333;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 18px;
+    margin: 1px;
+    padding-top: 10px;
 }
 
 .form .input--box input,
 .form .input--box select {
-    height: 40px;
+    height: 50px;
     width: 100%;
     outline: none;
     font-size: 1rem;
     color: #333;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 0 15px;
     margin-top: 10px;
 }
@@ -262,7 +282,23 @@ td {
     width: 100%;
 }
 
-.form button {
+.button--wrapper button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #AD88C6;
+    color:#FFF;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.button--wrapper button:hover {
+    background-color: #E1AFD1;
+    transition: ease-in-out 0.5s;
+}
+
+/* .form button {
     display: block;
     height: 40px;
     width: 300px;
@@ -279,18 +315,21 @@ td {
 .form button:hover {
     background-color: #AD88C6;
     transition: ease-out 0.5s;
-}
+} */
 
 ::placeholder {
-    color: #999;
+    color: gray;
+    font-weight: 500;
 }
 
 ::-ms-input-placeholder {
-    color: #999;
+    color: gray;
+    font-weight: 500;
 }
 
 ::-ms-input-placeholder {
-    color: #999;
+    color: gray;
+    font-weight: 500;
 }
 
 /* UPDATE EMPLOYEE MODAL CSS */
@@ -314,23 +353,32 @@ scrollbar and hindi siya mag affect ng other elements */
 
 /* Style the employee list container */
 .input--box {
-    position: relative; /* Set the parent container to relative positioning */
+    position: relative;
+    /* Set the parent container to relative positioning */
 }
 
 /* Style the employee list container */
 .employee-list {
-    position: absolute; /* Set the employee list to absolute positioning */
-    top: calc(100% + 5px); /* Position it below the input box */
+    position: absolute;
+    /* Set the employee list to absolute positioning */
+    top: calc(100% + 5px);
+    /* Position it below the input box */
     left: 0;
-    z-index: 1000; /* Ensure it appears above other elements */
-    max-height: 300px; /* Set a maximum height for the list */
-    overflow-y: auto; /* Enable vertical scrollbar */
+    z-index: 1000;
+    /* Ensure it appears above other elements */
+    max-height: 300px;
+    /* Set a maximum height for the list */
+    overflow-y: auto;
+    /* Enable vertical scrollbar */
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add a shadow for depth */
-    display: none; /* Initially hide the list */
-    width: 100%; /* Make the list full width */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    /* Add a shadow for depth */
+    display: none;
+    /* Initially hide the list */
+    width: 100%;
+    /* Make the list full width */
 }
 
 /* Show the employee list when its parent is hovered */
@@ -352,4 +400,3 @@ scrollbar and hindi siya mag affect ng other elements */
 #leave-modal body.modal-open {
     overflow: hidden;
 }
-
