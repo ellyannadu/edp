@@ -1,0 +1,290 @@
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.leave-list {
+    width: 100%;
+    margin-top: 1rem;
+    color: #fff;
+    background-color: #6559a8;
+    border-top: #fff;
+    border-radius: 6px;
+    padding: 10px 10px 10px 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+th,
+td {
+    text-align: center;
+}
+
+.leave-button {
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.leave-button:hover {
+    background-color: #E1AFD1;
+    transition: ease-in-out 0.5s;
+}
+
+.fa-solid.fa-user-plus {
+    font-size: 15px;
+}
+
+.modalBtn {
+    background-color: transparent;
+    color: #FFF;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.modalBtn:hover {
+    color: #E1AFD1;
+    transition: ease-in-out 0.3s;
+}
+
+
+.fa-solid.fa-circle-info {
+    font-size: 17px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete-button,
+.edit-button {
+    display: inline-block;
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-button:hover,
+.edit-button:hover {
+    background-color: #E1AFD1;
+    transition: ease-in-out 0.5s;
+}
+
+/* modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #7469B6;
+    margin: 1% auto;
+    padding: 20px 40px;
+    padding-bottom: 60px;
+    border-radius: 10px;
+    max-width: 98%;
+}
+
+#leave-details-table {
+    width: 100%;
+    color: #fff;
+    border-radius: 6px;
+    padding: 10px;
+    border-collapse: collapse;
+}
+
+#leave-details-table th,
+#leave-details-table td {
+    padding: 12px;
+    border-bottom: 1px solid #AD88C6;
+}
+
+#leave-details-table th {
+    background-color: transparent;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+#leave-details-table td {
+    text-align: center;
+}
+
+#leave-details-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.close {
+    color: #fff;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.close:hover,
+.close:focus {
+    color: #AD88C6;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* ADD EMPLOYEE MODAL CSS */
+
+.modal-title {
+    color: #FFF;
+}
+
+.container {
+    position: center;
+    max-width: 100%;
+    width: 100%;
+    background: #F2F2F2;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.form {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form .input--box {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input--box label {
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.form .input--box input,
+.form .input--box select {
+    height: 40px;
+    width: 100%;
+    outline: none;
+    font-size: 1rem;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 15px;
+    margin-top: 10px;
+}
+
+.form .column {
+    display: flex;
+    column-gap: 15px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.row--options {
+    display: flex !important;
+    flex-wrap: wrap;
+}
+
+.column {
+    flex: 1 !important;
+    margin: 0 0.5rem;
+}
+
+.input--box {
+    display: flex;
+    flex-direction: column;
+}
+
+.button--wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    width: 100%;
+}
+
+.form button {
+    display: block;
+    height: 40px;
+    width: 300px;
+    color: #FFF;
+    font-size: 1rem;
+    border: none;
+    margin: 50px auto 0;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    background-color: #7469B6;
+}
+
+.form button:hover {
+    background-color: #AD88C6;
+    transition: ease-out 0.5s;
+}
+
+::placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
+}
+
+::-ms-input-placeholder {
+    color: #999;
+}
+
+/* UPDATE EMPLOYEE MODAL CSS */
+.update-container {
+    display: none;
+    position: center;
+    max-width: 100%;
+    width: 100%;
+    background: #F2F2F2;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-modal-title {
+    color: white;
+}
+
+.employee-list {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+}
+
+.employee-list-item {
+    cursor: pointer;
+    padding: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.employee-list-item:hover {
+    background-color: #f0f0f0;
+}
+
+#leave-modal body.modal-open {
+    overflow: hidden;
+}

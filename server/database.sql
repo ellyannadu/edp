@@ -79,6 +79,15 @@ CREATE TABLE leave_status (
     leave_status_name VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE Signatories (
+    signatory_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    superior_id INT,
+    superior_status VARCHAR(10) NOT NULL DEFAULT 'Active',
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (superior_id) REFERENCES employee(employee_id)
+);
+
 -- QUERIES START (IN ORDER):
 
 -- ADD EMPLOYEE status
