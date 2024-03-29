@@ -215,7 +215,7 @@ app.get("/leave", async(req, res) => {
     LEFT JOIN employee e ON l.employee_id = e.employee_id
     LEFT JOIN leave_type lt ON l.leave_type = lt.leave_type_id
     LEFT JOIN leave_status ls ON l.leave_status = ls.leave_status_id
-    ORDER BY l.leave_start;`);
+    ORDER BY l.leave_id;`);
     res.json(allLeaves.rows);
   } catch (err) {
     console.error("Cannot get leaves:", err.message);
@@ -268,23 +268,25 @@ app.put("/assign-designation/:id", async (req, res) => {
 // Update a leave request
 app.put("/leave/:id", async (req, res) => {
   try {
-    const{id} = req.params;
+    const { id } = req.params;
     const {
-      leave_start, leave_end, leave_type, leave_status
+      leave_id, employee_id, leave_start, leave_end, leave_type, leave_status
     } = req.body;
 
     const updateLeave = await pool.query(`
       UPDATE leave
-      SET leave_start = $1, leave_end = $2, leave_type = $3, leave_status = $4
-      WHERE leave_id = $5`, 
-      [leave_start, leave_end, leave_type, leave_status, id]
+      SET employee_id = $1, leave_start = $2, leave_end = $3, leave_type = $4, leave_status = $5
+      WHERE leave_id = $6`, 
+      [employee_id, leave_start, leave_end, leave_type, leave_status, leave_id]
     );
-      res.json("Leave request was updated");
-    } catch (err) {
+
+    res.json("Leave request was updated");
+  } catch (err) {
     console.log("Cannot update leave request:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 // Delete an employee
 app.delete("/employee/:id", async (req, res) => {

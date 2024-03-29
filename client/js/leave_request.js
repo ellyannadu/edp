@@ -1,3 +1,4 @@
+// to fix: update employee name [di magwork], search sa add modal
 import { submitLeaveRequest, getEmployeesAndPopulateList, getLeaves, updateLeaveRequest } from './fetchAPI.js';
 
 const addLeaveModal = document.getElementById('add-leave-modal');
@@ -9,13 +10,18 @@ const cancelAddModalButton = document.getElementById('cancel-add-modal-button');
 const cancelEditModalButton = document.getElementById('cancel-edit-modal-button');
 const addLeaveForm = document.getElementById('file-leave-form');
 const editLeaveForm = document.getElementById('edit-leave-form');
-const searchInput = document.getElementById('search-input');
-const employeeList = document.getElementById('employee-list');
-const employeeIDInput = document.getElementById('employee-id');
 
 // Fetch all leave on page load
 document.addEventListener('DOMContentLoaded', function() {
     getLeaves();
+    getEmployeesAndPopulateList();
+});
+
+document.addEventListener('click', function(event) {
+    const isClickedInsideDropdown = employeeListEdit.contains(event.target);
+    if (!isClickedInsideDropdown) {
+        hideDropdown(); // Hide dropdown if clicked outside
+    }
 });
 
 // Show add leave request modal
@@ -79,11 +85,16 @@ export function displayLeave(leave) {
 
         statusCell.textContent = leaveItem.leave_status_name;
 
+        const leave_Start = new Date(leaveItem.leave_start);
+        const leave_End = new Date(leaveItem.leave_end);
+        leave_Start.setDate(leave_Start.getDate() + 1);
+        leave_End.setDate(leave_End.getDate() + 1);
+
         row.innerHTML = `
             <td>${leaveItem.leave_id}</td>
             <td>${leaveItem.first_name} ${leaveItem.last_name}</td>
-            <td>${leaveItem.leave_start.split('T')[0]}</td>
-            <td>${leaveItem.leave_end.split('T')[0]}</td>
+            <td>${leave_Start.toISOString().split('T')[0]}</td>
+            <td>${leave_End.toISOString().split('T')[0]}</td>
             <td>${leaveItem.leave_type_name}</td>
         `;
         row.appendChild(statusCell);
@@ -97,68 +108,64 @@ function createEditButton(leaveItem) {
     const editButton = document.createElement('button');
     editButton.textContent = 'Edit';
     editButton.classList.add('edit-button');
-    console.log('leaveItem', leaveItem);   
+    // console.log('leaveItem', leaveItem);   
 
     editButton.addEventListener('click', function() {
         editLeaveModal.showModal();
         editLeaveForm.elements['leave-id'].value = leaveItem.leave_id;
         editLeaveForm.elements['employee-id'].value = leaveItem.employee_id;
-        editLeaveForm.elements['search-input'].value = `${leaveItem.last_name}, ${leaveItem.first_name} ${leaveItem.middle_name}`;
+        editLeaveForm.elements['edit-search-input'].value = `${leaveItem.last_name}, ${leaveItem.first_name} ${leaveItem.middle_name}`;
         editLeaveForm.elements['leave-start'].value = leaveItem.leave_start.split('T')[0];
         editLeaveForm.elements['leave-end'].value = leaveItem.leave_end.split('T')[0];
         editLeaveForm.elements['leave-type-select'].value = leaveItem.leave_type;
         editLeaveForm.elements['leave-status-select'].value = leaveItem.leave_status;
+        getEmployeesAndPopulateList();
     });
     return editButton;
 }
 
-// Fetch all employees + populate dropdown
-window.addEventListener('load', function() {
-    getEmployeesAndPopulateList();
-
-    employeeList.addEventListener('click', function(event) {
-        const selectedItem = event.target.closest('.employee-list-item');
-        if (selectedItem) {
-            const selectedName = selectedItem.textContent.trim();
-            const selectedValue = selectedItem.dataset.value;
-            searchInput.value = selectedName;
-            employeeIDInput.value = selectedValue;
-            console.log('Selected Name ID:', selectedValue); // Log the selected name
-            employeeList.style.display = 'none';
-            searchInput.focus();
-        }
-    });
-});
-
-// Filter employee list based on search input
-function filterList() {
-    const searchText = searchInput.value.trim().toLowerCase();
-    const listItems = employeeList.getElementsByClassName('employee-list-item');
-
-    // Show list when typing starts
-    if (searchText.length > 0) {
-        employeeList.style.display = 'block';
-        employeeIDInput.value = ''; // Clear employee ID
-    } else {
-        employeeList.style.display = 'none';
-    }
-
-    // Filter list items based on search text
-    for (const item of listItems) {
-        const itemName = item.textContent.trim().toLowerCase();
-        if (itemName.includes(searchText)) {
-            item.style.display = 'block'; // Show matching item
-        } else {
-            item.style.display = 'none'; // Hide non-matching item
-        }
-    }
+// Function to hide the dropdown
+function hideDropdown() {
+    employeeListEdit.classList.remove('show-dropdown');
+    employeeListAdd.classList.remove('show-dropdown');
 }
 
-searchInput.addEventListener('input', filterList);
+// Event listener for employee list items in the add modal
+const employeeIdInputAdd = document.querySelector('#employee-id');
+const employeeListAdd = document.querySelector('.employee-list-dropdown');
+const employeeNameInput = document.querySelector('#search-input');
 
-searchInput.addEventListener('click', function() {
-    employeeList.style.display = 'block';
-    filterList();
+employeeListAdd.addEventListener('click', function(event) {
+    const clickedItem = event.target.closest('.employee-list-item');
+    if (clickedItem) {
+        const employeeId = clickedItem.dataset.value;
+        const employeeName = clickedItem.textContent.trim();
+        if (employeeIdInputAdd) {
+            console.log('clicked ID in add modal: ', employeeId);
+            employeeIdInputAdd.value = employeeId; // Update employee ID input in add modal
+            employeeNameInput.value = employeeName; // Update employee name input in add modal
+            hideDropdown();
+        }
+    }
+});
+
+// Event listener for employee list items in the edit modal
+const employeeIdInputEdit = document.querySelector('#employee-id-edit');
+const employeeListEdit = document.querySelector('.employee-list-dropdown-edit');
+const employeeNameInputEdit = document.querySelector('#edit-search-input');
+
+employeeListEdit.addEventListener('click', function(event) {
+    const clickedItem = event.target.closest('.employee-list-item');
+    if (clickedItem) {
+        const employeeId = clickedItem.dataset.value;
+        const employeeNameEdit = clickedItem.textContent.trim();
+        if (employeeIdInputEdit) {
+            console.log('clicked ID in edit modal: ', employeeId);
+            employeeIdInputEdit.value = employeeId; // Update employee ID input in edit modal
+            employeeNameInputEdit.value = employeeNameEdit; // Update employee name input in edit modal
+            hideDropdown();
+        }
+    }
 });
 
 // Submit leave request on file leave button
@@ -167,33 +174,15 @@ addLeaveForm.addEventListener('submit', function(event) {
     // Get form data
     const formData = new FormData(addLeaveForm);
 
-    // Adjust dates for timezone offset
-    const leaveStartInput = formData.get('leave-start');
-    const leaveEndInput = formData.get('leave-end');
-    console.log("leaveStartInput", leaveStartInput);
-    console.log("leaveEndInput", leaveEndInput);
-    // Manually parse date strings and construct UTC date objects
-    const [startYear, startMonth, startDay] = leaveStartInput.split('-').map(Number);
-    const [endYear, endMonth, endDay] = leaveEndInput.split('-').map(Number);
-    const leaveStart = new Date(Date.UTC(startYear, startMonth - 1, startDay)); // Note: Month is zero-based in JavaScript
-    const leaveEnd = new Date(Date.UTC(endYear, endMonth - 1, endDay)); // Note: Month is zero-based in JavaScript
-
-    leaveStart.setDate(leaveStart.getDate() + 1);
-    leaveEnd.setDate(leaveEnd.getDate() + 1);
-
     const requestData = {
         employee_id: formData.get('employee-id'),
-        leave_start: leaveStart.toISOString(),         
-        leave_end: leaveEnd.toISOString(),
+        leave_start: formData.get('leave-start').split('T')[0],         
+        leave_end: formData.get('leave-end').split('T')[0],
         leave_type: formData.get('leave-type'),
         leave_status: formData.get('leave-status'),
     };
-
-    console.log('Form Data 1:', requestData);
     submitLeaveRequest(requestData);
     addLeaveModal.close();
-    getLeaves(); 
-    addLeaveForm.reset();
 }); 
 
 // Edit/Update Leave Request on form submit
@@ -201,24 +190,21 @@ editLeaveForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(editLeaveForm);
-    const leave_id = formData.get('leave-id');
-    const leaveStart = new Date(formData.get('leave-start'));
-    const leaveEnd = new Date(formData.get('leave-end'));
-    leaveStart.setDate(leaveStart.getDate() + 1);
-    leaveEnd.setDate(leaveEnd.getDate() + 1);
 
     const requestedData = {
         employee_id: formData.get('employee-id'),
-        leave_start: leaveStart.toISOString(),
-        leave_end: leaveEnd.toISOString(),
+        leave_id: formData.get('leave-id'),
+        leave_start: formData.get('leave-start').split('T')[0],         
+        leave_end: formData.get('leave-end').split('T')[0],
         leave_type: formData.get('leave-type'),
         leave_status: formData.get('leave-status'),
     };
 
     try {
-        updateLeaveRequest(requestedData, leave_id);
+        updateLeaveRequest(requestedData);
         editLeaveModal.close();
     } catch (error) {
         console.error('Error updating leave:', error);
     }
 });
+

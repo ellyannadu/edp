@@ -126,19 +126,19 @@
                     <div class="row">
                         <div class="column">
                             <div class="input--box">
-                                <label>Employee Name</label>
-                                <input type="text" id="search-input" placeholder="Search employee..." autocomplete="off" required>
-                                <div name="employee-name" id="employee-list" class="employee-list" required></div>
+                                <label for="search-input">Employee Name</label>
+                                <input type="text" id="search-input" class="search-input" placeholder="Search employee..." autocomplete="off" required>
+                                <div name="employee-name" class="employee-list-dropdown employee-list" required></div>
                             </div>
                         </div>
-
+                
                         <div class="column">
                             <div class="input--box">
-                                <label>Employee ID</label>
-                                <input type="text" name="employee-id" id="employee-id" autocomplete="off" readonly>
+                                <label for="employee-id">Employee ID</label>
+                                <input type="text" name="employee-id" id="employee-id" class="employee-id-input" autocomplete="off" readonly>
                             </div>
                         </div>
-                    </div>
+                    </div>                
 
                     <div class="row">
                         <div class="column">
@@ -203,15 +203,15 @@
                     <div class="row">
                         <div class="column">
                             <div class="input--box">
-                                <label>Leave ID</label>
+                                <label for="leave-id">Leave ID</label>
                                 <input type="text" name="leave-id" id="leave-id" autocomplete="off" readonly>
                             </div>
                         </div>
 
                         <div class="column">
                             <div class="input--box">
-                                <label>Employee ID</label>
-                                <input type="text" name="employee-id" id="employee-id" autocomplete="off" readonly>
+                                <label for="employee-id">Employee ID</label>
+                                <input type="text" name="employee-id" id="employee-id-edit" class="employee-id-input" autocomplete="off" readonly>
                             </div>
                         </div>
                     </div>
@@ -219,9 +219,9 @@
                     <div class="row">
                         <div class="column">
                             <div class="input--box">
-                                <label>Employee Name</label>
-                                <input type="text" id="search-input" autocomplete="off" required>
-                                <div name="employee-name" id="employee-list" class="employee-list" required></div>
+                                <label for="edit-search-input">Employee Name</label>
+                                <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
+                                <div name="employee-name" class="employee-list-dropdown-edit employee-list" required></div>
                             </div>
                         </div>
                     </div>
