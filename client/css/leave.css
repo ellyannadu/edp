@@ -398,6 +398,7 @@ scrollbar and hindi siya mag affect ng other elements */
     /* Make the list full width */
 }
 
+
 /* Show the employee list when its parent is hovered */
 .input--box:hover .employee-list {
     display: block;
