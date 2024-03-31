@@ -156,7 +156,7 @@ td {
 }
 
 .modal-background .row {
-    gap: 200px;
+    gap: 20px;
 }
 
 .modal-content h1,
@@ -417,4 +417,34 @@ scrollbar and hindi siya mag affect ng other elements */
 
 #leave-modal body.modal-open {
     overflow: hidden;
+}
+
+/* Media query for smaller screens for modal */
+@media screen and (max-width: 768px) {
+    .modal-content {
+        padding: 20px; /* Increase padding for smaller screens */
+        width: 90%; /* Adjust modal width for smaller screens */
+    }
+
+    .modal-title {
+        font-size: 24px; /* Reduce font size for smaller screens */
+    }
+
+    .input--box input,
+    .input--box select {
+        width: 100%; /* Make input and select elements full width */
+    }
+
+    .row {
+        flex-direction: column; /* Change flex direction to column for smaller screens */
+    }
+
+    .button--wrapper {
+        flex-direction: column; /* Change button wrapper direction to column for smaller screens */
+    }
+
+    .button--wrapper button {
+        width: 100%; /* Make buttons full width */
+        margin-top: 10px; /* Add margin between buttons */
+    }
 }
