@@ -26,31 +26,32 @@
           </a>
         </li>
 
-        <li>
+        <li class="active">
           <a href="/client/html/view_employees.html">
             <i class="fa-solid fa-people-group"></i>
             <span>Employees</span>
           </a>
         </li>
 
-        <li class="active">
+        <li>
           <a href="/client/html/departments.html">
             <i class="fa-solid fa-user-tag"></i>
             <span>Departments</span>
           </a>
         </li>
 
-        <li>
-          <a href="#">
-            <i class="fa-solid fa-flag"></i>
-            <span>Reports</span>
-          </a>
-        </li>
 
         <li>
-          <a href="#">
-            <i class="fa-solid fa-money-bill"></i>
-            <span>Payroll</span>
+          <a href="/client/html/leave_requests.html">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Leave Requests</span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/client/html/signatories.html">
+            <i class="fa-solid fa-signature"></i>
+            <span>Signatories</span>
           </a>
         </li>
 
@@ -103,7 +104,8 @@
           <span id="close-add-modal-button">&times;</span>
           <h1 class="modal-title">Add Signatory</h1>
 
-          <form id="signatory-form">
+          <div class="modal-background">
+            <form id="signatory-form">
             <div class="row">
               <div class="column">
                 <div class="input--box">
@@ -170,7 +172,8 @@
               </div>
             </div>
           </form>
-        </div>
+        </div></div>
+          
       </dialog>
       <!-- END OF MODAL FOR ADD SIGNATORY -->
     </div>
@@ -182,73 +185,75 @@
           <span id="close-edit-modal-button">&times;</span>
           <h1 class="modal-title">Edit Signatory</h1>
 
-          <form id="edit-signatory-form">
-              <div class="row">
-                  <div class="column">
-                      <div class="input--box">
-                          <label for="signatory-id">Signatory ID</label>
-                          <input type="text" name="signatory-id" id="signatory-id" autocomplete="off" readonly>
-                      </div>
+          <div class="modal-background"><form id="edit-signatory-form">
+            <div class="row">
+                <div class="column">
+                    <div class="input--box">
+                        <label for="signatory-id">Signatory ID</label>
+                        <input type="text" name="signatory-id" id="signatory-id" autocomplete="off" readonly>
+                    </div>
 
-              <div class="row">
-                  <div class="column">
-                      <div class="input--box">
-                          <label for="edit-search-input">Employee Name</label>
-                          <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
-                          <div name="employee-name" class="employee-list-dropdown-edit employee-list" required></div>
-                      </div>
-                  </div>
-              
-
-              <div class="column">
-                <div class="input--box">
-                    <label for="employee-id">Employee ID</label>
-                    <input type="text" name="employee-id" id="employee-id-edit" class="employee-id-input" autocomplete="off" readonly>
+            <div class="row">
+                <div class="column">
+                    <div class="input--box">
+                        <label for="edit-search-input">Employee Name</label>
+                        <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
+                        <div name="employee-name" class="employee-list-dropdown-edit employee-list" required></div>
+                    </div>
                 </div>
+            
+
+            <div class="column">
+              <div class="input--box">
+                  <label for="employee-id">Employee ID</label>
+                  <input type="text" name="employee-id" id="employee-id-edit" class="employee-id-input" autocomplete="off" readonly>
+              </div>
+          </div>
+      </div>
+      
+      <div class="row">
+        <div class="column">
+            <div class="input--box">
+                <label for="edit-superior-search-input">Superior Name</label>
+                <input type="text" id="edit-superior-search-input" class="edit-superior-search-input" autocomplete="off" required>
+                <div name="superior-name" class="superior-list-dropdown-edit superior-list" required></div>
             </div>
         </div>
         
-        <div class="row">
-          <div class="column">
-              <div class="input--box">
-                  <label for="edit-superior-search-input">Superior Name</label>
-                  <input type="text" id="edit-superior-search-input" class="edit-superior-search-input" autocomplete="off" required>
-                  <div name="superior-name" class="superior-list-dropdown-edit superior-list" required></div>
-              </div>
-          </div>
-          
-      
+    
 
-              <div class="column">
-                <div class="input--box">
-                    <label for="superior-id">Superior ID</label>
-                    <input type="text" name="superior-id" id="superior-id-edit" class="superior-id-input" autocomplete="off" readonly>
+            <div class="column">
+              <div class="input--box">
+                  <label for="superior-id">Superior ID</label>
+                  <input type="text" name="superior-id" id="superior-id-edit" class="superior-id-input" autocomplete="off" readonly>
+              </div>
+              </div>
+            </div>
+          
+
+                <div class="column">
+                    <div class="input--box">
+                        <label> Superior Status</label>
+                        <select name="superior-status" id="superior-status-select" required>
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
                 </div>
-                </div>
+              </div>
               </div>
             
+            
 
-                  <div class="column">
-                      <div class="input--box">
-                          <label> Superior Status</label>
-                          <select name="superior-status" id="superior-status-select" required>
-                              <option value="1">Active</option>
-                              <option value="2">Inactive</option>
-                          </select>
-                      </div>
-                  </div>
+            <div class="row">
+                <div class="button--wrapper">
+                    <button type="submit" id="update-signatory-button">Update Signatory</button>
+                    <button id="cancel-edit-modal-button">Cancel</button>
                 </div>
-                </div>
-              
-              
-
-              <div class="row">
-                  <div class="button--wrapper">
-                      <button type="submit" id="update-signatory-button">Update Signatory</button>
-                      <button id="cancel-edit-modal-button">Cancel</button>
-                  </div>
-              </div>
-              </div>
+            </div>
+            </div>
+          </div>
+          
           </form>
       </div>
   </dialog>

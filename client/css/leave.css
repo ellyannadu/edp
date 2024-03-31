@@ -133,7 +133,7 @@ td {
 .modal-content {
     background-color: #7469B6;
     margin: 1% auto;
-    padding: 90px 120px;
+    padding: 3% 5%;
     border-radius: 10px;
     max-width: 98%;
     position: fixed;
@@ -293,6 +293,8 @@ td {
 .input--box {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .input--box input,
@@ -326,7 +328,7 @@ td {
     border-radius: 6px;
     cursor: pointer;
     height: 50px;
-    width: 300px;
+    width: 30%;
 }
 
 .button--wrapper button:hover {
