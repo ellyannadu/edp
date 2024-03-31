@@ -89,6 +89,36 @@ app.post("/leave", async (req, res) => {
   }
 });
 
+// Create a signatory request
+app.post("/signatory", async (req, res) => {
+  try {
+    const {
+      employee_id, superior_id, superior_status
+    } = req.body;
+    
+    const newSignatoryQuery = `
+    INSERT INTO signatories 
+      (employee_ID, superior_ID, superior_status)
+    VALUES 
+      ($1, $2, $3)
+    RETURNING * `;
+
+    const newSignatory = await pool.query(newSignatoryQuery, [
+      employee_id, superior_id, superior_status
+    ]);
+
+    console.log(newSignatory.rows[0]);
+
+    res.json(newSignatory.rows[0]);
+
+  } catch (err) {
+    console.error("Error adding signatory requests:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
 // Get all employees
 app.get("/employee", async(req, res) => {
   try {
@@ -223,6 +253,39 @@ app.get("/leave", async(req, res) => {
   }
 });
 
+// Get all signatories joined with employee first name and last name, superior name, superior status
+app.get("/signatory", async(req, res) => {
+  try {
+    const allSignatories = await pool.query(`
+    SELECT 
+    s.signatory_id, 
+    e.employee_id AS signatory_employee_id, 
+    e.first_name AS signatory_first_name, 
+    e.middle_name AS signatory_middle_name, 
+    e.last_name AS signatory_last_name, 
+    s.superior_id, 
+    e2.first_name AS superior_first_name, 
+    e2.middle_name AS superior_middle_name, 
+    e2.last_name AS superior_last_name,  
+    s.superior_status,
+    ss.superior_status_name
+    FROM 
+        signatories s
+    LEFT JOIN 
+        employee e ON s.employee_id = e.employee_id
+    LEFT JOIN 
+        employee e2 ON s.superior_id = e2.employee_id
+    LEFT JOIN 
+        superior_status ss ON s.superior_status = ss.superior_status_id
+    ORDER BY 
+        s.signatory_id;`);
+    res.json(allSignatories.rows);
+  } catch (err) {
+    console.error("Cannot get signatories:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Update an employee
 app.put("/employee/:id", async (req, res) => {
   try {
@@ -287,6 +350,25 @@ app.put("/leave/:id", async (req, res) => {
   }
 });
 
+// Update a signatory request
+app.put("/signatory/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employee_id, superior_id, superior_status } = req.body;
+
+    const updateSignatory = await pool.query(`
+      UPDATE signatories
+      SET employee_id = $1, superior_id = $2, superior_status = $3
+      WHERE signatory_id = $4`, 
+      [employee_id, superior_id, superior_status, id]
+    );
+
+    res.json("Signatory request was updated");
+  } catch (err) {
+    console.error("Cannot update signatory request:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 // Delete an employee
 app.delete("/employee/:id", async (req, res) => {
