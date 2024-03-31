@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/client/css/sidebar.css" />
+    <link rel="stylesheet" href="/client/css/style.css" />
+    <link rel="stylesheet" href="/client/css/signatories.css" />
+    <script
+      src="https://kit.fontawesome.com/e4c61f12b3.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="/client/js/signatories.js"></script>
     <title>Signatories</title>
-    <link rel="stylesheet" href="/client/css/sidebar.css">
-    <link rel="stylesheet" href="/client/css/style.css">
-    <link rel="stylesheet" href="/client/css/view_employees.css">
-    <link rel="stylesheet" href="/client/css/leave.css">
-    <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
-    <script type="module" src="/client/js/leave_request.js"></script>
-</head>
+  </head>
 
-<body>
+  <body>
+    <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo flex-container"></div>
-        <!-- ------------------------------------------------------------------------- -->
-        <ul class="menu">
-
+      <div class="logo flex-container"></div>
+      <ul class="menu">
         <li>
           <a href="/client/html/index.html">
             <i class="fa-solid fa-gauge"></i>
@@ -33,7 +33,7 @@
           </a>
         </li>
 
-        <li>
+        <li class="active">
           <a href="/client/html/departments.html">
             <i class="fa-solid fa-user-tag"></i>
             <span>Departments</span>
@@ -41,16 +41,16 @@
         </li>
 
         <li>
-          <a href="/client/html/leave_requests.html">
-            <i class="fa-regular fa-calendar"></i>
-            <span>Leave Requests</span>
+          <a href="#">
+            <i class="fa-solid fa-flag"></i>
+            <span>Reports</span>
           </a>
         </li>
-        
-        <li class="active">
-          <a href="/client/html/signatories.html">
-            <i class="fa-solid fa-signature"></i>
-            <span>Signatories</span>
+
+        <li>
+          <a href="#">
+            <i class="fa-solid fa-money-bill"></i>
+            <span>Payroll</span>
           </a>
         </li>
 
@@ -62,88 +62,198 @@
             </a>
           </li>
         </div>
-
       </ul>
     </div>
 
-    <!-- ------------------------------------------------------------------------- -->
+    <!-- Main Content -->
     <div class="main--content">
-        <div class="header--wrapper">
-            <div class="header--title">
-                <h1>Signatories List</h1>
-            </div>
-        <button id="show-modal-button" class="modalBtn">
-            <i class="fa-solid fa-user-plus"></i>
-            </button>
+      <div class="header--wrapper">
+        <div class="header--title">
+          <h1>Signatories</h1>
         </div>
 
-        <!-- ------------------------------------------------------------------------- -->
-        <!-- MODAL FOR ADD SIGNATORY REQUEST -->
-        <dialog id="leave-modal">
-            <div class="modal-content">
-                <span id="close-modal-button">&times;</span>
-                <h1 class="modal-title">Create Signatory</h1>
+        <button id="show-add-modal-button" class="modalBtn">
+          <i class="fa-solid fa-user-plus"></i>
+        </button>
+      </div>
 
-                <form method="put" id="file-leave-form">
-                    <div class="row">
-                        <div class="column">
-                            <div class="input--box">
-                                <label>Employee Name</label>
-                                <input type="text" id="search-input" placeholder="Search employee..." autocomplete="off">
-                                <div name="employee-name" id="employee-list" class="employee-list" required></div>
-                            </div>
-                        </div>
-                    </div>
-
-                <form method="put" id="file-leave-form">
-                    <div class="row">
-                        <div class="column">
-                            <div class="input--box">
-                                <label>Superior Name</label>
-                                <input type="text" id="search-input" placeholder="Search superior..." autocomplete="off">
-                                <div name="employee-name" id="employee-list" class="employee-list" required></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="column">
-                        <div class="input--box">
-                          <label>Superior Status</label>
-                          <select name="leave-status" id="leave-status-select" required>
-                            <option value="1">Active</option>
-                            <option value="2">Inactive</option>
-                          </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="button--wrapper">
-                          <button type="submit" id="file-leave-button">Confirm Signatory</button>
-                          <button type="reset">Clear</button>
-                          <button id="cancel-modal-button">Cancel</button>
-                        </div>
-                      </div>  
-                </form>
-            </div>
-        </dialog>
-         <!-- END OF MODAL FOR ADD LEAVE REQUEST -->
-
-        <!-- ------------------------------------------------------------------------- -->
-        
-        <div id="employee-list" class="table-container">
-            <table class="employee-list">
-              <tr>
-                <th>Signatory ID</th>
-                <th>Employee Name</th>
-                <th>Superior Name</th>
-                <th>Status</th>
-              </tr>
-              <tbody id="employee-table-body">
+      <!-- Signatory List -->
+      <div id="signatory-list" class="table-container">
+        <table class="signatory-list">
+          <tr>
+            <th>Signatory #</th>
+            <th>Employee Name</th>
+            <th>Superior</th>
+            <th>Superior Status</th>
+            <!-- 
+                        Active
+                        Inactive
+                     -->
+            <th>Edit</th>
+          </tr>
+          <tbody id="signatory-table-body">
             
-              </tbody>
-            </table>
-          </div>
-    <!-- ------------------------------------------------------------------------- -->
-</body>
+          </tbody>
+        </table>
+      </div>
 
+      <!-- MODAL FOR ADD SIGNATORY -->
+      <dialog id="add-signatory-modal">
+        <div class="modal-content">
+          <span id="close-add-modal-button">&times;</span>
+          <h1 class="modal-title">Add Signatory</h1>
+
+          <form id="signatory-form">
+            <div class="row">
+              <div class="column">
+                <div class="input--box">
+                  <label for="search-input">Employee Name</label>
+                  <input type="text" id="search-input" class="search-input" placeholder="Search employee..." autocomplete="off" required>
+                  <div name="employee-name" class="employee-list-dropdown employee-list" required></div>
+              </div>
+
+              </div>
+              <div class="column">
+                <div class="input--box">
+                  <label for="employee-id">Employee ID</label>
+                  <input type="text" name="employee-id" id="employee-id" class="employee-id-input" autocomplete="off" readonly>
+              </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="column">
+                <div class="input--box">
+                  <label>Superior Name</label>
+                  <input
+                    type="text"
+                    id="superior-search-input"
+                    placeholder="Search superior..."
+                    autocomplete="off"
+                    required
+                  />
+
+                  <div name="superior-name" class="superior-list-dropdown superior-list" required></div>
+
+                </div>
+              </div>
+              <div class="column">
+                <div class="input--box">
+                  <label for="superior-id">Superior ID</label>
+                  <input
+                    type="text"
+                    name="superior-id"
+                    id="superior-id"
+                    class="superior-id-input"
+                    autocomplete="off"
+                    readonly
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <div class="input--box">
+                <label>Superior Status</label>
+                <select name="superior-status" id="superior-status-select" required>
+                  <option value="1">Active</option>
+                  <option value="2">Inactive</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="button--wrapper">
+                <button type="submit" id="add-signatory-button">Add Signatory</button>
+                <button type="reset">Clear</button>
+                <button id="cancel-add-modal-button">Cancel</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </dialog>
+      <!-- END OF MODAL FOR ADD SIGNATORY -->
+    </div>
+
+
+    <!-- MODAL FOR UPDATE SIGNATORY -->
+    <dialog id="edit-signatory-modal">
+      <div class="modal-content">
+          <span id="close-edit-modal-button">&times;</span>
+          <h1 class="modal-title">Edit Signatory</h1>
+
+          <form id="edit-signatory-form">
+              <div class="row">
+                  <div class="column">
+                      <div class="input--box">
+                          <label for="signatory-id">Signatory ID</label>
+                          <input type="text" name="signatory-id" id="signatory-id" autocomplete="off" readonly>
+                      </div>
+
+              <div class="row">
+                  <div class="column">
+                      <div class="input--box">
+                          <label for="edit-search-input">Employee Name</label>
+                          <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
+                          <div name="employee-name" class="employee-list-dropdown-edit employee-list" required></div>
+                      </div>
+                  </div>
+              
+
+              <div class="column">
+                <div class="input--box">
+                    <label for="employee-id">Employee ID</label>
+                    <input type="text" name="employee-id" id="employee-id-edit" class="employee-id-input" autocomplete="off" readonly>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+          <div class="column">
+              <div class="input--box">
+                  <label for="edit-superior-search-input">Superior Name</label>
+                  <input type="text" id="edit-superior-search-input" class="edit-superior-search-input" autocomplete="off" required>
+                  <div name="superior-name" class="superior-list-dropdown-edit superior-list" required></div>
+              </div>
+          </div>
+          
+      
+
+              <div class="column">
+                <div class="input--box">
+                    <label for="superior-id">Superior ID</label>
+                    <input type="text" name="superior-id" id="superior-id-edit" class="superior-id-input" autocomplete="off" readonly>
+                </div>
+                </div>
+              </div>
+            
+
+                  <div class="column">
+                      <div class="input--box">
+                          <label> Superior Status</label>
+                          <select name="superior-status" id="superior-status-select" required>
+                              <option value="1">Active</option>
+                              <option value="2">Inactive</option>
+                          </select>
+                      </div>
+                  </div>
+                </div>
+                </div>
+              
+              
+
+              <div class="row">
+                  <div class="button--wrapper">
+                      <button type="submit" id="update-signatory-button">Update Signatory</button>
+                      <button id="cancel-edit-modal-button">Cancel</button>
+                  </div>
+              </div>
+              </div>
+          </form>
+      </div>
+  </dialog>
+  <!-- END OF MODAL FOR UPDATE SIGNATORY -->
+
+</div>
+  </body>
 </html>
