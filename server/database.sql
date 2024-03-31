@@ -79,13 +79,19 @@ CREATE TABLE leave_status (
     leave_status_name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE Signatories (
+CREATE TABLE signatories (
     signatory_id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
     superior_id INT,
-    superior_status VARCHAR(10) NOT NULL DEFAULT 'Active',
+    superior_status INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
-    FOREIGN KEY (superior_id) REFERENCES employee(employee_id)
+    FOREIGN KEY (superior_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (superior_status) REFERENCES superior_status(superior_status_id)
+);
+
+CREATE TABLE superior_status (
+    superior_status_id SERIAL PRIMARY KEY,
+    superior_status_name VARCHAR(255) NOT NULL
 );
 
 -- QUERIES START (IN ORDER):
@@ -176,6 +182,13 @@ INSERT INTO leave_status (leave_status_name) VALUES
     ('Pending'),
     ('Approved'),
     ('Denied');
+
+-- ADD SUPERIOR STATUS
+INSERT INTO superior_status (superior_status_name) VALUES
+    ('Active'),
+    ('Inactive');
+
+INSERT INTO signatories (employee_ID, superior_ID, superior_status) VALUES (7, 8, 1);
 
 -- JOIN STATEMENTS
 SELECT e.employee_id, e.first_name, e.middle_name, e.last_name, d.designation_name, dep.department_name, es.employee_status_name, ad.designation_date
