@@ -1,4 +1,13 @@
+tasks: (add ur own nalang idk how to divide)
 
+CASSEY
+- create formulas for govt contributions
+- create APIs/database for payroll
+
+YUNNY
+
+ARJ
+  
 To update local edp:
  1. git pull
 
