@@ -10,8 +10,6 @@ const closeEditButton = document.getElementById('close-edit-modal-button');
 const cancelEditButton = document.getElementById('cancel-edit-modal-button');
 const editSignatoryForm = document.getElementById('edit-signatory-form');
 
-
-
 document.addEventListener('DOMContentLoaded', function() {
     getSignatories();
     getEmployeesAndPopulateList();
@@ -179,9 +177,6 @@ function hideDropdown() {
     employeeListAdd.classList.remove('show-dropdown');
 }
 
-
-
-
 const superiorIdInputAdd = document.querySelector('#superior-id');
 const superiorListAdd = document.querySelector('.superior-list-dropdown');
 const superiorNameInput = document.querySelector('#superior-search-input');
@@ -199,8 +194,6 @@ superiorListAdd.addEventListener('click', function(event) {
         }
     }
 });
-
-
 
 // Fetch all employees + populate dropdown
 export async function getEmployeesAndPopulateList() {
@@ -252,11 +245,6 @@ export async function getEmployeesAndPopulateList() {
     }
   }
   
-
-
-  
-
-
 
 // Event listener for employee list items in the add modal
 const employeeIdInputEdit = document.querySelector('#employee-id-edit');

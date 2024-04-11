@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/client/css/sidebar.css">
+    <link rel="stylesheet" href="/client/css/style.css">
+    <link rel="stylesheet" href="/client/css/leave.css">
+    <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
+    <script type="module" src="/client/js/gov_contributions.js"></script>
+    <title>Leaves</title>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo flex-container"></div>
+        <ul class="menu">
+
+        <li>
+            <a href="/client/html/index.html">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+          <a href="/client/html/view_employees.html">
+            <i class="fa-solid fa-people-group"></i>
+            <span>Employees</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/client/html/departments.html">
+            <i class="fa-solid fa-user-tag"></i>
+            <span>Departments</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="/client/html/leave_requests.html">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Leave Requests</span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/client/html/signatories.html">
+            <i class="fa-solid fa-signature"></i>
+            <span>Signatories</span>
+          </a>
+        </li>
+        
+        <li class="active">
+            <a href="/client/html/payroll.html">
+              <span>Payroll</span>
+        </li>
+
+        <div class="logout-wrapper">
+          <li class="logout">
+            <a href="#">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Log Out</span>
+            </a>
+          </li>
+        </div>
+
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <h1>Employee Payroll</h1>
+            </div>
+                
+
+            <button id="" class="">
+                <i class="fa-solid fa-user-plus"></i>
+                <!-- Change to other symbol or "apply/file for leave??" -->
+            </button>
+        </div>
+
+        <!-- Overall Payroll List -->
+        <div id="payroll-list" class="table-container">
+            <table class="leave-list">
+                <tr>
+                    <th>Employee ID</th>
+                    <th>Employee Name</th>
+                    <th>Gross </th>
+                    <th>Net Pay</th>
+                    <th>Action</th>
+                </tr>
+                <tbody id="leave-table-body">
+                    <!-- <tr>
+                        <td>John Doe</td>
+                        <td>2021-10-01</td>
+                        <td>2021-10-05</td>
+                        <td>Vacation Leave</td>
+                        <td>Pending</td>
+                    </tr>  -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

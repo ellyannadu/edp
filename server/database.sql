@@ -82,7 +82,7 @@ CREATE TABLE leave_status (
 CREATE TABLE signatories (
     signatory_id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
-    superior_id INT,
+    superior_id INT NOT NULL,
     superior_status INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
     FOREIGN KEY (superior_id) REFERENCES employee(employee_id),
@@ -92,6 +92,15 @@ CREATE TABLE signatories (
 CREATE TABLE superior_status (
     superior_status_id SERIAL PRIMARY KEY,
     superior_status_name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE deductions (
+    deduction_id SERIAL PRIMARY KEY,
+    deduction_type VARCHAR(255) NOT NULL,
+    employee_id INT NOT NULL,
+    deduction_date DATE NOT NULL,
+    deduction_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
 -- QUERIES START (IN ORDER):
