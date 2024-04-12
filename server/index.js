@@ -432,8 +432,7 @@ app.post("/contributions", async (req, res) => {
     const newContribution = await pool.query(`
       INSERT INTO contributions
       (employee_id, contribution_type, contribution_date, contribution_amount)
-      VALUES
-      ($1, $2, $3, $4)
+      VALUES ($1, $2, $3, $4)
       RETURNING *`, [employee_id, contribution_type, contribution_date, contribution_amount]);
     res.json(newContribution.rows[0]);
   } catch (err) {
@@ -443,19 +442,19 @@ app.post("/contributions", async (req, res) => {
 });
 
 // Create a payroll
-app.post("/payroll", async (req, res) => {
+app.post('/payroll', async (req, res) => {
+  const { start_date, end_date, pay_date, status } = req.body;
   try {
-    const { employee_id, payroll_start_date, payroll_end_date, net_pay } = req.body;
-    const newPayroll = await pool.query(`
-      INSERT INTO payroll
-      (employee_id, payroll_start_date, payroll_end_date, net_pay)
-      VALUES
-      ($1, $2, $3, $4)
-      RETURNING *`, [employee_id, payroll_start_date, payroll_end_date, net_pay]);
-    res.json(newPayroll.rows[0]);
-  } catch (err) {
-    console.error("Error adding payroll:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    const { rows } = await pool.query(`
+      INSERT INTO payroll (start_date, end_date, pay_date, status) 
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+      [start_date, end_date, pay_date, status]
+    );
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    console.error('Error creating payroll record:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -492,47 +491,44 @@ app.get("/contributions", async(req, res) => {
   }
 });
 
-// Get overall payroll
-app.get("/payroll", async(req, res) => {
+// GET all payroll records
+app.get('/payroll', async (req, res) => {
   try {
-    const allPayrolls = await pool.query("SELECT * FROM payroll ORDER BY payroll_id ASC");
-    res.json(allPayrolls.rows);
-  } catch (err) {
-    console.error("Cannot get payrolls:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    const { rows } = await pool.query('SELECT * FROM payroll');
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching payroll data:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
-// Get payroll of 1 employee with deductions, earnings, contributions
-app.get("/payroll/:id", async (req, res) => {
+// GET salary
+app.get('/salary', async (req, res) => {
   try {
-    const { id } = req.params;
-    const payroll = await pool.query(`
-    SELECT
-      p.payroll_id,
-      e.employee_id,
-      e.first_name,
-      e.last_name,
-      e.middle_name,
-      p.payroll_start_date,
-      p.payroll_end_date,
-      p.net_pay,
-      d.deduction_type,
-      d.deduction_amount,
-      e.earning_type,
-      e.earning_amount,
-      c.contribution_type,
-      c.contribution_amount
-    FROM
-      payroll p
-      LEFT JOIN deductions d ON p.employee_id = d.employee_id
-      LEFT JOIN earnings e ON p.employee_id = e.employee_id
-      LEFT JOIN contributions c ON p.employee_id = c.employee_id
-    WHERE p.employee_id = $1`, [id]);
-    res.json(payroll.rows[0]);
-  } catch (err) {
-    console.error("Cannot get payroll:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    const { rows } = await pool.query('SELECT * FROM salary');
+    res.json(rows);
+  } catch (error) {
+    console.error('Error fetching salary data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// PUT endpoint to update an existing payroll record
+app.put('/payroll/:id', async (req, res) => {
+  const { id } = req.params;
+  const { start_date, end_date, pay_date, status } = req.body;
+  try {
+    const { rows } = await pool.query(
+      'UPDATE payroll SET start_date = $1, end_date = $2, pay_date = $3, status = $4 WHERE payroll_id = $5 RETURNING *',
+      [start_date, end_date, pay_date, status, id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).send('Payroll record not found');
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error updating payroll record:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 

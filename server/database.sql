@@ -12,7 +12,7 @@ CREATE TABLE employee (
     barangay VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     province VARCHAR(255) NOT NULL,
-    zip_code VARCHAR(255) NOT NULL
+    zip_code VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE employee_status (
@@ -101,7 +101,7 @@ CREATE TABLE deductions (
     employee_id INT NOT NULL,
     deduction_date DATE NOT NULL,
     deduction_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
 CREATE TABLE earnings (
@@ -110,7 +110,7 @@ CREATE TABLE earnings (
     employee_id INT NOT NULL,
     earning_date DATE NOT NULL,
     earning_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
 CREATE TABLE contributions (
@@ -119,18 +119,28 @@ CREATE TABLE contributions (
     employee_id INT NOT NULL,
     contribution_date DATE NOT NULL,
     contribution_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
 CREATE TABLE payroll (
     payroll_id SERIAL PRIMARY KEY,
-    employee_id INT NOT NULL,
-    payroll_start_date DATE NOT NULL,
-    payroll_end_date DATE NOT NULL,
-    net_pay DECIMAL(10, 2) NOT NULL, 
-    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    pay_date DATE NOT NULL,
+    status VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE salary (
+    salary_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    basic_pay DECIMAL(10, 2) NOT NULL,
+    total_deductions DECIMAL(10, 2) NOT NULL,
+    total_earnings DECIMAL(10, 2) NOT NULL,
+    total_contributions DECIMAL(10, 2) NOT NULL,
+    net_pay DECIMAL(10, 2) NOT NULL,
+    salary_date DATE NOT NULL, 
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
 
 -- QUERIES START (IN ORDER):
 
