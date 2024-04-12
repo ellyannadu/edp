@@ -94,14 +94,43 @@ CREATE TABLE superior_status (
     superior_status_name VARCHAR(255) NOT NULL
 );
 
+-- PAYROLL SYSTEM
 CREATE TABLE deductions (
     deduction_id SERIAL PRIMARY KEY,
     deduction_type VARCHAR(255) NOT NULL,
     employee_id INT NOT NULL,
     deduction_date DATE NOT NULL,
     deduction_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
 );
+
+CREATE TABLE earnings (
+    earning_id SERIAL PRIMARY KEY,
+    earning_type VARCHAR(255) NOT NULL,
+    employee_id INT NOT NULL,
+    earning_date DATE NOT NULL,
+    earning_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+
+CREATE TABLE contributions (
+    contribution_id SERIAL PRIMARY KEY,
+    contribution_type VARCHAR(255) NOT NULL,
+    employee_id INT NOT NULL,
+    contribution_date DATE NOT NULL,
+    contribution_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+
+CREATE TABLE payroll (
+    payroll_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    payroll_start_date DATE NOT NULL,
+    payroll_end_date DATE NOT NULL,
+    net_pay DECIMAL(10, 2) NOT NULL, 
+    FOREIGN KEY (employee_id) REFERENCES employees(employee_id)
+);
+
 
 -- QUERIES START (IN ORDER):
 
