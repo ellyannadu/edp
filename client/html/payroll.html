@@ -7,9 +7,11 @@
     <link rel="stylesheet" href="/client/css/sidebar.css">
     <link rel="stylesheet" href="/client/css/style.css">
     <link rel="stylesheet" href="/client/css/leave.css">
+    <link rel="stylesheet" href="/client/css/payroll.css">
     <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
     <script type="module" src="/client/js/gov_contributions.js"></script>
-    <title>Leaves</title>
+    <script type="module" src="/client/js/payroll.js"></script>
+    <title>Payroll</title>
 </head>
 
 <body>
@@ -55,8 +57,9 @@
         </li>
         
         <li class="active">
-            <a href="/client/html/payroll.html">
-              <span>Payroll</span>
+          <a href="/client/html/payroll.html">
+            <span>Payroll</span>
+          </a>
         </li>
 
         <div class="logout-wrapper">
@@ -73,39 +76,172 @@
 
     <!-- Main Content -->
     <div class="main--content">
-        <div class="header--wrapper">
-            <div class="header--title">
-                <h1>Employee Payroll</h1>
-            </div>
-                
-
-            <button id="" class="">
-                <i class="fa-solid fa-user-plus"></i>
-                <!-- Change to other symbol or "apply/file for leave??" -->
-            </button>
+      <div class="header--wrapper">
+        <div class="header--title">
+          <h1>Employee Payroll</h1>
         </div>
+      </div>
 
-        <!-- Overall Payroll List -->
-        <div id="payroll-list" class="table-container">
-            <table class="leave-list">
-                <tr>
-                    <th>Employee ID</th>
-                    <th>Employee Name</th>
-                    <th>Gross </th>
-                    <th>Net Pay</th>
-                    <th>Action</th>
-                </tr>
-                <tbody id="leave-table-body">
-                    <!-- <tr>
-                        <td>John Doe</td>
-                        <td>2021-10-01</td>
-                        <td>2021-10-05</td>
-                        <td>Vacation Leave</td>
-                        <td>Pending</td>
-                    </tr>  -->
-                </tbody>
-            </table>
+      <!-- Switch tabs between view payroll OR deductions OR earnings -->
+      <div>
+        <button id="view-payroll-report-btn">View Payroll Report</button>
+        <button id="view-deductions-btn">View Deductions</button>
+        <button id="view-earnings-btn">View Earnings</button>
+      </div>
+
+      <!-- Overall Payroll List -->
+      <div id="payroll-list" class="table-container">
+        <button id="show-add-payroll-btn" class="">Generate New Payroll</button>
+        <table class="leave-list">
+          <tr>
+            <th colspan="5" style="text-align: center">OVERALL PAYROLL REPORT</th>
+          </tr>
+
+          <tr>
+            <th>Pay Date</th>
+            <th>Start of Cutoff</th>
+            <th>End of Cutoff</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          <tbody id="payroll-table-body">
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Overall Deductions List -->
+      <div id="deductions-list" class="table-container">
+        <button id="show-add-deduction-btn" class="">Add Deduction</button>
+        <table class="leave-list">
+          <tr>
+            <th colspan="5" style="text-align: center">DEDUCTIONS HISTORY</th>
+          </tr>
+
+          <tr>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+          </tr>
+          <tbody id="deductions-table-body">
+          </tbody>
+        </table>
+      </div>
+
+       <!-- Overall Earnings List -->
+       <div id="earnings-list" class="table-container">
+        <button id="show-add-earning-btn" class="">Add Earning</button>
+        <table class="leave-list">
+          <tr>
+            <th colspan="5" style="text-align: center">EARNINGS HISTORY</th>
+          </tr>
+
+          <tr>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+          </tr>
+          <tbody id="earnings-table-body">
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <!-- MODAL FOR ADD DEDUCTION -->
+  <dialog id="add-deduction-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Add Deduction</h1>
+
+      <form id="add-deduction-form">
+        <label for="employee-id">Employee ID</label>
+        <input type="text" name="employee-id" id="employee-id" class="employee-id-input" autocomplete="off" readonly>
+      
+        <div class="input--box">
+          <label for="edit-search-input">Employee Name</label>
+          <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
+          <div id="employee-list" class="employee-list"></div>
         </div>
+        
+        <label>Date</label>
+        <input type="date" id="leave-start" name="leave-start" required/>
+
+        <label for="deduction-type">Deduction Type</label>
+        <select name="deduction-type" id="deduction-type" required>
+          <option value="AWOL">Absence Without Leave</option>
+          <option value="Late">Tardiness Penalty</option>
+          <option value="Damage">Property Damage</option>
+          <option value="Others">Others</option>
+        </select>
+
+        <label for="deduction-amount">Amount</label>
+        <input type="number" name="deduction-amount" id="deduction-amount" required/>
+
+        <button type="submit" id="add-deduction-button">Add Deduction</button>
+        <button type="reset">Reset</button>
+      </form>
     </div>
+  </dialog>
+
+  <!-- MODAL FOR ADD EARNING -->
+  <dialog id="add-earning-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Add Earnings</h1>
+
+      <form id="add-earning-form">
+        <label for="employee-id">Employee ID</label>
+        <input type="text" name="employee-id" id="employee-id-2" class="employee-id-input" autocomplete="off" readonly>
+      
+        <div class="input--box">
+          <label for="edit-search-input">Employee Name</label>
+          <input type="text" id="edit-search-input-2" class="edit-search-input" autocomplete="off" required>
+          <div id="employee-list-2" class="employee-list"></div>
+        </div>
+        
+        <label>Date</label>
+        <input type="date" id="leave-start" name="leave-start" required/>
+
+        <label for="earning-type">Earning Type</label>
+        <select name="earning-type" id="earning-type" required>
+          <option value="Bonus">Bonus</option>
+          <option value="OT">Overtime</option>
+          <option value="Commission">Commission</option>
+          <option value="Others">Others</option>
+        </select>
+
+        <label for="earning-amount">Amount</label>
+        <input type="number" name="earning-amount" id="earning-amount" required/>
+
+        <button type="submit" id="add-earning-button">Add Earning</button>
+        <button type="reset">Reset</button>
+      </form>
+    </div>
+  </dialog>
+
+  <!-- MODAL FOR GENERATE NEW PAYROLL -->
+  <dialog id="add-payroll-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Generate New Payroll</h1>
+
+      <form id="generate-payroll-form">
+        <label>Pay Date</label>
+        <input type="date" id="pay-date" name="pay-date" required/>
+
+        <label>Start of Cutoff</label>
+        <input type="date" id="start-cutoff" name="start-cutoff" required/>
+
+        <label>End of Cutoff</label>
+        <input type="date" id="end-cutoff" name="end-cutoff" required/>
+
+        <button type="submit" id="generate-payroll-button">Generate Payroll</button>
+      </form>
+    </div>
+  </dialog>
+
 </body>
 </html>
