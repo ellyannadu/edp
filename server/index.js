@@ -604,3 +604,6 @@ app.delete("/earnings/:id", async (req, res) => {
   }
 });
 
+// ========= PAYROLL REPORT =========
+// GET payroll report
+// tbc magawa pa ako ng report stuff sa database, keyword: coalesce zzzz
