@@ -18,7 +18,7 @@ const deductionsContainer = document.getElementById('deductions-list');
 const earningsContainer = document.getElementById('earnings-list');
 
 // On load of the payroll page
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
     getPayroll();
 });
 
@@ -76,6 +76,163 @@ window.addEventListener('click', function(event) {
     }
 });
 
+// ================== FORM SUBMISSIONS ==================
+
+// On form submission "Generate Payroll"
+document.getElementById('generate-payroll-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const startDate = document.getElementById('start-cutoff').value;
+    const endDate = document.getElementById('end-cutoff').value;
+    const payDate = document.getElementById('pay-date').value;
+
+    try {
+        // Generate payroll
+        const payrollResponse = await fetch('http://localhost:3000/payroll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                start_date: startDate,
+                end_date: endDate,
+                pay_date: payDate,
+                status: 'Pending'
+            })
+        });
+
+        if (!payrollResponse.ok) {
+            throw new Error('Failed to generate payroll');
+        }
+
+        // Extract the payroll_id from the response JSON
+        const payrollData = await payrollResponse.json();
+        const payrollId = payrollData.payroll_id;
+
+        console.log('Generated payroll with ID:', payrollId);
+
+        // Fetch all employees
+        const employeeResponse = await fetch('http://localhost:3000/employee');
+        if (!employeeResponse.ok) {
+            throw new Error('Failed to fetch employees');
+        }
+        const allEmployees = await employeeResponse.json();
+
+        // Process each employee
+        await Promise.all(allEmployees.map(async (employee) => {
+            // Fetch employee's status from assign_designation table
+            const assignDesignationResponse = await fetch(`http://localhost:3000/assign-designation/${employee.employee_id}`);
+            if (!assignDesignationResponse.ok) {
+                throw new Error(`Failed to fetch employee status for ID ${employee.employee_id}`);
+            }
+            const assignDesignationData = await assignDesignationResponse.json();
+            const employeeStatus = assignDesignationData.employee_status;
+
+            console.log(`Employee ID ${employee.employee_id} status:`, employeeStatus);
+
+            if (employeeStatus === 1) {
+                const salaryData = {
+                    payroll_id: payrollId,
+                    employee_id: employee.employee_id,
+                    basic_pay: 15000, // Example basic pay
+                    total_deductions: 0,
+                    total_earnings: 0,
+                    total_contributions: 0,
+                    net_pay: 0,
+                };
+
+                // Create salary for active employee
+                const salaryResponse = await fetch('http://localhost:3000/salary', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(salaryData)
+                });
+
+                if (!salaryResponse.ok) {
+                    throw new Error('Failed to create salary for employee');
+                }
+
+                console.log(`Salary created for employee ID ${employee.employee_id}`, 'Salary data:', salaryData);
+            } else {
+                console.log(`Employee ID ${employee.employee_id} is inactive. Skipping salary creation.`);
+            }
+        }));
+
+        getPayroll();
+    } catch (error) {
+        console.error('Error generating payroll or creating salaries:', error);
+    }
+});
+
+// On form submission "Add deductions"
+document.getElementById('add-deduction-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const employee_id = document.getElementById('employee-id').value;
+    const deduction_date = document.getElementById('deduction-date').value;
+    const deduction_type = document.getElementById('deduction-type').value;
+    const deduction_amount = document.getElementById('deduction-amount').value;
+
+    try{
+        const response = await fetch('http://localhost:3000/deductions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employee_id,
+                deduction_date: deduction_date,
+                deduction_type: deduction_type,
+                deduction_amount: deduction_amount
+            })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add deduction');
+        }
+
+        console.log('Added deduction:', response);
+        getDeductions();
+    } catch (error) {
+        console.error('Error adding deduction:', error);
+    }
+});   
+
+// On form submission "Add earnings"
+document.getElementById('add-earning-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const employee_id = document.getElementById('employee-id').value;
+    const earning_date = document.getElementById('earning-date').value;
+    const earning_type = document.getElementById('earning-type').value;
+    const earning_amount = document.getElementById('earning-amount').value;
+
+    try{
+        const response = await fetch('http://localhost:3000/earnings', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employee_id,
+                earning_date: earning_date,
+                earning_type: earning_type,
+                earning_amount: earning_amount
+            })
+        });
+        if (!response.ok) {
+            throw new Error('Failed to add earning');
+        }
+
+        console.log('Added earning:', response);
+        getEarnings();
+    } catch (error) {
+        console.error('Error adding earning:', error);
+    }
+}); 
+
+// ========================================================================
 
 // ================== Fetch Employee Names / Search Name ==================
 // Function to fetch employee names and populate the dropdown
@@ -90,7 +247,7 @@ async function fetchEmployeeNames() {
         const employeeLists = document.querySelectorAll('.employee-list');
         employeeLists.forEach(employeeList => {
             employeeList.innerHTML = ''; // Clear existing content
-            allEmployees.forEach(employee => {
+            allEmployees.forEach(async employee => {
                 const listItem = document.createElement('div');
                 listItem.classList.add('employee-list-item');
                 listItem.textContent = `${employee.last_name}, ${employee.first_name} ${employee.middle_name}`;
@@ -176,10 +333,13 @@ async function getDeductions() {
         
         allDeductions.forEach(deduction => {
             const row = document.createElement('tr');
+            const deductionDate = new Date(deduction.deduction_date);
+            deductionDate.setDate(deductionDate.getDate() + 1);
+
             row.innerHTML = `
                 <td>${deduction.deduction_id}</td>
                 <td>${deduction.employee_id}</td>
-                <td>${deduction.deduction_date.split('T')[0]}</td>
+                <td>${deductionDate.toISOString().split('T')[0]}</td>
                 <td>${deduction.deduction_type}</td>
                 <td>${deduction.deduction_amount}</td>
                 <td>
@@ -209,10 +369,14 @@ async function getEarnings() {
 
         allEarnings.forEach(earning => {
             const row = document.createElement('tr');
+
+            const earningDate = new Date(earning.earning_date);
+            earningDate.setDate(earningDate.getDate() + 1);
+
             row.innerHTML = `
                 <td>${earning.earning_id}</td>
                 <td>${earning.employee_id}</td>
-                <td>${earning.earning_date.split('T')[0]}</td>
+                <td>${earningDate.toISOString().split('T')[0]}</td>
                 <td>${earning.earning_type}</td>
                 <td>${earning.earning_amount}</td>
                 <td>
@@ -242,10 +406,17 @@ async function getPayroll() {
 
         allPayroll.forEach(payroll => {
             const row = document.createElement('tr');
+            const payDate = new Date(payroll.pay_date);
+            const startCutoff = new Date(payroll.start_date);
+            const endCutoff = new Date(payroll.end_date);
+            payDate.setDate(payDate.getDate() + 1);
+            startCutoff.setDate(startCutoff.getDate() + 1);
+            endCutoff.setDate(endCutoff.getDate() + 1);
+
             row.innerHTML = `
-                <td>${payroll.pay_date.split('T')[0]}</td>
-                <td>${payroll.start_date.split('T')[0]}</td>
-                <td>${payroll.end_date.split('T')[0]}</td>
+                <td>${payDate.toISOString().split('T')[0]}</td>
+                <td>${startCutoff.toISOString().split('T')[0]}</td>
+                <td>${endCutoff.toISOString().split('T')[0]}</td>
                 <td>${payroll.status}</td>
                 <td>
                     <button class="view-report-details-btn">View</button>
@@ -255,9 +426,30 @@ async function getPayroll() {
             
             // Event listener for "View" button
             const viewReportBtn = row.querySelector('.view-report-details-btn');
-            viewReportBtn.addEventListener('click', () => {
-                const reportUrl = `http://localhost:3000/reports/${payroll.payroll_id}`; // Example URL
-                window.open(reportUrl, '_blank'); // Open in new tab
+            viewReportBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('http://localhost:3000/payroll-report', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                         
+                        })
+                    });
+            
+                    if (!response.ok) {
+                        throw new Error('Failed to add to payroll');
+                    }
+            
+                    console.log('Added to payroll:', response);
+                    console.log('Viewing payroll:', rowData);
+
+                    const reportUrl = `http://localhost:3000/reports/${payroll.payroll_id}`; // Example URL
+                    window.open(reportUrl, '_blank'); // Open in new tab
+                } catch (error) {
+                    console.error('Error adding to payroll:', error);
+                }
             });
         });
 
@@ -266,33 +458,4 @@ async function getPayroll() {
         console.error('Error fetching payroll:', error);
     }
 }
-
-// Add to payroll-report-details
-async function addToPayrollReportDetails(employeeId, payDate, startDate, endDate, status) {
-    try {
-        const response = await fetch('http://localhost:3000/payroll', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                employee_id: employeeId,
-                pay_date: payDate,
-                start_date: startDate,
-                end_date: endDate,
-                status: status
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to add to payroll');
-        }
-
-        console.log('Added to payroll:', response);
-    } catch (error) {
-        console.error('Error adding to payroll:', error);
-    }
-}
-
 // ========================================================================
-

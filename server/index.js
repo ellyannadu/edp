@@ -448,15 +448,39 @@ app.post('/payroll', async (req, res) => {
     const { rows } = await pool.query(`
       INSERT INTO payroll (start_date, end_date, pay_date, status) 
       VALUES ($1, $2, $3, $4)
-      RETURNING *`,
+      RETURNING payroll_id`,
       [start_date, end_date, pay_date, status]
     );
-    res.status(201).json(rows[0]);
+    const { payroll_id } = rows[0];
+    res.status(201).json({ payroll_id });
   } catch (error) {
     console.error('Error creating payroll record:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Create a salary
+app.post('/salary', async (req, res) => {
+  const { payroll_id, employee_id, basic_pay, total_deductions, total_earnings, total_contributions, net_pay } = req.body;
+
+  console.log('Received salary data:', req.body);
+
+  try {
+    const { rows } = await pool.query(`
+      INSERT INTO salary (payroll_id, employee_id, basic_pay, total_deductions, total_earnings, total_contributions, net_pay)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *`,
+      [payroll_id, employee_id, basic_pay, total_deductions, total_earnings, total_contributions, net_pay]
+    );
+
+    console.log('Inserted salary:', rows[0]);
+    res.status(201).json(rows[0]);
+  } catch (error) {
+    console.error('Error creating salary:', error);
+    res.status(500).json({ error: 'Failed to create salary entry' });
+  }
+});
+
 
 // Get all deductions
 app.get("/deductions", async(req, res) => {
@@ -605,50 +629,3 @@ app.delete("/earnings/:id", async (req, res) => {
 });
 
 // ========= PAYROLL REPORT =========
-// ADD payroll report
-app.post("/payroll-report-details", async (req, res) => {
-  try {
-    const { payroll_id, employee_id } = req.body; // Only extract necessary properties
-
-    const newReportQuery = `
-      INSERT INTO payroll_report_details (payroll_id, employee_id, deductions_total, earnings_total, contributions_total, net_pay)
-      SELECT
-          p.payroll_id,
-          e.employee_id,
-          COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0) AS deductions_total,
-          COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0) AS earnings_total,
-          COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0) AS contributions_total,
-          (COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0)
-          - COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0)
-          - COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0)) AS net_pay
-      FROM payroll p, employee e
-      LEFT JOIN deductions d ON e.employee_id = d.employee_id
-      LEFT JOIN earnings er ON e.employee_id = er.employee_id
-      LEFT JOIN contributions c ON e.employee_id = c.employee_id
-      WHERE p.payroll_id = $1 AND e.employee_id = $2 -- Ensure you filter by specific payroll_id and employee_id
-      GROUP BY p.payroll_id, e.employee_id`;
-
-    const newReport = await pool.query(newReportQuery, [
-      payroll_id, employee_id
-    ]);
-
-    // Assuming payroll_report_details has an auto-incrementing primary key
-    res.status(201).json({ payroll_report_id: newReport.rows[0].payroll_report_id });
-  } catch (err) {
-    console.error("Error adding new report:", err.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-// GET a payroll report
-app.get("/payroll-report-details/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const report = await pool.query(`
-      SELECT * FROM payroll_report_details WHERE payroll_report_id = $1`, [id]);
-    res.json(report.rows[0]);
-  } catch (err) {
-    console.error("Cannot get payroll report:", err.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
