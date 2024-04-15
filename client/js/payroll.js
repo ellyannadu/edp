@@ -162,7 +162,7 @@ document.addEventListener('click', function (event) {
 });
 // ========================================================================
 
-// ================== Show Deduction / Earning / Payroll Functions ==================
+// ================== ASYNC FUNCTIONS Deduction / Earning / Payroll Functions ==================
 // Fetch all deductions
 async function getDeductions() {
     try {
@@ -266,5 +266,33 @@ async function getPayroll() {
         console.error('Error fetching payroll:', error);
     }
 }
+
+// Add to payroll-report-details
+async function addToPayrollReportDetails(employeeId, payDate, startDate, endDate, status) {
+    try {
+        const response = await fetch('http://localhost:3000/payroll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                pay_date: payDate,
+                start_date: startDate,
+                end_date: endDate,
+                status: status
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add to payroll');
+        }
+
+        console.log('Added to payroll:', response);
+    } catch (error) {
+        console.error('Error adding to payroll:', error);
+    }
+}
+
 // ========================================================================
 

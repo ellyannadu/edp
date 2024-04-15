@@ -605,5 +605,50 @@ app.delete("/earnings/:id", async (req, res) => {
 });
 
 // ========= PAYROLL REPORT =========
-// GET payroll report
-// tbc magawa pa ako ng report stuff sa database, keyword: coalesce zzzz
+// ADD payroll report
+app.post("/payroll-report-details", async (req, res) => {
+  try {
+    const { payroll_id, employee_id } = req.body; // Only extract necessary properties
+
+    const newReportQuery = `
+      INSERT INTO payroll_report_details (payroll_id, employee_id, deductions_total, earnings_total, contributions_total, net_pay)
+      SELECT
+          p.payroll_id,
+          e.employee_id,
+          COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0) AS deductions_total,
+          COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0) AS earnings_total,
+          COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0) AS contributions_total,
+          (COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0)
+          - COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0)
+          - COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0)) AS net_pay
+      FROM payroll p, employee e
+      LEFT JOIN deductions d ON e.employee_id = d.employee_id
+      LEFT JOIN earnings er ON e.employee_id = er.employee_id
+      LEFT JOIN contributions c ON e.employee_id = c.employee_id
+      WHERE p.payroll_id = $1 AND e.employee_id = $2 -- Ensure you filter by specific payroll_id and employee_id
+      GROUP BY p.payroll_id, e.employee_id`;
+
+    const newReport = await pool.query(newReportQuery, [
+      payroll_id, employee_id
+    ]);
+
+    // Assuming payroll_report_details has an auto-incrementing primary key
+    res.status(201).json({ payroll_report_id: newReport.rows[0].payroll_report_id });
+  } catch (err) {
+    console.error("Error adding new report:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// GET a payroll report
+app.get("/payroll-report-details/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const report = await pool.query(`
+      SELECT * FROM payroll_report_details WHERE payroll_report_id = $1`, [id]);
+    res.json(report.rows[0]);
+  } catch (err) {
+    console.error("Cannot get payroll report:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});

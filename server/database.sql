@@ -142,6 +142,16 @@ CREATE TABLE salary (
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
 
+CREATE TABLE payroll_report_details (
+    payroll_report_id SERIAL PRIMARY KEY,
+    payroll_id INT REFERENCES payroll(payroll_id),
+    employee_id INT REFERENCES employee(employee_id),
+    deductions_total DECIMAL(10, 2),
+    earnings_total DECIMAL(10, 2),
+    contributions_total DECIMAL(10, 2), 
+    net_pay DECIMAL(10, 2)
+);
+
 -- QUERIES START (IN ORDER):
 
 -- ADD EMPLOYEE status
@@ -237,6 +247,29 @@ INSERT INTO superior_status (superior_status_name) VALUES
     ('Inactive');
 
 INSERT INTO signatories (employee_ID, superior_ID, superior_status) VALUES (7, 8, 1);
+
+-- Populate the association class table with data within cutoff dates
+INSERT INTO payroll_report_details (payroll_id, employee_id, deductions_total, earnings_total, contributions_total, net_pay)
+SELECT
+    p.payroll_id,
+    e.employee_id,
+    COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0) AS deductions_total,
+    COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0) AS earnings_total,
+    COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0) AS contributions_total,
+    (COALESCE(SUM(CASE WHEN er.earning_date BETWEEN p.start_date AND p.end_date THEN er.earning_amount ELSE 0 END), 0)
+    - COALESCE(SUM(CASE WHEN d.deduction_date BETWEEN p.start_date AND p.end_date THEN d.deduction_amount ELSE 0 END), 0)
+    - COALESCE(SUM(CASE WHEN c.contribution_date BETWEEN p.start_date AND p.end_date THEN c.contribution_amount ELSE 0 END), 0)) AS net_pay
+FROM payroll p, employee e
+LEFT JOIN deductions d ON e.employee_id = d.employee_id
+LEFT JOIN earnings er ON e.employee_id = er.employee_id
+LEFT JOIN contributions c ON e.employee_id = c.employee_id
+GROUP BY p.payroll_id, e.employee_id;
+
+-- Fetch data from the association class table
+SELECT pr.payroll_report_id, p.pay_date, e.employee_id, e.first_name, e.last_name, pr.deductions_total, pr.earnings_total, pr.contributions_total, pr.net_pay
+FROM payroll_report_details pr
+JOIN payroll p ON pr.payroll_id = p.payroll_id
+JOIN employee e ON pr.employee_id = e.employee_id;
 
 -- JOIN STATEMENTS
 SELECT e.employee_id, e.first_name, e.middle_name, e.last_name, d.designation_name, dep.department_name, es.employee_status_name, ad.designation_date
