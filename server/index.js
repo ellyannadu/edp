@@ -388,9 +388,7 @@ app.listen(3000, () => {
 });
 
 
-
-// PAYROLL
-
+// ======================= PAYROLL =======================
 // Add a deduction
 app.post("/deductions", async (req, res) => {
   try {
