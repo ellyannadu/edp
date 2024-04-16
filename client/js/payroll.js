@@ -426,30 +426,8 @@ async function getPayroll() {
             
             // Event listener for "View" button
             const viewReportBtn = row.querySelector('.view-report-details-btn');
-            viewReportBtn.addEventListener('click', async () => {
-                try {
-                    const response = await fetch('http://localhost:3000/payroll-report', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                         
-                        })
-                    });
-            
-                    if (!response.ok) {
-                        throw new Error('Failed to add to payroll');
-                    }
-            
-                    console.log('Added to payroll:', response);
-                    console.log('Viewing payroll:', rowData);
-
-                    const reportUrl = `http://localhost:3000/reports/${payroll.payroll_id}`; // Example URL
-                    window.open(reportUrl, '_blank'); // Open in new tab
-                } catch (error) {
-                    console.error('Error adding to payroll:', error);
-                }
+            viewReportBtn.addEventListener('click', () => {
+                window.open('payroll-report.html', '_blank'); // Open in new tab
             });
         });
 
