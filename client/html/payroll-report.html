@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script type="module" src="/client/js/payroll.js"></script>
+    <script type="module" src="/client/js/payroll-report.js"></script>
     <title>Payroll Report</title>
 </head>
 <body>
@@ -29,52 +29,8 @@
         </tbody>
     </table>
     </div>
+
+    <!-- MODAL FOR VIEW EACH EMPLOYEE PAYSLIP -->
 </body>
 </html>
 
-
-<!-- IGNORE -->
-<script>
-    try {
-        const response = await fetch('http://localhost:3000/salary', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to get salaries');
-        }
-
-        const salaryData = await response.json();
-
-        const salaryTableBody = document.getElementById('salary-table-body');
-        salaryTableBody.innerHTML = '';
-
-        // Populate table rows with data
-        salaryData.forEach(salary => {
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td>${salary.salary_id}</td>
-                <td>${salary.employee_id}</td>
-                <td>${salary.payroll_id}</td>
-                <td>${salary.basic_pay}</td>
-                <td>${salary.total_deductions}</td>
-                <td>${salary.total_earnings}</td>
-                <td>${salary.total_contributions}</td>
-                <td>${salary.net_pay}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
-                </td>
-            `;
-            salaryTableBody.appendChild(row);
-        });
-        const reportUrl = `http://localhost:3000/salary`;
-        window.open(reportUrl, '_blank'); // Open in new tab
-    } catch (error) {
-        console.error('Error getting payroll salaries:', error);
-    }
-</script>
