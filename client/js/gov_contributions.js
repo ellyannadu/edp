@@ -124,35 +124,35 @@ export function calculateWithholdingTax(employeeMonthlySalary) {
     return tax;
 }
 
-// Example usage:
-const employeeSalary = 5000; // Monthly salary in PHP
+// // Example usage:
+// const employeeSalary = 5000; // Monthly salary in PHP
 
-let contributions = calculatePagIbig();
+// let contributions = calculatePagIbig();
 
-console.log("------------ PAG IBIG -----------");
-console.log("Employee Monthly Salary: PHP", employeeSalary);
-console.log("Employee Contribution: PHP", contributions.employeeContribution);
-console.log("Employer Contribution: PHP", contributions.employerContribution);
-console.log("Total Contribution: PHP", contributions.totalContribution);
+// console.log("------------ PAG IBIG -----------");
+// console.log("Employee Monthly Salary: PHP", employeeSalary);
+// console.log("Employee Contribution: PHP", contributions.employeeContribution);
+// console.log("Employer Contribution: PHP", contributions.employerContribution);
+// console.log("Total Contribution: PHP", contributions.totalContribution);
 
-contributions = calculatePhilHealth(employeeSalary);
+// contributions = calculatePhilHealth(employeeSalary);
 
-console.log("------------ PHILHEALTH -----------");
-console.log("Employee Monthly Salary: PHP", employeeSalary);
-console.log("Employee Contribution: PHP", contributions.employeeContribution);
-console.log("Employer Contribution: PHP", contributions.employerContribution);
-console.log("Total Contribution: PHP", contributions.totalContribution);
+// console.log("------------ PHILHEALTH -----------");
+// console.log("Employee Monthly Salary: PHP", employeeSalary);
+// console.log("Employee Contribution: PHP", contributions.employeeContribution);
+// console.log("Employer Contribution: PHP", contributions.employerContribution);
+// console.log("Total Contribution: PHP", contributions.totalContribution);
 
-contributions = calculateSSS(employeeSalary);
+// contributions = calculateSSS(employeeSalary);
 
-console.log("------------ SSS -----------");
-console.log("Employee Monthly Salary: PHP", employeeSalary);
-console.log("Employee Contribution: PHP", contributions.employeeContribution);
-console.log("Employer Contribution: PHP", contributions.employerContribution);
-console.log("Total Contribution: PHP", contributions.totalContribution);
+// console.log("------------ SSS -----------");
+// console.log("Employee Monthly Salary: PHP", employeeSalary);
+// console.log("Employee Contribution: PHP", contributions.employeeContribution);
+// console.log("Employer Contribution: PHP", contributions.employerContribution);
+// console.log("Total Contribution: PHP", contributions.totalContribution);
 
-let tax = calculateWithholdingTax(employeeSalary);
+// let tax = calculateWithholdingTax(employeeSalary);
 
-console.log("------------ WITHHOLDING TAX -----------");
-console.log("Employee Monthly Salary: PHP", employeeSalary);
-console.log("Withholding Tax: PHP", tax);
+// console.log("------------ WITHHOLDING TAX -----------");
+// console.log("Employee Monthly Salary: PHP", employeeSalary);
+// console.log("Withholding Tax: PHP", tax);

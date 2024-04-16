@@ -112,14 +112,16 @@ CREATE TABLE earnings (
     earning_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
-
+-- tbc katulgon na ko yawards
 CREATE TABLE contributions (
     contribution_id SERIAL PRIMARY KEY,
     contribution_type VARCHAR(255) NOT NULL,
-    employee_id INT NOT NULL,
     contribution_date DATE NOT NULL,
     contribution_amount DECIMAL(10, 2) NOT NULL,
-    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+    employee_id INT NOT NULL,
+    salary_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
 );
 
 CREATE TABLE payroll (

@@ -524,6 +524,21 @@ app.get('/payroll', async (req, res) => {
   }
 });
 
+// GET 1 payroll record
+app.get('/payroll/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { rows } = await pool.query('SELECT * FROM payroll WHERE payroll_id = $1', [id]);
+    if (rows.length === 0) {
+      return res.status(404).send('Payroll record not found');
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching payroll data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // GET salary
 app.get('/salary', async (req, res) => {
   try {
@@ -531,6 +546,42 @@ app.get('/salary', async (req, res) => {
     res.json(rows);
   } catch (error) {
     console.error('Error fetching salary data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// GET a salary
+app.get('/salary/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const { rows } = await pool.query('SELECT * FROM salary WHERE salary_id = $1', [id]);
+    if (rows.length === 0) {
+      return res.status(404).send('Salary record not found');
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching salary data:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Update salary
+app.put('/salary/:id', async (req, res) => {
+  const { id } = req.params;
+  const { total_deductions, total_earnings, total_contributions, net_pay } = req.body;
+  try {
+    const { rows } = await pool.query(`
+      UPDATE salary 
+      SET total_deductions = $1, total_earnings = $2, total_contributions = $3, net_pay = $4
+      WHERE salary_id = $5 RETURNING *`,
+      [total_deductions, total_earnings, total_contributions, net_pay, id]
+    );
+    if (rows.length === 0) {
+      return res.status(404).send('Salary record not found');
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    console.error('Error updating salary record:', error);
     res.status(500).send('Internal Server Error');
   }
 });

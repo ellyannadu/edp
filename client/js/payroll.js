@@ -427,7 +427,29 @@ async function getPayroll() {
             // Event listener for "View" button
             const viewReportBtn = row.querySelector('.view-report-details-btn');
             viewReportBtn.addEventListener('click', () => {
-                window.open('payroll-report.html', '_blank'); // Open in new tab
+                const payrollId = payroll.payroll_id;
+                const startCutoff = payroll.start_date;
+                const endCutoff = payroll.end_date;
+
+                console.log('Payroll ID:', payrollId);
+                console.log('Start Cutoff:', startCutoff);
+                console.log('End Cutoff:', endCutoff);
+                // Check if payrollId is valid
+                if (payrollId && startCutoff && endCutoff) {
+                    const newTab = window.open('payroll-report.html', '_blank'); // Open new tab
+                    
+                    // Pass these values to the new tab
+                    newTab.addEventListener('load', () => {
+                        newTab.sessionStorage.setItem('payrollId', payrollId);
+                        newTab.sessionStorage.setItem('startCutoff', startCutoff);
+                        newTab.sessionStorage.setItem('endCutoff', endCutoff);
+                    });
+                } else {
+                    console.error('Invalid payrollID, startCutoff, or endCutoff. Cannot open payroll report.');
+                }
+
+                // Update salary by updating the total deductions, total earnings, total contributions, and net pay
+                updateSalary(payrollId);
             });
         });
 
@@ -437,3 +459,103 @@ async function getPayroll() {
     }
 }
 // ========================================================================
+
+// ================== Update Salary Function ==============================
+// Update salary by updating the total deductions, total earnings, total contributions, and net pay
+async function updateSalary(payrollId) {
+    try {
+        // Fetch all deductions, earnings, and salaries for the payroll ID
+        const [deductionsResponse, earningsResponse, salariesResponse, payrollResponse] = await Promise.all([
+            fetch(`http://localhost:3000/deductions`),
+            fetch(`http://localhost:3000/earnings`),
+            fetch(`http://localhost:3000/salary`),
+            fetch(`http://localhost:3000/payroll/${payrollId}`)
+        ]);
+
+        if (!deductionsResponse.ok || !earningsResponse.ok || !salariesResponse.ok || !payrollResponse.ok) {
+            throw new Error('Failed to fetch data');
+        }
+
+        const [allDeductions, allEarnings, allSalaries, payrollData] = await Promise.all([
+            deductionsResponse.json(),
+            earningsResponse.json(),
+            salariesResponse.json(),
+            payrollResponse.json()
+        ]);
+
+        const startDate = payrollData.start_date;
+        const endDate = payrollData.end_date;
+
+        // Process each salary
+        await Promise.all(allSalaries.map(async (salary) => {
+            const employeeId = salary.employee_id;
+
+            const employeeDeductions = allDeductions.filter(deduction => {
+                const deductionDate = deduction.deduction_date;
+                console.log('deduction.employee_id:', deduction.employee_id, 'employeeId:', employeeId, 'deductionDate:', deductionDate, 'startDate:', startDate, 'endDate:', endDate);
+                return deduction.employee_id === employeeId && deductionDate >= startDate && deductionDate <= endDate;
+            });
+            const employeeEarnings = allEarnings.filter(earning => {
+                const earningDate = new Date(earning.earning_date);
+                return earning.employee_id === employeeId && earningDate >= startDate && earningDate <= endDate;
+            });
+
+            console.log(`Employee ID ${employeeId} deductions:`, employeeDeductions);
+            console.log(`Employee ID ${employeeId} earnings:`, employeeEarnings);
+            // Calculate total deductions, total earnings, total contributions, and net pay
+            const totalDeductions = employeeDeductions.reduce((total, deduction) => total + deduction.deduction_amount, 0);
+            const totalEarnings = employeeEarnings.reduce((total, earning) => total + earning.earning_amount + salary.basic_pay, 0);
+            const totalContributions = calculateTotalContributions(totalDeductions, totalEarnings);
+            const netPay = totalEarnings - totalContributions;
+
+            console.log(`Employee ID ${employeeId} total deductions:`, totalDeductions);
+            console.log(`Employee ID ${employeeId} total earnings:`, totalEarnings);
+            console.log(`Employee ID ${employeeId} total contributions:`, totalContributions);
+            console.log(`Employee ID ${employeeId} net pay:`, netPay);
+
+            // Update salary with new values
+            const updatedSalary = {
+                total_deductions: totalDeductions,
+                total_earnings: totalEarnings,
+                total_contributions: totalContributions,
+                net_pay: netPay,
+                salary_id: salary.salary_id
+            };
+
+            // Fetch and update the salary using salaryId
+            const updateSalaryResponse = await fetch(`http://localhost:3000/salary/${salary.salary_id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedSalary)
+            });
+
+            if (!updateSalaryResponse.ok) {
+                throw new Error('Failed to update salary');
+            }
+
+            console.log(`Updated salary for employee ID ${employeeId}`, 'Updated salary:', updatedSalary);
+        }));
+
+        getPayroll();
+    } catch (error) {
+        console.error('Error updating salary:', error);
+    }
+}
+
+function calculateTotalContributions(totalDeductions, totalEarnings) {
+    const grossPay = totalEarnings - totalDeductions;
+    const pagIbig = calculatePagIbig();
+    const philHealth = calculatePhilHealth(grossPay);
+    const sss = calculateSSS(grossPay);
+    const withholdingTax = calculateWithholdingTax(grossPay);
+
+    console.log('Pag-IBIG:', pagIbig);
+    console.log('PhilHealth:', philHealth);
+    console.log('SSS:', sss);
+    console.log('Withholding Tax:', withholdingTax);
+    console.log('Total Deductions:', totalDeductions);
+
+    return (pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax + totalDeductions);
+}
