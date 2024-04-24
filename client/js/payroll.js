@@ -128,8 +128,6 @@ document.getElementById('generate-payroll-form').addEventListener('submit', asyn
             const assignDesignationData = await assignDesignationResponse.json();
             const employeeStatus = assignDesignationData.employee_status;
 
-            console.log(`Employee ID ${employee.employee_id} status:`, employeeStatus);
-
             if (employeeStatus === 1) {
                 const salaryData = {
                     payroll_id: payrollId,
@@ -154,7 +152,37 @@ document.getElementById('generate-payroll-form').addEventListener('submit', asyn
                     throw new Error('Failed to create salary for employee');
                 }
 
-                console.log(`Salary created for employee ID ${employee.employee_id}`, 'Salary data:', salaryData);
+                const salaryDataResponse = await salaryResponse.json(); 
+
+                console.log(`Salary created for employee ID ${employee.employee_id}`, 'Salary data:', salaryDataResponse);
+                
+                const [
+                    { philhealth_id: philHealth_id },
+                    { pagibig_id: pagIbig_id },
+                    { sss_id: sss_id },
+                    { tax_id: tax_id }
+                ] = await Promise.all([
+                    initializePhilHealth(employee.employee_id, salaryDataResponse.salary_id).catch(error => {
+                        console.error('Error initializing PhilHealth:', error);
+                        return null;
+                    }),
+                    initializePagIbig(employee.employee_id, salaryDataResponse.salary_id).catch(error => {
+                        console.error('Error initializing PagIbig:', error);
+                        return null;
+                    }),
+                    initializeSSS(employee.employee_id, salaryDataResponse.salary_id).catch(error => {
+                        console.error('Error initializing SSS:', error);
+                        return null;
+                    }),
+                    initializeTax(employee.employee_id, salaryDataResponse.salary_id).catch(error => {
+                        console.error('Error initializing Tax:', error);
+                        return null;
+                    })
+                ]);                
+                
+                console.log('sss_id:', sss_id, 'philHealth_id:', philHealth_id, 'pagIbig_id:', pagIbig_id, 'tax_id:', tax_id);
+                
+                initializeContributions(employee.employee_id, salaryDataResponse.salary_id, sss_id, philHealth_id, pagIbig_id, tax_id);                
             } else {
                 console.log(`Employee ID ${employee.employee_id} is inactive. Skipping salary creation.`);
             }
@@ -231,8 +259,6 @@ document.getElementById('add-earning-form').addEventListener('submit', async fun
         console.error('Error adding earning:', error);
     }
 }); 
-
-// ========================================================================
 
 // ================== Fetch Employee Names / Search Name ==================
 // Function to fetch employee names and populate the dropdown
@@ -317,7 +343,6 @@ document.addEventListener('click', function (event) {
         dropdown2.style.display = 'none'; // Hide dropdown if clicked outside
     }
 });
-// ========================================================================
 
 // ================== ASYNC FUNCTIONS Deduction / Earning / Payroll Functions ==================
 // Fetch all deductions
@@ -457,7 +482,126 @@ async function getPayroll() {
         console.error('Error fetching payroll:', error);
     }
 }
-// ========================================================================
+
+// ============== ASYNC FUNCTIONS FOR GOVERNMENT CONTRIBUTION =============
+async function initializePhilHealth(employeeId, salaryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/philHealth`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                salary_id: salaryId,
+                employee_contrib: 0,
+                employer_contrib: 0,
+                totalAmount: 0,
+                date: new Date(),
+            })
+        });
+
+        return response.json();
+    } catch (error) {
+        console.error('Error initializing PhilHealth:', error);
+    }
+}
+
+async function initializePagIbig(employeeId, salaryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/pagIbig`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                salary_id: salaryId,
+                employee_contrib: 0,
+                employer_contrib: 0,
+                totalAmount: 0,
+                date: new Date(),
+            })
+        });
+
+        return response.json();
+    } catch (error) {
+        console.error('Error initializing PagIbig:', error);
+    }
+}
+
+async function initializeSSS(employeeId, salaryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/sss`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                salary_id: salaryId,
+                employee_contrib: 0,
+                employer_contrib: 0,
+                totalAmount: 0,
+                date: new Date(),
+            })
+        });
+
+        return response.json();
+    } catch (error) {
+        console.error('Error initializing SSS:', error);
+    }
+}
+
+async function initializeTax(employeeId, salaryId) {
+    try {
+        const response = await fetch(`http://localhost:3000/tax`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                salary_id: salaryId,
+                amount: 0,
+                date: new Date(),
+            })
+        });
+
+        return response.json();
+    } catch (error) {
+        console.error('Error initializing Tax:', error);
+    }
+}
+
+async function initializeContributions(employeeId, salaryId, sssId, philHealthId, pagIbigId, taxId) {
+    try {
+        const contributionResponse = await fetch('http://localhost:3000/contributions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                employee_id: employeeId,
+                philHealth_id: philHealthId,
+                pagIbig_id: pagIbigId,
+                sss_id: sssId,
+                tax_id: taxId,
+                salary_id: salaryId
+            })
+        });
+
+        if (!contributionResponse.ok) {
+            throw new Error('Failed to initialize contributions');
+        }
+
+        return contributionResponse.json();
+    } catch (error) {
+        console.error('Error initializing contributions:', error);
+        throw error; // You can handle this error as needed in the calling code
+    }
+}
+
 
 // ================== Update Salary Function ==============================
 // Update salary by updating the total deductions, total earnings, total contributions, and net pay
@@ -488,6 +632,7 @@ async function updateSalary(payrollId) {
         // Process each salary
         await Promise.all(allSalaries.map(async (salary) => {
             const employeeId = salary.employee_id;
+            const salaryId = salary.salary_id;
 
             const employeeDeductions = allDeductions.filter(deduction => {
                 const deductionDate = deduction.deduction_date;
@@ -502,7 +647,7 @@ async function updateSalary(payrollId) {
             const totalDeductions = employeeDeductions.reduce((total, deduction) => total + parseFloat(deduction.deduction_amount), 0);
             const totalEarnings = employeeEarnings.reduce((total, earning) => total + parseFloat(earning.earning_amount), 0);
             const basicPay = parseFloat(salary.basic_pay);
-            const totalContributions = calculateTotalContributions(basicPay);
+            const totalContributions = calculateTotalContributions(basicPay, employeeId, salaryId);
             const netPay = basicPay + totalEarnings - totalDeductions - totalContributions;
 
             // console.log(`Employee ID ${employeeId} total deductions:`, totalDeductions);
@@ -543,10 +688,13 @@ async function updateSalary(payrollId) {
     }
 }
 
-function calculateTotalContributions(basicPay) {
-    const pagIbig = calculatePagIbig();
-    const philHealth = calculatePhilHealth(basicPay);
+async function calculateTotalContributions(basicPay, employeeId, salaryId) {
     const sss = calculateSSS(basicPay);
+
+    const pagIbig = calculatePagIbig();
+
+    const philHealth = calculatePhilHealth(basicPay);
+
     const withholdingTax = calculateWithholdingTax(basicPay);
 
     console.log('Pag-IBIG:', pagIbig,
@@ -554,7 +702,5 @@ function calculateTotalContributions(basicPay) {
         'SSS:', sss,
         'Withholding Tax:', withholdingTax,
         'Basic Pay:', basicPay);
- 
-
-    return (pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax);
+    return pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax;
 }

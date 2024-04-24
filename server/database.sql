@@ -112,15 +112,66 @@ CREATE TABLE earnings (
     earning_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
--- tbc katulgon na ko helps
-CREATE TABLE contributions (
-    contribution_id SERIAL PRIMARY KEY,
-    contribution_type VARCHAR(255) NOT NULL,
-    contribution_date DATE NOT NULL,
-    contribution_amount DECIMAL(10, 2) NOT NULL,
+
+CREATE TABLE philHealth (
+    philHealth_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
     employee_id INT NOT NULL,
     salary_id INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
+);
+
+CREATE TABLE pagIbig (
+    pagIbig_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    employee_id INT NOT NULL,
+    salary_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
+);
+
+CREATE TABLE sss (
+    sss_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    employee_id INT NOT NULL,
+    salary_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
+);
+
+CREATE TABLE tax (
+    tax_id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    employee_id INT NOT NULL,
+    salary_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
+);
+
+CREATE TABLE contributions (
+    contribution_id SERIAL PRIMARY KEY,
+    employee_id INT NOT NULL,
+    philHealth_id INT NOT NULL,
+    pagIbig_id INT NOT NULL,
+    sss_id INT NOT NULL,
+    tax_id INT NOT NULL,
+    salary_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
+    FOREIGN KEY (philHealth_id) REFERENCES philHealth(philHealth_id),
+    FOREIGN KEY (pagIbig_id) REFERENCES pagIbig(pagIbig_id),
+    FOREIGN KEY (sss_id) REFERENCES sss(sss_id),
+    FOREIGN KEY (tax_id) REFERENCES tax(tax_id),
     FOREIGN KEY (salary_id) REFERENCES salary(salary_id)
 );
 
@@ -240,6 +291,13 @@ INSERT INTO superior_status (superior_status_name) VALUES
     ('Inactive');
 
 INSERT INTO signatories (employee_ID, superior_ID, superior_status) VALUES (7, 8, 1);
+
+-- Inserting values into contribution_types table
+INSERT INTO contribution_types (type_name, description)
+VALUES ('SSS', 'Social Security System'),
+       ('Pag-IBIG', 'Home Development Mutual Fund'),
+       ('PhilHealth', 'Philippine Health Insurance Corporation'),
+       ('Tax', 'Withholding Tax');
 
 -- JOIN STATEMENTS
 SELECT e.employee_id, e.first_name, e.middle_name, e.last_name, d.designation_name, dep.department_name, es.employee_status_name, ad.designation_date

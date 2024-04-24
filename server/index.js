@@ -149,7 +149,9 @@ app.get("/assign-designation/:id", async (req, res) => {
     const assignDesignation = await pool.query(`
     SELECT
       ad.assign_designation_id,
+      e.employee_id,
       e.first_name,
+      e.middle_name,
       e.last_name,
       d.department_id,
       d.department_name,
@@ -426,18 +428,25 @@ app.post("/earnings", async (req, res) => {
 // Add government contribution
 app.post("/contributions", async (req, res) => {
   try {
-    const { employee_id, contribution_type, contribution_date, contribution_amount } = req.body;
+    const { employee_id, salary_id, philHealth_id, pagIbig_id, sss_id, tax_id } = req.body;
+    
+    console.log('Received contribution data:', req.body);
+    // Insert into the database
     const newContribution = await pool.query(`
       INSERT INTO contributions
-      (employee_id, contribution_type, contribution_date, contribution_amount)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *`, [employee_id, contribution_type, contribution_date, contribution_amount]);
-    res.json(newContribution.rows[0]);
+      (employee_id, salary_id, philHealth_id, pagIbig_id, sss_id, tax_id)
+      VALUES
+      ($1, $2, $3, $4, $5, $6)
+      RETURNING *`, [employee_id, salary_id, philHealth_id, pagIbig_id, sss_id, tax_id]);
+
+    // Respond with success message or relevant data
+    res.json({ message: 'Contribution added successfully', contribution: newContribution.rows[0] });
   } catch (err) {
     console.error("Error adding contribution:", err.message);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(400).json({ error: err.message });
   }
 });
+
 
 // Create a payroll
 app.post('/payroll', async (req, res) => {
@@ -640,16 +649,33 @@ app.put("/earnings/:id", async (req, res) => {
   }
 });
 
-// Update a contribution
+// Update government contributions
 app.put("/contributions/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { employee_id, contribution_type, contribution_date, contribution_amount } = req.body;
+    const { employee_id, philHealth_id, pagIbig_id, sss_id, tax_id, salary_id } = req.body;
+    
+    // Check if the required fields are provided
+    if (!employee_id || !philHealth_id || !pagIbig_id || !sss_id || !tax_id || !salary_id) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
     const updateContribution = await pool.query(`
-      UPDATE contributions
-      SET employee_id = $1, contribution_type = $2, contribution_date = $3, contribution_amount = $4
-      WHERE contribution_id = $5`, [employee_id, contribution_type, contribution_date, contribution_amount, id]);
-    res.json("Contribution was updated");
+    UPDATE contributions
+    SET employee_id = $1,
+        philHealth_id = $2,
+        pagIbig_id = $3,
+        sss_id = $4,
+        tax_id = $5,
+        salary_id = $6,
+    WHERE contribution_id = $7
+    RETURNING *`, [employee_id, philHealth_id, pagIbig_id, sss_id, tax_id, salary_id, id]);
+
+     // Check if the contribution record was updated
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Contribution not found" });
+    }
+
+    res.json(result.rows[0]);
   } catch (err) {
     console.error("Cannot update contribution:", err.message);
     res.status(500).json({ error: "Internal server error" });
@@ -681,3 +707,123 @@ app.delete("/earnings/:id", async (req, res) => {
 });
 
 // ========= PAYROLL REPORT =========
+// Add to philHealth
+app.post("/philHealth", async (req, res) => {
+  try {
+    const { employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id } = req.body;
+    const newPhilHealth = await pool.query(`
+      INSERT INTO philHealth
+      (employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id)
+      VALUES
+      ($1, $2, $3, $4, $5, $6)
+      RETURNING philHealth_id`, [employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id]);
+    res.json(newPhilHealth.rows[0]);
+  } catch (err) {
+    console.error("Error adding PhilHealth:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Add to pagIbig
+app.post("/pagIbig", async (req, res) => {
+  try {
+    const { employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id } = req.body;
+    const newPagIbig = await pool.query(`
+      INSERT INTO pagIbig
+      (employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id)
+      VALUES
+      ($1, $2, $3, $4, $5, $6)
+      RETURNING pagIbig_id`, [employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id]);
+    res.json(newPagIbig.rows[0]);
+  } catch (err) {
+    console.error("Error adding PagIbig:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Add to sss
+app.post("/sss", async (req, res) => {
+  try {
+    const { employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id } = req.body;
+    const newSSS = await pool.query(`
+      INSERT INTO sss
+      (employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id)
+      VALUES
+      ($1, $2, $3, $4, $5, $6)
+      RETURNING sss_id`, [employee_contrib, employer_contrib, totalAmount, date, employee_id, salary_id]);
+    res.json(newSSS.rows[0]);
+  } catch (err) {
+    console.error("Error adding SSS:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+// Add to tax
+app.post("/tax", async (req, res) => {
+  try {
+    const { amount, date, employee_id, salary_id } = req.body;
+    const newTax = await pool.query(`
+      INSERT INTO tax
+      (amount, date, employee_id, salary_id)
+      VALUES
+      ($1, $2, $3, $4)
+      RETURNING tax_id`, [amount, date, employee_id, salary_id]);
+    res.status(201).json(newTax.rows[0]);
+  } catch (err) {
+    console.error("Error adding Tax:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get payslip of an employee within the specified date range
+app.get("/payslip/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const payslip = await pool.query(`
+    SELECT
+      emp.employee_id,
+      emp.first_name,
+      emp.middle_name,
+      emp.last_name,
+      s.salary_id,
+      s.payroll_id,
+      s.basic_pay,
+      s.total_deductions,
+      s.total_earnings,
+      s.total_contributions,
+      s.net_pay,
+      ded.deduction_id,
+      ded.deduction_type,
+      ded.deduction_date,
+      ded.deduction_amount,
+      ear.earning_id,
+      ear.earning_type,
+      ear.earning_date,
+      ear.earning_amount,
+      con.contribution_id,
+      con.contribution_date,
+      con.contribution_amount,
+      con.type_id,
+      p.start_date,
+      p.end_date,
+      p.pay_date
+    FROM
+      employee emp
+    JOIN
+      salary s ON emp.employee_id = s.employee_id
+    JOIN
+      payroll p ON s.payroll_id = p.payroll_id
+    LEFT JOIN
+      deductions ded ON emp.employee_id = ded.employee_id AND ded.deduction_date BETWEEN p.start_date AND p.end_date
+    LEFT JOIN
+      earnings ear ON emp.employee_id = ear.employee_id AND ear.earning_date BETWEEN p.start_date AND p.end_date
+    LEFT JOIN
+      contributions con ON emp.employee_id = con.employee_id AND con.contribution_date BETWEEN p.start_date AND p.end_date
+    WHERE emp.employee_id = $1`, [id]);
+    res.json(payslip.rows);
+  } catch (err) {
+    console.error("Cannot get employee payslip:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});

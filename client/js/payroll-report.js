@@ -16,9 +16,21 @@ document.addEventListener('DOMContentLoaded', async function() {
     console.log('Start Cutoff:', startCutoff);
     console.log('End Cutoff:', endCutoff);
 
-    modal.show();
+    // delete this line after formatting modal, for testing purposes only
+    // modal.show();
+    
     // Pass dates to getSalary function
     getSalary(startCutoff, endCutoff);
+});
+
+window.addEventListener('click', function(event) {
+    if (event.target !== modal && !modal.contains(event.target)) {
+        modal.style.display = 'none';
+    }
+});
+
+modalCloseBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
 });
 
 async function getSalary(startCutoff, endCutoff) {
@@ -29,7 +41,6 @@ async function getSalary(startCutoff, endCutoff) {
         }
         const salaryData = await response.json();
         
-       
         const salaryTableBody = document.getElementById('salary-table-body');
         salaryTableBody.innerHTML = '';
 
@@ -53,17 +64,6 @@ async function getSalary(startCutoff, endCutoff) {
                 </td>
             `;
             salaryTableBody.appendChild(row);
-
-            const viewPayslipBtn = row.querySelector('.view-payslip-btn');
-            viewPayslipBtn.addEventListener('click', () => {
-                modal.style.display = 'block';
-                const modalContent = document.getElementById('modal-content');
-                modalContent.innerHTML = `
-                `;
-                modalCloseBtn.addEventListener('click', () => {
-                    modal.style.display = 'none';
-                });
-            });
         });
 
         console.log('all salary:', salaryData);
@@ -71,3 +71,43 @@ async function getSalary(startCutoff, endCutoff) {
         console.error('Error fetching salary:', error);
     }
 }
+
+// Add event listener to view payslip button
+document.addEventListener('click', async function(event) {
+    const target = event.target;
+    if (target.classList.contains('view-payslip-btn')) {
+        event.stopPropagation(); // Stop the click event from propagating to the window
+        modal.style.display = 'block';
+        try {
+            const [informationResponse, deductionsResponse, earningsResponse, salariesResponse, payrollResponse] = await Promise.all([
+                fetch(`http://localhost:3000/assign-designation/${employeeId}`),
+                fetch(`http://localhost:3000/deductions`),
+                fetch(`http://localhost:3000/earnings`),
+                fetch(`http://localhost:3000/contributions`),
+                fetch(`http://localhost:3000/salary`),
+                fetch(`http://localhost:3000/payroll/${payrollId}`)
+            ]);
+
+            if (!deductionsResponse.ok || !earningsResponse.ok || !salariesResponse.ok || !payrollResponse.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const [allDeductions, allEarnings, allSalaries, payrollData] = await Promise.all([
+                deductionsResponse.json(),
+                earningsResponse.json(),
+                salariesResponse.json(),
+                payrollResponse.json()
+            ]);
+
+            // Update modal content with fetched data
+            const startDate = payrollData.start_date;
+            const endDate = payrollData.end_date;
+            document.getElementById('start-cutoff').textContent = startDate;
+            document.getElementById('end-cutoff').textContent = endDate;
+            // Update other modal content based on fetched data
+
+        } catch (error) {
+            console.error('Error fetching payslip:', error);
+        }
+    }
+});
