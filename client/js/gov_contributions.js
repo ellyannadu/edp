@@ -14,7 +14,7 @@ export function calculatePagIbig() {
 // Function to calculate the PhilHealth contributions of an employee
 export function calculatePhilHealth(employeeMonthlySalary) {
     let totalContribution = 0;
-
+    
     if (employeeMonthlySalary >= 100000) {
         employeeMonthlySalary = Math.min(employeeMonthlySalary, 100000);
         totalContribution = employeeMonthlySalary * 0.05;

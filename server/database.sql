@@ -112,7 +112,7 @@ CREATE TABLE earnings (
     earning_amount DECIMAL(10, 2) NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
 );
--- tbc katulgon na ko yawards
+-- tbc katulgon na ko helps
 CREATE TABLE contributions (
     contribution_id SERIAL PRIMARY KEY,
     contribution_type VARCHAR(255) NOT NULL,

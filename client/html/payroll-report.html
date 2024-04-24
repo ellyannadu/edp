@@ -7,18 +7,125 @@
     <title>Payroll Report</title>
 </head>
 <body>
-    <div id="report-details-list" class="table-container">
-    <table class="report-details-list">
+    <h3 id="header-text"></h3>
+    <table id="salary-table">
         <thead>
-          
+            <tr>
+                <!-- <th>Payroll ID</th> -->
+                <th>Employee ID</th>
+                <th>Basic Pay</th>
+                <th>Total Earnings</th>
+                <th>Total Deductions</th>
+                <th>Total Contributions</th>
+                <th>Net Pay</th>
+                <th>Actions</th>
+            </tr>
         </thead>
-        <tbody id="salary-table-body">
-            <!-- Rows will be added dynamically -->
-        </tbody>
+        <tbody id="salary-table-body"></tbody>
     </table>
-    </div>
 
-    <!-- MODAL FOR VIEW EACH EMPLOYEE PAYSLIP -->
+    <!-- MODAL FOR EMPLOYEE PAYSLIP -->
+    <dialog id="payslip-modal" class="modal">
+        <div id="modal-content">
+            <span id="modal-close-btn">&times;</span>
+            <h3>Employee Payslip</h3>
+            <p>Pay Period: 
+                <span id="start-cutoff"></span> - <span id="end-cutoff"></span>
+            </p>          
+            <p>Employee Name: <span id="employee-name"></span></p>
+            <p>Employee ID: <span id="employee-id"></span></p>
+            <p>Designation: <span id="designation"></span></p>
+            <p>Department: <span id="department"></span></p>
+            <table id="payslip-table">
+                <thead>
+                    <tr>
+                        <th>Earnings</th>
+                        <th>Amount</th>
+                        <th>Deductions</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="payslip-table-body">
+                    <tr>
+                        <td>Basic Pay</td>
+                        <td id="basic-pay"></td>
+                        <td>Absence Without Leave</td>
+                        <td id="AWOL"></td>
+                    </tr>
+                    <tr>
+                        <td>Bonus</td>
+                        <td id="bonus"></td>
+                        <td>Tardiness</td>
+                        <td id="tardiness"></td>
+                    </tr>
+                    <tr>
+                        <td>Overtime Pay</td>
+                        <td id="overtime-pay"></td>
+                        <td>Property Damages</td>
+                        <td id="property-damages"></td>
+                    </tr>
+                    <tr>
+                        <td>Commission</td>
+                        <td id="commission"></td>
+                        <td>Other Deductions</td>
+                        <td id="other-deductions"></td>
+                    </tr>
+                    <tr>
+                        <td>Other Earnings</td>
+                        <td id="other-earnings"></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Government Contributions</strong></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>SSS</td>
+                        <td id="sss"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>PhilHealth</td>
+                        <td id="philhealth"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Pag-IBIG</td>
+                        <td id="pagibig"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td>Withholding Tax</td>
+                        <td id="withholding-tax"></td>
+                    </tr>
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Total Contributions</strong></td>
+                        <td id="total-contributions"></td>
+                    </tr>                    
+                    <tr>
+                        <td><strong>Total Earnings</strong></td>
+                        <td id="total-earnings"></td>
+                        <td><strong>Total Deductions</strong></td>
+                        <td id="total-deductions"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td><strong>Net Pay</strong></td>
+                        <td id="net-pay"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </dialog>
 </body>
 </html>
-

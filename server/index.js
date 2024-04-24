@@ -542,7 +542,7 @@ app.get('/payroll/:id', async (req, res) => {
 // GET salary
 app.get('/salary', async (req, res) => {
   try {
-    const { rows } = await pool.query('SELECT * FROM salary');
+    const { rows } = await pool.query('SELECT * FROM salary ORDER BY employee_id ASC');
     res.json(rows);
   } catch (error) {
     console.error('Error fetching salary data:', error);
@@ -568,13 +568,16 @@ app.get('/salary/:id', async (req, res) => {
 // Update salary
 app.put('/salary/:id', async (req, res) => {
   const { id } = req.params;
-  const { total_deductions, total_earnings, total_contributions, net_pay } = req.body;
+  const { total_deductions, total_earnings, total_contributions, basic_pay, net_pay } = req.body;
+
+  console.log('Received request body:', req.body);
+
   try {
     const { rows } = await pool.query(`
       UPDATE salary 
-      SET total_deductions = $1, total_earnings = $2, total_contributions = $3, net_pay = $4
-      WHERE salary_id = $5 RETURNING *`,
-      [total_deductions, total_earnings, total_contributions, net_pay, id]
+      SET total_deductions = $1, total_earnings = $2, total_contributions = $3, basic_pay = $4, net_pay = $5
+      WHERE salary_id = $6 RETURNING *`,
+      [total_deductions, total_earnings, total_contributions, basic_pay, net_pay, id]
     );
     if (rows.length === 0) {
       return res.status(404).send('Salary record not found');

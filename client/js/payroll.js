@@ -431,6 +431,8 @@ async function getPayroll() {
                 const startCutoff = payroll.start_date;
                 const endCutoff = payroll.end_date;
 
+                updateSalary(payrollId);
+
                 console.log('Payroll ID:', payrollId);
                 console.log('Start Cutoff:', startCutoff);
                 console.log('End Cutoff:', endCutoff);
@@ -447,9 +449,6 @@ async function getPayroll() {
                 } else {
                     console.error('Invalid payrollID, startCutoff, or endCutoff. Cannot open payroll report.');
                 }
-
-                // Update salary by updating the total deductions, total earnings, total contributions, and net pay
-                updateSalary(payrollId);
             });
         });
 
@@ -492,32 +491,32 @@ async function updateSalary(payrollId) {
 
             const employeeDeductions = allDeductions.filter(deduction => {
                 const deductionDate = deduction.deduction_date;
-                console.log('deduction.employee_id:', deduction.employee_id, 'employeeId:', employeeId, 'deductionDate:', deductionDate, 'startDate:', startDate, 'endDate:', endDate);
                 return deduction.employee_id === employeeId && deductionDate >= startDate && deductionDate <= endDate;
             });
             const employeeEarnings = allEarnings.filter(earning => {
-                const earningDate = new Date(earning.earning_date);
+                const earningDate = earning.earning_date;
                 return earning.employee_id === employeeId && earningDate >= startDate && earningDate <= endDate;
             });
-
-            console.log(`Employee ID ${employeeId} deductions:`, employeeDeductions);
-            console.log(`Employee ID ${employeeId} earnings:`, employeeEarnings);
+            
             // Calculate total deductions, total earnings, total contributions, and net pay
-            const totalDeductions = employeeDeductions.reduce((total, deduction) => total + deduction.deduction_amount, 0);
-            const totalEarnings = employeeEarnings.reduce((total, earning) => total + earning.earning_amount + salary.basic_pay, 0);
-            const totalContributions = calculateTotalContributions(totalDeductions, totalEarnings);
-            const netPay = totalEarnings - totalContributions;
+            const totalDeductions = employeeDeductions.reduce((total, deduction) => total + parseFloat(deduction.deduction_amount), 0);
+            const totalEarnings = employeeEarnings.reduce((total, earning) => total + parseFloat(earning.earning_amount), 0);
+            const basicPay = parseFloat(salary.basic_pay);
+            const totalContributions = calculateTotalContributions(basicPay);
+            const netPay = basicPay + totalEarnings - totalDeductions - totalContributions;
 
-            console.log(`Employee ID ${employeeId} total deductions:`, totalDeductions);
-            console.log(`Employee ID ${employeeId} total earnings:`, totalEarnings);
-            console.log(`Employee ID ${employeeId} total contributions:`, totalContributions);
-            console.log(`Employee ID ${employeeId} net pay:`, netPay);
+            // console.log(`Employee ID ${employeeId} total deductions:`, totalDeductions);
+            // console.log(`Employee ID ${employeeId} total earnings:`, totalEarnings);
+            // console.log(`Employee ID ${employeeId} total contributions:`, totalContributions);
+            // console.log(`Employee ID ${employeeId} basic pay:`, basicPay);
+            // console.log(`Employee ID ${employeeId} net pay:`, netPay);
 
             // Update salary with new values
             const updatedSalary = {
                 total_deductions: totalDeductions,
                 total_earnings: totalEarnings,
                 total_contributions: totalContributions,
+                basic_pay: basicPay,
                 net_pay: netPay,
                 salary_id: salary.salary_id
             };
@@ -544,18 +543,18 @@ async function updateSalary(payrollId) {
     }
 }
 
-function calculateTotalContributions(totalDeductions, totalEarnings) {
-    const grossPay = totalEarnings - totalDeductions;
+function calculateTotalContributions(basicPay) {
     const pagIbig = calculatePagIbig();
-    const philHealth = calculatePhilHealth(grossPay);
-    const sss = calculateSSS(grossPay);
-    const withholdingTax = calculateWithholdingTax(grossPay);
+    const philHealth = calculatePhilHealth(basicPay);
+    const sss = calculateSSS(basicPay);
+    const withholdingTax = calculateWithholdingTax(basicPay);
 
-    console.log('Pag-IBIG:', pagIbig);
-    console.log('PhilHealth:', philHealth);
-    console.log('SSS:', sss);
-    console.log('Withholding Tax:', withholdingTax);
-    console.log('Total Deductions:', totalDeductions);
+    console.log('Pag-IBIG:', pagIbig,
+        'PhilHealth:', philHealth,
+        'SSS:', sss,
+        'Withholding Tax:', withholdingTax,
+        'Basic Pay:', basicPay);
+ 
 
-    return (pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax + totalDeductions);
+    return (pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax);
 }
