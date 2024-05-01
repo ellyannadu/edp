@@ -1,26 +1,27 @@
 const modal = document.getElementById('payslip-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', () => {
     // Retrieve variables from sessionStorage
     const payrollId = window.sessionStorage.getItem('payrollId');
-    const startCutoffStr = window.sessionStorage.getItem('startCutoff');
-    const endCutoffStr = window.sessionStorage.getItem('endCutoff');
-
-    // Convert date strings to date objects
-    const startCutoff = new Date(startCutoffStr);
-    const endCutoff = new Date(endCutoffStr);
+    const startCutoff = window.sessionStorage.getItem('startCutoff');
+    const endCutoff = window.sessionStorage.getItem('endCutoff');
 
     // Use the retrieved variables
     console.log('Payroll ID:', payrollId);
     console.log('Start Cutoff:', startCutoff);
     console.log('End Cutoff:', endCutoff);
 
+    getEmployee();
+    const totalEarnings = getEarnings(startCutoff, endCutoff, employeeId);
+    const totalDeductions = getDeductions(startCutoff, endCutoff, employeeId);
+    const totalContributions = getContributions(startCutoff, endCutoff, employeeId);
+    const netPay = totalEarnings - totalDeductions - totalContributions;
+
+
+    displayPayrollReport(payrollId);
     // delete this line after formatting modal, for testing purposes only
     // modal.show();
-    
-    // Pass dates to getSalary function
-    getSalary(startCutoff, endCutoff);
 });
 
 window.addEventListener('click', function(event) {
@@ -33,43 +34,23 @@ modalCloseBtn.addEventListener('click', () => {
     modal.style.display = 'none';
 });
 
-async function getSalary(startCutoff, endCutoff) {
-    try{
-        const response = await fetch('http://localhost:3000/salary');
-        if (!response.ok) {
-            throw new Error('Failed to fetch salary');
-        }
-        const salaryData = await response.json();
-        
-        const salaryTableBody = document.getElementById('salary-table-body');
-        salaryTableBody.innerHTML = '';
-
-        // Populate table rows with data
-        salaryData.forEach(salary => {
-             // Update the header text with the correct date range
-            const headerText = document.getElementById('header-text');
-            headerText.textContent = `PAYROLL REPORT #${salary.payroll_id} from ${startCutoff.toDateString()} to ${endCutoff.toDateString()}`;
-        
-            const row = document.createElement('tr');
-
-            row.innerHTML = `
-                <td>${salary.employee_id}</td>
-                <td>${salary.basic_pay}</td>
-                <td>${salary.total_earnings}</td>
-                <td>${salary.total_deductions}</td>
-                <td>${salary.total_contributions}</td>
-                <td>${salary.net_pay}</td>
-                <td>
-                    <button class="view-payslip-btn">View</button>
-                </td>
-            `;
-            salaryTableBody.appendChild(row);
+function displayPayrollReport(payrollId) {
+    // Fetch payroll report data
+    fetch(`http://localhost:3000/payroll/${payrollId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch payroll report data');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Display payroll report data
+            console.log('Payroll Report Data:', data);
+        })
+        .catch(error => {
+            console.error('Error fetching payroll report data:', error);
+            // Display an error message or handle the error in a suitable way
         });
-
-        console.log('all salary:', salaryData);
-    } catch (error) {
-        console.error('Error fetching salary:', error);
-    }
 }
 
 // Add event listener to view payslip button
@@ -79,23 +60,21 @@ document.addEventListener('click', async function(event) {
         event.stopPropagation(); // Stop the click event from propagating to the window
         modal.style.display = 'block';
         try {
-            const [informationResponse, deductionsResponse, earningsResponse, salariesResponse, payrollResponse] = await Promise.all([
+            const [informationResponse, deductionsResponse, earningsResponse, payrollResponse] = await Promise.all([
                 fetch(`http://localhost:3000/assign-designation/${employeeId}`),
                 fetch(`http://localhost:3000/deductions`),
                 fetch(`http://localhost:3000/earnings`),
-                fetch(`http://localhost:3000/contributions`),
-                fetch(`http://localhost:3000/salary`),
                 fetch(`http://localhost:3000/payroll/${payrollId}`)
             ]);
 
-            if (!deductionsResponse.ok || !earningsResponse.ok || !salariesResponse.ok || !payrollResponse.ok) {
+            if (!informationResponse.ok || !deductionsResponse.ok || !earningsResponse.ok || !payrollResponse.ok) {
                 throw new Error('Failed to fetch data');
             }
 
-            const [allDeductions, allEarnings, allSalaries, payrollData] = await Promise.all([
+            const [informationData, deductionsData, earningsData, payrollData] = await Promise.all([
+                informationResponse.json(),
                 deductionsResponse.json(),
                 earningsResponse.json(),
-                salariesResponse.json(),
                 payrollResponse.json()
             ]);
 
@@ -108,6 +87,24 @@ document.addEventListener('click', async function(event) {
 
         } catch (error) {
             console.error('Error fetching payslip:', error);
+            // Display an error message or handle the error in a suitable way
         }
     }
 });
+
+async function calculateTotalContributions(basicPay) {
+    const sss = calculateSSS(basicPay);
+    
+    const pagIbig = calculatePagIbig();
+
+    const philHealth = calculatePhilHealth(basicPay);
+
+    const withholdingTax = calculateWithholdingTax(basicPay);
+
+    console.log('Pag-IBIG:', pagIbig,
+        'PhilHealth:', philHealth,
+        'SSS:', sss,
+        'Withholding Tax:', withholdingTax,
+        'Basic Pay:', basicPay);
+    return pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax;
+}
