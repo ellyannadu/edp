@@ -1,5 +1,3 @@
-import { calculatePagIbig, calculatePhilHealth, calculateSSS, calculateWithholdingTax } from "./gov_contributions.js";
-
 const addDeductionModal = document.getElementById('add-deduction-modal');
 const addEarningModal = document.getElementById('add-earning-modal');
 const addPayrollModal = document.getElementById('add-payroll-modal');
@@ -537,19 +535,4 @@ async function initializeTax(employeeId) {
     }
 }
 
-async function calculateTotalContributions(basicPay) {
-    const sss = calculateSSS(basicPay);
-    
-    const pagIbig = calculatePagIbig();
 
-    const philHealth = calculatePhilHealth(basicPay);
-
-    const withholdingTax = calculateWithholdingTax(basicPay);
-
-    console.log('Pag-IBIG:', pagIbig,
-        'PhilHealth:', philHealth,
-        'SSS:', sss,
-        'Withholding Tax:', withholdingTax,
-        'Basic Pay:', basicPay);
-    return pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax;
-}

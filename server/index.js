@@ -288,6 +288,34 @@ app.get("/signatory", async(req, res) => {
   }
 });
 
+
+// Get all sss, pagibig, philhealth, tax of an employee
+app.get("/contributions/:id", async(req, res) => {
+  try {
+    const { id } = req.params;
+    const allContributions = await pool.query(`
+    SELECT 
+      s.employee_contrib AS sss_contrib,
+      p.employee_contrib AS pagibig_contrib,
+      ph.employee_contrib AS philhealth_contrib,
+      t.amount AS tax_amount
+    FROM 
+      sss s
+    LEFT JOIN 
+      pagibig p ON s.employee_id = p.employee_id
+    LEFT JOIN 
+      philhealth ph ON p.employee_id = ph.employee_id
+    LEFT JOIN 
+      tax t ON ph.employee_id = t.employee_id
+    WHERE 
+      s.employee_id = $1`, [id]);
+    res.json(allContributions.rows);
+  } catch (err) {
+    console.error("Cannot get contributions:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Update an employee
 app.put("/employee/:id", async (req, res) => {
   try {
@@ -487,25 +515,6 @@ app.get('/payroll/:id', async (req, res) => {
     res.json(rows[0]);
   } catch (error) {
     console.error('Error fetching payroll data:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-// PUT endpoint to update an existing payroll record
-app.put('/payroll/:id', async (req, res) => {
-  const { id } = req.params;
-  const { start_date, end_date, pay_date, status } = req.body;
-  try {
-    const { rows } = await pool.query(
-      'UPDATE payroll SET start_date = $1, end_date = $2, pay_date = $3, status = $4 WHERE payroll_id = $5 RETURNING *',
-      [start_date, end_date, pay_date, status, id]
-    );
-    if (rows.length === 0) {
-      return res.status(404).send('Payroll record not found');
-    }
-    res.json(rows[0]);
-  } catch (error) {
-    console.error('Error updating payroll record:', error);
     res.status(500).send('Internal Server Error');
   }
 });
