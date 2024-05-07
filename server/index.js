@@ -482,6 +482,18 @@ app.get("/deductions", async(req, res) => {
   }
 });
 
+// Get a deduction
+app.get("/deductions/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deduction = await pool.query("SELECT * FROM deductions WHERE employee_id = $1", [id]);
+    res.json(deduction.rows);
+  } catch (err) {
+    console.error("Cannot get deduction:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Get all earnings
 app.get("/earnings", async(req, res) => {
   try {
@@ -489,6 +501,18 @@ app.get("/earnings", async(req, res) => {
     res.json(allEarnings.rows);
   } catch (err) {
     console.error("Cannot get earnings:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get an earning
+app.get("/earnings/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const earning = await pool.query("SELECT * FROM earnings WHERE employee_id = $1", [id]);
+    res.json(earning.rows);
+  } catch (err) {
+    console.error("Cannot get earning:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -547,30 +571,6 @@ app.put("/earnings/:id", async (req, res) => {
     res.json("Earning was updated");
   } catch (err) {
     console.error("Cannot update earning:", err.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-// Delete a deduction
-app.delete("/deductions/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteDeduction = await pool.query("DELETE FROM deductions WHERE deduction_id = $1", [id]);
-    res.json("Deduction was deleted");
-  } catch (err) {
-    console.error("Cannot delete deduction:", err.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-// Delete an earning
-app.delete("/earnings/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteEarning = await pool.query("DELETE FROM earnings WHERE earning_id = $1", [id]);
-    res.json("Earning was deleted");
-  } catch (err) {
-    console.error("Cannot delete earning:", err.message);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -739,18 +739,26 @@ app.get("/payslip/:id", async (req, res) => {
     FROM
       employee emp
     LEFT JOIN
-      deductions ded ON emp.employee_id = ded.employee_id AND ded.deduction_date BETWEEN p.start_date AND p.end_date
+      deductions ded ON emp.employee_id = ded.employee_id
     LEFT JOIN
-      earnings ear ON emp.employee_id = ear.employee_id AND ear.earning_date BETWEEN p.start_date AND p.end_date
+      earnings ear ON emp.employee_id = ear.employee_id
     LEFT JOIN
-      philHealth ph ON emp.employee_id = ph.employee_id AND ph.date BETWEEN p.start_date AND p.end_date
+      philHealth ph ON emp.employee_id = ph.employee_id
     LEFT JOIN
-      pagIbig pg ON emp.employee_id = pg.employee_id AND pg.date BETWEEN p.start_date AND p.end_date
+      pagIbig pg ON emp.employee_id = pg.employee_id
     LEFT JOIN
-      sss ON emp.employee_id = sss.employee_id AND sss.date BETWEEN p.start_date AND p.end_date
+      sss ON emp.employee_id = sss.employee_id
     LEFT JOIN
-      tax tx ON emp.employee_id = tx.employee_id AND tx.date BETWEEN p.start_date AND p.end_date
-    WHERE emp.employee_id = $1`, [id]);
+      tax tx ON emp.employee_id = tx.employee_id
+    LEFT JOIN
+      payroll p ON ded.deduction_date BETWEEN p.start_date AND p.end_date
+    WHERE
+      emp.employee_id = $1
+      AND ear.earning_date BETWEEN p.start_date AND p.end_date
+      AND ph.date BETWEEN p.start_date AND p.end_date
+      AND pg.date BETWEEN p.start_date AND p.end_date
+      AND sss.date BETWEEN p.start_date AND p.end_date
+      AND tx.date BETWEEN p.start_date AND p.end_date;`, [id]);
 
     res.json(payslip.rows);
   } catch (err) {

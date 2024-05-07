@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     getPayrollReport(startCutoff, endCutoff);
 
     // delete this line after formatting modal, for testing purposes only
-    // modal.show();
+    modal.show();
 });
 
 window.addEventListener('click', function(event) {
@@ -54,7 +54,7 @@ async function getPayrollReport(startCutoff, endCutoff) {
             const employeeEarnings = await getEarnings(startCutoff, endCutoff, employee.employee_id);
             const basicPayObject = employeeEarnings.find(earning => earning.earning_type === 'Basic Pay');
             const basicPay = basicPayObject ? basicPayObject.earning_amount : 0;
-            console.log('Basic Pay:', basicPay);
+
             const totalEarnings = Array.isArray(employeeEarnings) ? employeeEarnings.reduce((total, earning) => total + parseFloat(earning.earning_amount), 0) : 0;
             const totalEarningsCell = document.createElement('td');
             totalEarningsCell.textContent = totalEarnings.toFixed(2);
@@ -120,7 +120,6 @@ async function getEarnings(startCutoff, endCutoff, employeeId) {
                    earning.earning_date <= endCutoff;
         });
 
-        console.log('Filtered Earnings:', filteredEarnings);
         return filteredEarnings;
     } catch (error) {
         console.error('Error fetching and filtering earnings:', error);
@@ -143,7 +142,7 @@ async function getDeductions(startCutoff, endCutoff, employeeId) {
                    deduction.deduction_date <= endCutoff;
         });
 
-        console.log('Filtered Deductions:', filteredDeductions);
+        // console.log('Filtered Deductions:', filteredDeductions);
         return filteredDeductions;
     } catch (error) {
         console.error('Error fetching and filtering deductions:', error);
@@ -161,7 +160,7 @@ async function getContributions(basicPay, totalEarnings, employeeId, startCutoff
         const startCutoffFormatted = new Date(startCutoff);
         startCutoffFormatted.setDate(startCutoffFormatted.getDate() + 1);
         const updatedStartCutoffFormatted = startCutoffFormatted.toISOString().split('T')[0];
-        console.log(updatedStartCutoffFormatted);
+        // console.log(updatedStartCutoffFormatted);
     
         const responses = await Promise.all([
             fetch(`http://localhost:3000/sss/${employeeId}`, {
@@ -213,7 +212,6 @@ async function getContributions(basicPay, totalEarnings, employeeId, startCutoff
         ]);
 
         const responseData = await Promise.all(responses.map(response => response.json()));
-        console.log('All contributions updated:', responseData);
     } catch (error) {
         console.error('Error updating contributions:', error);
     }
@@ -234,20 +232,25 @@ document.addEventListener('click', async function(event) {
         try {
             // Obtain employeeId from the clicked row or element
             const employeeId = target.closest('tr').querySelector('.employee-id').textContent;
-            const payrollId = window.sessionStorage.getItem('payrollId');
             const startCutoff = window.sessionStorage.getItem('startCutoff');
             const endCutoff = window.sessionStorage.getItem('endCutoff');
+            const startCutoffDate = new Date(startCutoff);
+            const endCutoffDate = new Date(endCutoff);
             const startCutoffFormatted = new Date(startCutoff).toDateString();
             const endCutoffFormatted = new Date(endCutoff).toDateString();
 
             // Fetch employee information, earnings, deductions, and payroll
-            const [employeeResponse, earningsResponse, deductionsResponse, payrollResponse] = await Promise.all([
-                fetch(`http://localhost:3000/assign-designation/${employeeId}`)
-                // fetch(`http://localhost:3000/deductions/${employeeId}`),
-                // fetch(`http://localhost:3000/payroll/${payrollId}`)
+            const [employeeResponse, payslipResponse, deductionsResponse, earningsResponse] = await Promise.all([
+                fetch(`http://localhost:3000/assign-designation/${employeeId}`),
+                fetch(`http://localhost:3000/payslip/${employeeId}`),
+                fetch(`http://localhost:3000/deductions/${employeeId}`),
+                fetch(`http://localhost:3000/earnings/${employeeId}`),
             ]);
 
             const employeeData = await employeeResponse.json();
+            const payslipData = await payslipResponse.json();
+            const deductionsData = await deductionsResponse.json();
+            const earningsData = await earningsResponse.json();
 
             // Update modal content with fetched data
             document.getElementById('start-cutoff').textContent = startCutoffFormatted;
@@ -256,29 +259,61 @@ document.addEventListener('click', async function(event) {
             document.getElementById('employee-id').textContent = employeeId;
             document.getElementById('designation').textContent = employeeData.designation_name;
             document.getElementById('department').textContent = employeeData.department_name;
-  
-            // document.getElementById('sss').textContent = informationData.sss;
-            // document.getElementById('philhealth').textContent = informationData.philhealth;
-            // document.getElementById('pagibig').textContent = informationData.pagibig;
-            // document.getElementById('withholding-tax').textContent = informationData.withholding_tax;
-            // document.getElementById('total-contributions').textContent = informationData.total_contributions;
-          
-            // document.getElementById('total-earnings').textContent = payrollData.total_earnings;
-            // document.getElementById('total-deductions').textContent = payrollData.total_deductions;
-            // document.getElementById('net-pay').textContent = payrollData.net_pay;
             
-            // document.getElementById('basic-pay').textContent = earningsData.basic_pay;
-            // document.getElementById('AWOL').textContent = deductionsData.AWOL;
-            // document.getElementById('bonus').textContent = earningsData.bonus;
-            // document.getElementById('tardiness').textContent = deductionsData.tardiness;
-            // document.getElementById('overtime-pay').textContent = earningsData.overtime_pay;
-            // document.getElementById('property-damages').textContent = deductionsData.property_damages;
-            // document.getElementById('commission').textContent = earningsData.commission;
-            // document.getElementById('other-deductions').textContent = deductionsData.other_deductions;
-            // document.getElementById('other-earnings').textContent = earningsData.other_earnings;
+            const basicPayObject = earningsData.filter(item => item.earning_type === 'Basic Pay' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate);
+            const basicPayAmount = basicPayObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);
+            const bonusObject = earningsData.filter(item => item.earning_type === 'Bonus' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate);
+            const bonusAmount = bonusObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);
+            const overtimeObject = earningsData.filter(item => item.earning_type === 'Overtime' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate);
+            const overtimeAmount = overtimeObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);
+            const commissionObject = earningsData.filter(item => item.earning_type === 'Commission' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate); 
+            const commissionAmount = commissionObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);   
+            const otherEarningsObject = earningsData.filter(item => item.earning_type === 'Others' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate); 
+            const otherEarningsAmount = otherEarningsObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);
+
+            document.getElementById('basic-pay').textContent = basicPayAmount.toFixed(2);
+            document.getElementById('bonus').textContent = bonusAmount.toFixed(2);
+            document.getElementById('overtime-pay').textContent = overtimeAmount.toFixed(2);
+            document.getElementById('commission').textContent = commissionAmount.toFixed(2);
+            document.getElementById('other-earnings').textContent = otherEarningsAmount.toFixed(2);
+            
+            const AWOLObjects = deductionsData.filter(item => item.deduction_type === 'AWOL' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
+            const AWOLAmount = AWOLObjects.reduce((total, item) => total + parseFloat(item.deduction_amount), 0);
+            const tardinessObject = deductionsData.filter(item => item.deduction_type === 'Late' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
+            const tardinessAmount = tardinessObject.reduce((total, item) => total + parseFloat(item.deduction_amount), 0);
+            const propertyDamagesObject = deductionsData.filter(item => item.deduction_type === 'Damage' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
+            const propertyDamagesAmount = propertyDamagesObject.reduce((total, item) => total + parseFloat(item.deduction_amount), 0);
+            const otherDeductionsObject = deductionsData.filter(item => item.deduction_type === 'Others' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
+            const otherDeductionsAmount = otherDeductionsObject.reduce((total, item) => total + parseFloat(item.deduction_amount), 0);
+
+            document.getElementById('AWOL').textContent = AWOLAmount.toFixed(2);
+            document.getElementById('tardiness').textContent = tardinessAmount.toFixed(2);
+            document.getElementById('property-damages').textContent = propertyDamagesAmount.toFixed(2);
+            document.getElementById('other-deductions').textContent = otherDeductionsAmount.toFixed(2);
+
+            const sssContrib = parseFloat(payslipData[0].sss_contrib);
+            const pagibigContrib = parseFloat(payslipData[0].pagibig_contrib);
+            const philhealthContrib = parseFloat(payslipData[0].philhealth_contrib);
+            const taxAmount = parseFloat(payslipData[0].tax_amount);
+
+            document.getElementById('sss').textContent = sssContrib.toFixed(2);
+            document.getElementById('pagibig').textContent = pagibigContrib.toFixed(2);
+            document.getElementById('philhealth').textContent = philhealthContrib.toFixed(2);
+            document.getElementById('withholding-tax').textContent = taxAmount.toFixed(2);
+
+            const totalEarnings = basicPayAmount + bonusAmount + overtimeAmount + commissionAmount + otherEarningsAmount;
+            const totalDeductions = AWOLAmount + tardinessAmount + propertyDamagesAmount + otherDeductionsAmount;
+            const totalContributions = sssContrib + pagibigContrib + philhealthContrib + taxAmount;
+            const netPay = totalEarnings - totalDeductions - totalContributions;
+
+            document.getElementById('total-earnings').textContent = totalEarnings.toFixed(2);
+            document.getElementById('total-deductions').textContent = totalDeductions.toFixed(2);
+            document.getElementById('total-contributions').textContent = totalContributions.toFixed(2);
+            document.getElementById('net-pay').textContent = netPay.toFixed(2);
+
+
         } catch (error) {
-        console.error('Error fetching payslip:', error);
-        // Display an error message or handle the error in a suitable way
+            console.error('Error fetching payslip:', error);
         }
     }
 });
