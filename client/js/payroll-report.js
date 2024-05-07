@@ -65,8 +65,8 @@ async function getPayrollReport(startCutoff, endCutoff) {
             totalDeductionsCell.textContent = totalDeductions.toFixed(2);
             employeeRow.appendChild(totalDeductionsCell);
 
-            const employeeContributions = await getContributions(basicPay);
-            const totalContributions = Array.isArray(employeeContributions) ? employeeContributions.reduce((total, contribution) => total + parseFloat(contribution.contribution_amount), 0) : 0;
+            const employeeContributions = await getContributions(basicPay, totalEarnings);
+            const totalContributions = parseFloat(employeeContributions);
             const totalContributionsCell = document.createElement('td');
             totalContributionsCell.textContent = totalContributions.toFixed(2);
             employeeRow.appendChild(totalContributionsCell);
@@ -136,28 +136,25 @@ async function getDeductions(startCutoff, endCutoff, employeeId) {
         const deductionsData = await deductionsResponse.json();
 
         // Filter earnings based on employeeId and date range
-        const filteredEarnings = deductionsData.filter((deduction) => {
+        const filteredDeductions = deductionsData.filter((deduction) => {
             return deduction.employee_id === employeeId &&
                    deduction.deduction_date >= startCutoff &&
                    deduction.deduction_date <= endCutoff;
         });
 
-        console.log('Filtered Earnings:', filteredEarnings);
-        return filteredEarnings;
+        console.log('Filtered Deductions:', filteredDeductions);
+        return filteredDeductions;
     } catch (error) {
-        console.error('Error fetching and filtering earnings:', error);
+        console.error('Error fetching and filtering deductions:', error);
     }
 }
 
 // Get contributions based on employeeId and date range
-async function getContributions(basicPay) {
+async function getContributions(basicPay, totalEarnings) {
     const sss = calculateSSS(basicPay);
-    
     const pagIbig = calculatePagIbig();
-
     const philHealth = calculatePhilHealth(basicPay);
-
-    const withholdingTax = calculateWithholdingTax(basicPay);
+    const withholdingTax = calculateWithholdingTax(totalEarnings);
 
     // console.log('Pag-IBIG:', pagIbig,
     //     'PhilHealth:', philHealth,
@@ -167,11 +164,11 @@ async function getContributions(basicPay) {
     return pagIbig.employeeContribution + philHealth.employeeContribution + sss.employeeContribution + withholdingTax;
 }
 
-//----------------- Payslip Modal -----------------
+//----------------- Payslip Modal ----------------- 
 // Add event listener to view payslip button
 document.addEventListener('click', async function(event) {
     const target = event.target;
-    if (target.classList.contains('view-payslip-btn')) {
+    if (target.classList.contains('view-details-btn')) {
         event.stopPropagation(); // Stop the click event from propagating to the window
         modal.style.display = 'block';
         try {
