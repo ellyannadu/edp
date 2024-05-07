@@ -14,6 +14,152 @@
   width: 100%;
 }
 
+#view-payroll-report-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#view-payroll-report-btn:hover {
+  background-color: #E1AFD1;
+  transition: ease-in-out 0.5s;
+}
+
+#view-deductions-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#view-deductions-btn:hover {
+  background-color: #E1AFD1;
+  transition: ease-in-out 0.5s;
+}
+
+#view-earnings-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#view-earnings-btn:hover {
+  background-color: #E1AFD1;
+  transition: ease-in-out 0.5s;
+}
+
+#show-add-payroll-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #05a95c;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#show-add-payroll-btn:hover {
+  background-color: #04fc84;
+  transition: ease-in-out 0.5s;
+
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#show-add-earning-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #FFBF00;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#show-add-earning-btn:hover {
+  background-color: #FED000;
+  transition: ease-in-out 0.5s;
+
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+#show-add-deduction-btn {
+  display: inline-block;
+  font-size: large;
+  font-weight: bold;
+    color: #fff;
+    background-color: #D60000;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.delete-btn,
+.view-report-details-btn,
+.edit-btn {
+    display: inline-block;
+    color: #fff;
+    background-color: #AD88C6;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.delete-btn:hover,
+.view-report-details-btn:hover,
+.edit-btn:hover {
+    background-color: #E1AFD1;
+    transition: ease-in-out 0.5s;
+}
+
+#show-add-deduction-btn:hover {
+  background-color: #AA0000;
+  transition: ease-in-out 0.5s;
+
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cont {
+  display: flex;
+  padding-top: 1%;
+}
+
+.conti {
+  display: flex;
+  align-items: center;
+}
+
+.left-container {
+  flex: 1; /* Takes up remaining space */
+}
+
+.right-container {
+  padding-top: 2%;
+  flex: 1; /* Takes up remaining space */
+  text-align: right; /* Align content to the right */
+}
+
 /* Show the employee list when its parent is hovered */
 .input--box:hover .employee-list {
   display: block;
@@ -33,3 +179,98 @@
 #deductions-list, #earnings-list {
   display: none;
 }
+
+.modal-background .row {
+  gap: 20px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.row--options {
+  display: flex !important;
+  flex-wrap: wrap;
+}
+
+.form .column {
+  display: flex;
+  column-gap: 15px;
+}
+
+.column {
+  flex: 1 !important;
+  margin: 0 0.5rem;
+  align-items: center;
+}
+
+.input--box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button--wrapper {
+  display: flex;
+    justify-content: space-evenly; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    margin-top: 15px;
+    width: 100%;
+}
+
+.button--wrapper button {
+  margin-top: 15px;
+  padding: 15px 25px;
+  background-color: #7469B6;
+  color:#FFF;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  height: 50px;
+  width: 30%;
+}
+
+.button--wrapper button:hover {
+  background-color: #AD88C6;
+  transition: ease-in-out 0.5s;
+}
+
+.table-title {
+  font-size: 24px; /* Adjust the font size as needed */
+  text-align: center;
+}
+
+.leave-list {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+    color: #fff;
+    background-color: #6559a8;
+    border-top: #fff;
+    border-radius: 6px;
+    padding-bottom: 10px;
+    padding-left: 100px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.leave-list th,
+.leave-list td {
+  padding: 8px; /* Adjust padding as needed */
+}
+
+.leave-list tbody {
+  margin-bottom: 20px; /* Add space below main rows */
+}
+
+.main--content {
+  position: relative;
+  background: #F1EAFF;
+  width: 100%;
+  padding: 1rem;
+}
+
+
