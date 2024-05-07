@@ -645,6 +645,75 @@ app.post("/tax", async (req, res) => {
   }
 });
 
+// Update SSS based on employeeId and date
+app.put("/sss/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employee_contrib, employer_contrib, totalamount, date} = req.body;
+
+    const updateSSS = await pool.query(`
+      UPDATE sss
+      SET employee_contrib = $1, employer_contrib = $2, totalamount = $3
+      WHERE employee_id = $4 AND date = $5`, [employee_contrib, employer_contrib, totalamount, id, date]);
+      res.json("SSS was updated");
+
+  } catch (err) {
+    console.error("Cannot update SSS:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Update PagIbig based on employeeId and date
+app.put("/pagIbig/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employee_contrib, employer_contrib, totalamount, date} = req.body;
+
+    const updatePagIbig = await pool.query(`
+      UPDATE pagIbig
+      SET employee_contrib = $1, employer_contrib = $2, totalamount = $3
+      WHERE employee_id = $4 AND date = $5`, [employee_contrib, employer_contrib, totalamount, id, date]);
+      res.json("PagIbig was updated");
+
+  } catch (err) {
+    console.error("Cannot update PagIbig:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Update PhilHealth based on employeeId and date
+app.put("/philHealth/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { employee_contrib, employer_contrib, totalamount, date} = req.body;
+
+    const updatePhilHealth = await pool.query(`
+      UPDATE philHealth
+      SET employee_contrib = $1, employer_contrib = $2, totalamount = $3
+      WHERE employee_id = $4 AND date = $5`, [employee_contrib, employer_contrib, totalamount, id, date]);
+    res.json("PhilHealth was updated");
+  } catch (err) {
+    console.error("Cannot update PhilHealth:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Update Tax based on employeeId and date
+app.put("/tax/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { amount, date } = req.body;
+    const updateTax = await pool.query(`
+      UPDATE tax
+      SET amount = $1
+      WHERE employee_id = $2 AND date = $3`, [amount, id, date]);
+    res.json("Tax was updated");
+  } catch (err) {
+    console.error("Cannot update Tax:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Get payslip of an employee within the specified date range
 app.get("/payslip/:id", async (req, res) => {
   try {
@@ -652,9 +721,6 @@ app.get("/payslip/:id", async (req, res) => {
     const payslip = await pool.query(`
     SELECT
       emp.employee_id,
-      emp.first_name,
-      emp.middle_name,
-      emp.last_name,
       ded.deduction_id,
       ded.deduction_type,
       ded.deduction_date,

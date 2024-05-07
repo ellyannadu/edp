@@ -134,19 +134,19 @@ document.getElementById('generate-payroll-form').addEventListener('submit', asyn
                     { sss_id: sss_id },
                     { tax_id: tax_id }
                 ] = await Promise.all([
-                    initializePhilHealth(employee.employee_id).catch(error => {
+                    initializePhilHealth(employee.employee_id, startDate).catch(error => {
                         console.error('Error initializing PhilHealth:', error);
                         return null;
                     }),
-                    initializePagIbig(employee.employee_id).catch(error => {
+                    initializePagIbig(employee.employee_id, startDate).catch(error => {
                         console.error('Error initializing PagIbig:', error);
                         return null;
                     }),
-                    initializeSSS(employee.employee_id).catch(error => {
+                    initializeSSS(employee.employee_id, startDate).catch(error => {
                         console.error('Error initializing SSS:', error);
                         return null;
                     }),
-                    initializeTax(employee.employee_id).catch(error => {
+                    initializeTax(employee.employee_id, startDate).catch(error => {
                         console.error('Error initializing Tax:', error);
                         return null;
                     })
@@ -449,7 +449,7 @@ async function getPayroll() {
 }
 
 // ============== Initialize Government Contributions to 0 =============
-async function initializePhilHealth(employeeId) {
+async function initializePhilHealth(employeeId, startDate) {
     try {
         const response = await fetch(`http://localhost:3000/philHealth`, {
             method: 'POST',
@@ -461,7 +461,7 @@ async function initializePhilHealth(employeeId) {
                 employee_contrib: 0,
                 employer_contrib: 0,
                 totalAmount: 0,
-                date: new Date(),
+                date: startDate,
             })
         });
 
@@ -471,7 +471,7 @@ async function initializePhilHealth(employeeId) {
     }
 }
 
-async function initializePagIbig(employeeId) {
+async function initializePagIbig(employeeId, startDate) {
     try {
         const response = await fetch(`http://localhost:3000/pagIbig`, {
             method: 'POST',
@@ -483,7 +483,7 @@ async function initializePagIbig(employeeId) {
                 employee_contrib: 0,
                 employer_contrib: 0,
                 totalAmount: 0,
-                date: new Date(),
+                date: startDate,
             })
         });
 
@@ -493,7 +493,7 @@ async function initializePagIbig(employeeId) {
     }
 }
 
-async function initializeSSS(employeeId) {
+async function initializeSSS(employeeId, startDate) {
     try {
         const response = await fetch(`http://localhost:3000/sss`, {
             method: 'POST',
@@ -505,7 +505,7 @@ async function initializeSSS(employeeId) {
                 employee_contrib: 0,
                 employer_contrib: 0,
                 totalAmount: 0,
-                date: new Date(),
+                date: startDate,
             })
         });
 
@@ -515,7 +515,7 @@ async function initializeSSS(employeeId) {
     }
 }
 
-async function initializeTax(employeeId) {
+async function initializeTax(employeeId, startDate) {
     try {
         const response = await fetch(`http://localhost:3000/tax`, {
             method: 'POST',
@@ -525,7 +525,7 @@ async function initializeTax(employeeId) {
             body: JSON.stringify({
                 employee_id: employeeId,
                 amount: 0,
-                date: new Date(),
+                date: startDate,
             })
         });
 

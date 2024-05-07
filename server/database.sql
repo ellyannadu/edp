@@ -277,3 +277,9 @@ SELECT*FROM department_status;
 SELECT*FROM department;
 SELECT*FROM designation;
 SELECT*FROM assign_designation;
+
+
+DROP TABLE sss;
+DROP TABLE pagIbig;
+DROP TABLE philHealth;
+DROP TABLE tax;
