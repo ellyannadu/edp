@@ -12,7 +12,7 @@ CREATE TABLE employee (
     barangay VARCHAR(255) NOT NULL,
     city VARCHAR(255) NOT NULL,
     province VARCHAR(255) NOT NULL,
-    zip_code VARCHAR(255) NOT NULL
+    zip_code VARCHAR(255) NOT NULL,
 );
 
 CREATE TABLE employee_status (
@@ -82,7 +82,7 @@ CREATE TABLE leave_status (
 CREATE TABLE signatories (
     signatory_id SERIAL PRIMARY KEY,
     employee_id INT NOT NULL,
-    superior_id INT,
+    superior_id INT NOT NULL,
     superior_status INT NOT NULL,
     FOREIGN KEY (employee_id) REFERENCES employee(employee_id),
     FOREIGN KEY (superior_id) REFERENCES employee(employee_id),
@@ -92,6 +92,71 @@ CREATE TABLE signatories (
 CREATE TABLE superior_status (
     superior_status_id SERIAL PRIMARY KEY,
     superior_status_name VARCHAR(255) NOT NULL
+);
+
+-- PAYROLL SYSTEM
+CREATE TABLE deductions (
+    deduction_id SERIAL PRIMARY KEY,
+    deduction_type VARCHAR(255) NOT NULL,
+    employee_id INT NOT NULL,
+    deduction_date DATE NOT NULL,
+    deduction_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE earnings (
+    earning_id SERIAL PRIMARY KEY,
+    earning_type VARCHAR(255) NOT NULL,
+    employee_id INT NOT NULL,
+    earning_date DATE NOT NULL,
+    earning_amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE philHealth (
+    philHealth_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    employee_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE pagIbig (
+    pagIbig_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    employee_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE sss (
+    sss_id SERIAL PRIMARY KEY,
+    employee_contrib DECIMAL(10, 2) NOT NULL,
+    employer_contrib DECIMAL(10, 2) NOT NULL,
+    totalAmount DECIMAL(10, 2) NOT NULL,
+    date DATE NOT NULL,
+    employee_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE tax (
+    tax_id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    employee_id INT NOT NULL,
+    FOREIGN KEY (employee_id) REFERENCES employee(employee_id)
+);
+
+CREATE TABLE payroll (
+    payroll_id SERIAL PRIMARY KEY,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    pay_date DATE NOT NULL,
+    status VARCHAR(255) NOT NULL
 );
 
 -- QUERIES START (IN ORDER):
@@ -212,3 +277,9 @@ SELECT*FROM department_status;
 SELECT*FROM department;
 SELECT*FROM designation;
 SELECT*FROM assign_designation;
+
+
+DROP TABLE sss;
+DROP TABLE pagIbig;
+DROP TABLE philHealth;
+DROP TABLE tax;

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/client/css/sidebar.css">
+    <link rel="stylesheet" href="/client/css/leave.css">
+    <link rel="stylesheet" href="/client/css/style.css">
+    <link rel="stylesheet" href="/client/css/payroll.css">
+    <script src="https://kit.fontawesome.com/e4c61f12b3.js" crossorigin="anonymous"></script>
+    <script type="module" src="/client/js/gov_contributions.js"></script>
+    <script type="module" src="/client/js/payroll.js"></script>
+    <title>Payroll</title>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo flex-container"></div>
+        <ul class="menu">
+
+        <li>
+            <a href="/client/html/index.html">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li>
+          <a href="/client/html/view_employees.html">
+            <i class="fa-solid fa-people-group"></i>
+            <span>Employees</span>
+          </a>
+        </li>
+
+        <li>
+          <a href="/client/html/departments.html">
+            <i class="fa-solid fa-user-tag"></i>
+            <span>Departments</span>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="/client/html/leave_requests.html">
+            <i class="fa-regular fa-calendar"></i>
+            <span>Leave Requests</span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/client/html/signatories.html">
+            <i class="fa-solid fa-signature"></i>
+            <span>Signatories</span>
+          </a>
+        </li>
+        
+        <li>
+          <a href="/client/html/payroll.html">
+            <i class="fas fa-receipt"></i>
+            <span>Payroll</span>
+          </a>
+        </li>
+
+        <div class="logout-wrapper">
+          <li class="logout">
+            <a href="#">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Log Out</span>
+            </a>
+          </li>
+        </div>
+
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main--content">
+      <div class="header--wrapper">
+        <div class="header--title">
+          <h1>Employee Payroll</h1>
+          <!-- Switch tabs between view payroll OR deductions OR earnings -->
+      <div class="cont">
+        <div class="left-container">
+          <button id="view-payroll-report-btn">View Payroll Report</button>
+          <button id="view-earnings-btn">View Earnings</button>
+          <button id="view-deductions-btn">View Deductions</button>
+        </div>
+      </div>
+        </div>
+      </div>
+
+      
+        
+
+
+      <!-- Overall Payroll List -->
+      <div id="payroll-list" class="table-container">
+        <div class="right-container">
+          <button id="show-add-payroll-btn" class=""> <i class="fa-solid fa-plus"></i>   Generate New Payroll </i></button>
+        </div>
+        
+        <table class="leave-list">
+          <tr>
+            <th colspan="5" class="table-title">OVERALL PAYROLL REPORT</th>
+          </tr>
+        
+          <tr>
+            <th>Pay Date</th>
+            <th>Start of Cutoff</th>
+            <th>End of Cutoff</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          <tbody id="payroll-table-body">
+            <!-- Main rows go here -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Overall Deductions List -->
+      <div id="deductions-list" class="table-container">
+        <div class="right-container"> 
+        <button id="show-add-deduction-btn" class=""><i class="fa-solid fa-plus"></i>   Add Deduction</button>
+        </div>
+
+        <table class="leave-list">
+          <tr>
+            <th colspan="7" class="table-title">DEDUCTIONS HISTORY</th>
+          </tr>
+
+          <tr>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+          <tbody id="deductions-table-body">
+          </tbody>
+        </table>
+      </div>
+
+       <!-- Overall Earnings List -->
+       <div id="earnings-list" class="table-container">
+
+        <div class="right-container"> 
+          <button id="show-add-earning-btn" class=""><i class="fa-solid fa-plus"></i>   Add Earning</button>
+        </div>
+        
+        <table class="leave-list">
+          <tr>
+            <th colspan="7" class="table-title">EARNINGS HISTORY</th>
+          </tr>
+
+          <tr>
+            <th>ID</th>
+            <th>Employee ID</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Action</th>
+          </tr>
+          <tbody id="earnings-table-body">
+          </tbody>
+        </table>
+      </div>
+  </div>
+
+  <!-- MODAL FOR ADD DEDUCTION -->
+  <dialog id="add-deduction-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Add Deduction</h1>
+
+      <div class="modal-background">
+      <form id="add-deduction-form">
+
+        <div class="row">
+          <div class="input--box">
+        <label for="employee-id">Employee ID</label>
+        <input type="text" name="employee-id" id="employee-id" class="employee-id-input" autocomplete="off" readonly>
+            </div>
+        <div class="input--box">
+          <label for="edit-search-input">Employee Name</label>
+          <input type="text" id="edit-search-input" class="edit-search-input" autocomplete="off" required>
+          <div id="employee-list" class="employee-list"></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input--box">
+        <label for="deduction-date">Date</label>
+        <input type="date" id="deduction-date" name="deduction-date" required/>
+      </div>
+      <div class="input--box">
+        <label for="deduction-type">Deduction Type</label>
+        <select name="deduction-type" id="deduction-type" required>
+          <option value="AWOL">Absence Without Leave</option>
+          <option value="Late">Tardiness Penalty</option>
+          <option value="Damage">Property Damage</option>
+          <option value="Others">Others</option>
+        </select>
+        </div>
+
+        <div class="input--box">
+        <label for="deduction-amount">Amount</label>
+        <input type="number" name="deduction-amount" id="deduction-amount" required/>
+      </div>
+      </div>
+
+      <div class="button--wrapper">
+        <button type="submit" id="add-deduction-button">Add Deduction</button>
+        <button type="reset">Reset</button>
+      </div>
+      </form>
+    </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL FOR ADD EARNING -->
+  <dialog id="add-earning-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Add Earnings</h1>
+
+      <div class="modal-background">
+      <form id="add-earning-form">
+        <div class="row">
+          <div class="input--box">
+        <label for="employee-id">Employee ID</label>
+        <input type="text" name="employee-id" id="employee-id-2" class="employee-id-input" autocomplete="off" readonly>
+    </div>
+        <div class="input--box">
+          <label for="edit-search-input">Employee Name</label>
+          <input type="text" id="edit-search-input-2" class="edit-search-input" autocomplete="off" required>
+          <div id="employee-list-2" class="employee-list"></div>
+        </div>
+        </div>
+        
+
+        <div class="row">
+          <div class="input--box">
+        <label for="earning-date">Date</label>
+        <input type="date" id="earning-date" name="earning-date" required/>
+      </div>
+      <div class="input--box">
+        <label for="earning-type">Earning Type</label>
+        <select name="earning-type" id="earning-type" required>
+          <option value="Basic Pay">Basic Pay</option>
+          <option value="Bonus">Bonus</option>
+          <option value="Overtime">Overtime</option>
+          <option value="Commission">Commission</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      <div class="input--box">
+        <label for="earning-amount">Amount</label>
+        <input type="number" name="earning-amount" id="earning-amount" required/>
+      </div>
+      </div>
+
+        <div class="button--wrapper">
+        <button type="submit" id="add-earning-button">Add Earning</button>
+        <button type="reset">Reset</button>
+      </form>
+    </div>
+    </div>
+  </dialog>
+
+  <!-- MODAL FOR GENERATE NEW PAYROLL -->
+  <dialog id="add-payroll-modal">
+    <div class="modal-content">
+      <span class="close-add-modal-btn">&times;</span>
+      <h1 class="modal-title">Generate New Payroll</h1>
+
+      <div class="modal-background">
+      <form id="generate-payroll-form">
+          <div class="column">
+            <div class="input--box">
+        <label>Pay Date</label>
+        <input type="date" id="pay-date" name="pay-date" required/>
+      </div>
+      <div class="row">
+      <div class="column">
+        <div class="input--box">
+        <label>Start of Cutoff</label>
+        <input type="date" id="start-cutoff" name="start-cutoff" required/>
+      </div>
+    </div>
+      <div class="column">
+        </div>
+        <div class="input--box">
+        <label>End of Cutoff</label>
+        <input type="date" id="end-cutoff" name="end-cutoff" required/>
+    </div>
+  </div>
+  </div>
+      <div class="row">
+      <div class="button--wrapper">
+        <button type="submit" id="generate-payroll-button">Generate Payroll</button>
+      </div>
+      </div>
+    </div>
+      </form>
+    </div>
+    </div>
+    
+  </dialog>
+</body>
+</html>
