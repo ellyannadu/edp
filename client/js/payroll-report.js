@@ -15,10 +15,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log('End Cutoff:', endCutoff);
 
     // Fetch all active employees record for payroll report
-    getPayrollReport(startCutoff, endCutoff);
+    getPayrollReport(startCutoff, endCutoff, payrollId);
 
     // delete this line after formatting modal, for testing purposes only
-    modal.show();
+    // modal.show();
 });
 
 window.addEventListener('click', function(event) {
@@ -33,11 +33,17 @@ modalCloseBtn.addEventListener('click', () => {
 
 // ----------------- FUNCTIONS -----------------
 // Fetch all active employees record for payroll report
-async function getPayrollReport(startCutoff, endCutoff) {
+async function getPayrollReport(startCutoff, endCutoff, payrollId) {
     try {
         const employeeList = await getEmployees();
         const tableBody = document.getElementById('salary-table-body');
         tableBody.innerHTML = ''; // Clear previous rows
+
+        const startDate = new Date(startCutoff).toDateString();
+        const endDate = new Date(endCutoff).toDateString();
+        const header = document.getElementById('header-text');
+        header.textContent = `PAYROLL REPORT #${payrollId} from ${startDate} to ${endDate}`;
+
 
         for (const employee of employeeList) {
             const employeeRow = document.createElement('tr');
@@ -57,24 +63,24 @@ async function getPayrollReport(startCutoff, endCutoff) {
 
             const totalEarnings = Array.isArray(employeeEarnings) ? employeeEarnings.reduce((total, earning) => total + parseFloat(earning.earning_amount), 0) : 0;
             const totalEarningsCell = document.createElement('td');
-            totalEarningsCell.textContent = totalEarnings.toFixed(2);
+            totalEarningsCell.textContent = formatCurrency(totalEarnings);
             employeeRow.appendChild(totalEarningsCell);
 
             const employeeDeductions = await getDeductions(startCutoff, endCutoff, employee.employee_id);
             const totalDeductions = Array.isArray(employeeDeductions) ? employeeDeductions.reduce((total, deduction) => total + parseFloat(deduction.deduction_amount), 0) : 0;
             const totalDeductionsCell = document.createElement('td');
-            totalDeductionsCell.textContent = totalDeductions.toFixed(2);
+            totalDeductionsCell.textContent = formatCurrency(totalDeductions);
             employeeRow.appendChild(totalDeductionsCell);
 
             const employeeContributions = await getContributions(basicPay, totalEarnings, employee.employee_id, startCutoff);
             const totalContributions = parseFloat(employeeContributions);
             const totalContributionsCell = document.createElement('td');
-            totalContributionsCell.textContent = totalContributions.toFixed(2);
+            totalContributionsCell.textContent = formatCurrency(totalContributions);
             employeeRow.appendChild(totalContributionsCell);
 
             const netPay = totalEarnings - totalDeductions - totalContributions;
             const netPayCell = document.createElement('td');
-            netPayCell.textContent = netPay.toFixed(2);
+            netPayCell.textContent = formatCurrency(netPay);
             employeeRow.appendChild(netPayCell);
 
             const actionsCell = document.createElement('td');
@@ -87,6 +93,13 @@ async function getPayrollReport(startCutoff, endCutoff) {
     } catch (error) {
         console.error('Error fetching payroll report:', error);
     }
+}
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+    }).format(amount);
 }
 
 // Get all ACTIVE employees 
@@ -151,9 +164,9 @@ async function getDeductions(startCutoff, endCutoff, employeeId) {
 
 // Get contributions based on employeeId and date range
 async function getContributions(basicPay, totalEarnings, employeeId, startCutoff) {
-    const sss = calculateSSS(basicPay);
+    const sss = calculateSSS(totalEarnings);
     const pagIbig = calculatePagIbig();
-    const philHealth = calculatePhilHealth(basicPay);
+    const philHealth = calculatePhilHealth(totalEarnings);
     const withholdingTax = calculateWithholdingTax(totalEarnings);
 
     try {
@@ -245,6 +258,7 @@ document.addEventListener('click', async function(event) {
                 fetch(`http://localhost:3000/payslip/${employeeId}`),
                 fetch(`http://localhost:3000/deductions/${employeeId}`),
                 fetch(`http://localhost:3000/earnings/${employeeId}`),
+                fetch(`http://localhost:3000/sss/${employeeId}`)
             ]);
 
             const employeeData = await employeeResponse.json();
@@ -259,7 +273,7 @@ document.addEventListener('click', async function(event) {
             document.getElementById('employee-id').textContent = employeeId;
             document.getElementById('designation').textContent = employeeData.designation_name;
             document.getElementById('department').textContent = employeeData.department_name;
-            
+
             const basicPayObject = earningsData.filter(item => item.earning_type === 'Basic Pay' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate);
             const basicPayAmount = basicPayObject.reduce((total, item) => total + parseFloat(item.earning_amount), 0);
             const bonusObject = earningsData.filter(item => item.earning_type === 'Bonus' && new Date(item.earning_date) >= startCutoffDate && new Date(item.earning_date) <= endCutoffDate);
@@ -276,7 +290,7 @@ document.addEventListener('click', async function(event) {
             document.getElementById('overtime-pay').textContent = overtimeAmount.toFixed(2);
             document.getElementById('commission').textContent = commissionAmount.toFixed(2);
             document.getElementById('other-earnings').textContent = otherEarningsAmount.toFixed(2);
-            
+
             const AWOLObjects = deductionsData.filter(item => item.deduction_type === 'AWOL' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
             const AWOLAmount = AWOLObjects.reduce((total, item) => total + parseFloat(item.deduction_amount), 0);
             const tardinessObject = deductionsData.filter(item => item.deduction_type === 'Late' && new Date(item.deduction_date) >= startCutoffDate && new Date(item.deduction_date) <= endCutoffDate);
@@ -291,6 +305,7 @@ document.addEventListener('click', async function(event) {
             document.getElementById('property-damages').textContent = propertyDamagesAmount.toFixed(2);
             document.getElementById('other-deductions').textContent = otherDeductionsAmount.toFixed(2);
 
+    
             const sssContrib = parseFloat(payslipData[0].sss_contrib);
             const pagibigContrib = parseFloat(payslipData[0].pagibig_contrib);
             const philhealthContrib = parseFloat(payslipData[0].philhealth_contrib);
@@ -309,7 +324,7 @@ document.addEventListener('click', async function(event) {
             document.getElementById('total-earnings').textContent = totalEarnings.toFixed(2);
             document.getElementById('total-deductions').textContent = totalDeductions.toFixed(2);
             document.getElementById('total-contributions').textContent = totalContributions.toFixed(2);
-            document.getElementById('net-pay').textContent = netPay.toFixed(2);
+            document.getElementById('net-pay').textContent = formatCurrency(netPay);
 
 
         } catch (error) {
