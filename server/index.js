@@ -619,7 +619,53 @@ app.post("/tax", async (req, res) => {
 
 
 // Get sss of an employeeId
-app.get
+app.get("/sss/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sss = await pool.query("SELECT * FROM sss WHERE employee_id = $1", [id]);
+    res.json(sss.rows);
+  } catch (err) {
+    console.error("Cannot get SSS:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get pagIbig of an employeeId
+app.get("/pagIbig/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pagIbig = await pool.query("SELECT * FROM pagIbig WHERE employee_id = $1", [id]);
+    res.json(pagIbig.rows);
+  } catch (err) {
+    console.error("Cannot get PagIbig:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get philHealth of an employeeId
+app.get("/philHealth/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const philHealth = await pool.query("SELECT * FROM philHealth WHERE employee_id = $1", [id]);
+    res.json(philHealth.rows);
+  } catch (err) {
+    console.error("Cannot get PhilHealth:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Get tax of an employeeId
+app.get("/tax/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const tax = await pool.query("SELECT * FROM tax WHERE employee_id = $1", [id]);
+    res.json(tax.rows);
+  } catch (err) {
+    console.error("Cannot get Tax:", err.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Update SSS based on employeeId and date
 app.put("/sss/:id", async (req, res) => {
   try {

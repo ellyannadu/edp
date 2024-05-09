@@ -253,18 +253,26 @@ document.addEventListener('click', async function(event) {
             const endCutoffFormatted = new Date(endCutoff).toDateString();
 
             // Fetch employee information, earnings, deductions, and payroll
-            const [employeeResponse, payslipResponse, deductionsResponse, earningsResponse] = await Promise.all([
+            const [employeeResponse, payslipResponse, deductionsResponse, earningsResponse,
+                sssResponse, pagIbigResponse, philHealthResponse, taxResponse] = await Promise.all([
                 fetch(`http://localhost:3000/assign-designation/${employeeId}`),
                 fetch(`http://localhost:3000/payslip/${employeeId}`),
                 fetch(`http://localhost:3000/deductions/${employeeId}`),
                 fetch(`http://localhost:3000/earnings/${employeeId}`),
-                fetch(`http://localhost:3000/sss/${employeeId}`)
+                fetch(`http://localhost:3000/sss/${employeeId}`),
+                fetch(`http://localhost:3000/pagIbig/${employeeId}`),
+                fetch(`http://localhost:3000/philHealth/${employeeId}`),
+                fetch(`http://localhost:3000/tax/${employeeId}`)
             ]);
 
             const employeeData = await employeeResponse.json();
             const payslipData = await payslipResponse.json();
             const deductionsData = await deductionsResponse.json();
             const earningsData = await earningsResponse.json();
+            const sssData = await sssResponse.json();
+            const pagIbigData = await pagIbigResponse.json();
+            const philHealthData = await philHealthResponse.json();
+            const taxData = await taxResponse.json();
 
             // Update modal content with fetched data
             document.getElementById('start-cutoff').textContent = startCutoffFormatted;
@@ -305,20 +313,24 @@ document.addEventListener('click', async function(event) {
             document.getElementById('property-damages').textContent = propertyDamagesAmount.toFixed(2);
             document.getElementById('other-deductions').textContent = otherDeductionsAmount.toFixed(2);
 
-    
-            const sssContrib = parseFloat(payslipData[0].sss_contrib);
-            const pagibigContrib = parseFloat(payslipData[0].pagibig_contrib);
-            const philhealthContrib = parseFloat(payslipData[0].philhealth_contrib);
-            const taxAmount = parseFloat(payslipData[0].tax_amount);
+            const sssContrib = sssData.filter(item => new Date(item.date) >= startCutoffDate && new Date(item.date) <= endCutoffDate);
+            const sssAmount = sssContrib.reduce((total, item) => total + parseFloat(item.employee_contrib), 0);
+            const pagibigContrib = pagIbigData.filter(item => new Date(item.date) >= startCutoffDate && new Date(item.date) <= endCutoffDate);
+            const pagIbigAmount = pagibigContrib.reduce((total, item) => total + parseFloat(item.employee_contrib), 0);
+            const philhealthContrib = philHealthData.filter(item => new Date(item.date) >= startCutoffDate && new Date(item.date) <= endCutoffDate);
+            const philHealthAmount = philhealthContrib.reduce((total, item) => total + parseFloat(item.employee_contrib), 0);
+            const taxContrib = taxData.filter(item => new Date(item.date) >= startCutoffDate && new Date(item.date) <= endCutoffDate);
+            const taxAmount = taxContrib.reduce((total, item) => total + parseFloat(item.amount), 0);
 
-            document.getElementById('sss').textContent = sssContrib.toFixed(2);
-            document.getElementById('pagibig').textContent = pagibigContrib.toFixed(2);
-            document.getElementById('philhealth').textContent = philhealthContrib.toFixed(2);
+            console.log('SSS:', sssAmount);
+            document.getElementById('sss').textContent = sssAmount.toFixed(2);
+            document.getElementById('pagibig').textContent = pagIbigAmount.toFixed(2);
+            document.getElementById('philhealth').textContent = philHealthAmount.toFixed(2);
             document.getElementById('withholding-tax').textContent = taxAmount.toFixed(2);
 
             const totalEarnings = basicPayAmount + bonusAmount + overtimeAmount + commissionAmount + otherEarningsAmount;
             const totalDeductions = AWOLAmount + tardinessAmount + propertyDamagesAmount + otherDeductionsAmount;
-            const totalContributions = sssContrib + pagibigContrib + philhealthContrib + taxAmount;
+            const totalContributions = sssAmount + pagIbigAmount + philHealthAmount + taxAmount;
             const netPay = totalEarnings - totalDeductions - totalContributions;
 
             document.getElementById('total-earnings').textContent = totalEarnings.toFixed(2);
