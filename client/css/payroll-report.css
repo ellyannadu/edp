@@ -50,7 +50,6 @@
 #payslip-table th,
 #payslip-table td {
     padding: 8px;
-    text-align: left;
 }
 
 #payslip-table th {
@@ -287,12 +286,13 @@ td {
 }
 
 .header {
+    font-size: 25px;
+    font-weight: bold;
     text-align: center;
     color: #f2f2f2;
-    display: flex;
     background: #7469B6;
     border-radius: 10px;
-    padding: 10px 2rem;
+    padding: 1% 2rem;
     margin-bottom: 1rem;
 }
 
@@ -309,3 +309,29 @@ td {
     background-color: #E1AFD1;
     transition: ease-in-out 0.2s;
 }
+
+.payslip-table th:nth-child(3),
+.payslip-table td:nth-child(3),
+.payslip-table th:nth-child(4),
+.payslip-table td:nth-child(4),
+.payslip-table th:nth-child(5),
+.payslip-table td:nth-child(5),
+.payslip-table th:nth-child(6),
+.payslip-table td:nth-child(6) {
+    text-align: right;
+}
+
+.payslip-table th:nth-child(2),
+.payslip-table td:nth-child(2),
+.payslip-table th:nth-child(7),
+.payslip-table td:nth-child(7) {
+    text-align: left;
+}
+
+.payslip-table th:nth-child(7),
+.payslip-table td:nth-child(7) {
+    width: 15%; /* Adjust the width as needed */
+    text-align: center;
+}
+
+
