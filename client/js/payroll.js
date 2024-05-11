@@ -339,7 +339,6 @@ async function getDeductions() {
                 <td>${deduction.deduction_amount}</td>
                 <td>
                     <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
                 </td>
             `;
             deductionsTableBody.appendChild(row);
@@ -376,7 +375,6 @@ async function getEarnings() {
                 <td>${earning.earning_amount}</td>
                 <td>
                     <button class="edit-btn">Edit</button>
-                    <button class="delete-btn">Delete</button>
                 </td>
             `;
             earningsTableBody.appendChild(row);

@@ -322,7 +322,6 @@ document.addEventListener('click', async function(event) {
             const taxContrib = taxData.filter(item => new Date(item.date) >= startCutoffDate && new Date(item.date) <= endCutoffDate);
             const taxAmount = taxContrib.reduce((total, item) => total + parseFloat(item.amount), 0);
 
-            console.log('SSS:', sssAmount);
             document.getElementById('sss').textContent = sssAmount.toFixed(2);
             document.getElementById('pagibig').textContent = pagIbigAmount.toFixed(2);
             document.getElementById('philhealth').textContent = philHealthAmount.toFixed(2);
