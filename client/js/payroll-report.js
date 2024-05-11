@@ -1,6 +1,7 @@
 import { calculatePagIbig, calculatePhilHealth, calculateSSS, calculateWithholdingTax } from "./gov_contributions.js";
 
 const modal = document.getElementById('payslip-modal');
+const modalContent = document.getElementById('modal-content');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -22,7 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 window.addEventListener('click', function(event) {
-    if (event.target !== modal && !modal.contains(event.target)) {
+    console.log('Clicked on:', event.target);
+    if (event.target !== modalContent && !modalContent.contains(event.target)) {
+        console.log('Clicked outside modal. Closing modal...');
         modal.style.display = 'none';
     }
 });
