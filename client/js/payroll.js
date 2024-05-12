@@ -337,9 +337,6 @@ async function getDeductions() {
                 <td>${deductionDate.toISOString().split('T')[0]}</td>
                 <td>${deduction.deduction_type}</td>
                 <td>${deduction.deduction_amount}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                </td>
             `;
             deductionsTableBody.appendChild(row);
         });
@@ -373,9 +370,6 @@ async function getEarnings() {
                 <td>${earningDate.toISOString().split('T')[0]}</td>
                 <td>${earning.earning_type}</td>
                 <td>${earning.earning_amount}</td>
-                <td>
-                    <button class="edit-btn">Edit</button>
-                </td>
             `;
             earningsTableBody.appendChild(row);
         });
